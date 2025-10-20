@@ -9,7 +9,7 @@ export default function NavigationHeader() {
   return (
     <div className="w-full pt-8">
       <nav className="w-11/12 md:w-5/7 mx-auto rounded-2xl" style={{ backgroundColor: 'white' }}>
-        <div className="px-9 py-4">
+        <div className="px-9 py-2">
           <div className="flex items-center justify-between">
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center justify-center space-x-12 flex-1">

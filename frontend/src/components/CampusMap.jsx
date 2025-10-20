@@ -1,7 +1,7 @@
 function CampusMap() {
   return (
     <div 
-      className="border border-darkblue/20 rounded-lg shadow-lg h-full flex items-center justify-center"
+      className="border border-darkblue/20 rounded-2xl shadow-lg h-full flex items-center justify-center"
       style={{ backgroundColor: '#213985' }}
     >
       <div className="text-center text-white">
