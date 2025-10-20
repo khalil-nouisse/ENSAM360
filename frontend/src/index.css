@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Custom colors for the Campus Explorer */
+:root {
+  --color-beige: #F1E8DD;
+  --color-darkblue: #213985;
+  --color-dark: #151A28;
+}
