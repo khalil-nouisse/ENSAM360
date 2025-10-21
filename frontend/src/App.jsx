@@ -1,3 +1,5 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import VirtualTour from './components/VirtualTour'
 import { useState } from 'react'
 import Navbar from './components/Navbar'
 import CampusMap from './components/CampusMap'
@@ -54,6 +56,9 @@ function App() {
   }
 
   return (
+    <BrowserRouter>
+    <Routes>
+    <Route path="/" element={
     <div 
       className="min-h-screen font-sans"
       style={{ backgroundColor: '#F1E8DD' }}
@@ -101,6 +106,10 @@ function App() {
         </div>
       </main>
     </div>
+    }/>
+    <Route path="/tour" element={<VirtualTour />} />
+    </Routes>
+    </BrowserRouter>
   )
 }
 
