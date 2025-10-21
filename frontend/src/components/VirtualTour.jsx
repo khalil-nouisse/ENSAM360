@@ -144,9 +144,9 @@ function VirtualTour() {
       // Settings for 180° images
       haov: 360, // Horizontal angle of view (180° instead of 360°)
       vaov: 180, // Vertical angle of view
-      hfov: 100, // Initial field of view
+      hfov: 120, // Initial field of view
       minHfov: 50, // Maximum zoom in
-      maxHfov: 120, // Maximum zoom out
+      maxHfov: 150, // Maximum zoom out
       pitch: 0,
       yaw: 0,
       // Prevent looking beyond the 180° range
