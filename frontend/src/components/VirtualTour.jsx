@@ -141,9 +141,19 @@ function VirtualTour() {
       mouseZoom: true,
       draggable: true,
       compass: true,
-      hfov: 100,
+      // Settings for 180° images
+      haov: 360, // Horizontal angle of view (180° instead of 360°)
+      vaov: 180, // Vertical angle of view
+      hfov: 100, // Initial field of view
+      minHfov: 50, // Maximum zoom in
+      maxHfov: 120, // Maximum zoom out
       pitch: 0,
-      yaw: 0
+      yaw: 0,
+      // Prevent looking beyond the 180° range
+      // minYaw: -90,
+      // maxYaw: 90,
+      minPitch: -90,
+      maxPitch: 90
     })
   }, [currentLocation, viewerReady, current.image])
 
@@ -198,10 +208,13 @@ function VirtualTour() {
           {current.directions.forward && (
             <button
               onClick={() => navigateTo('forward')}
-              className="pointer-events-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -mt-32 bg-white/90 hover:bg-white p-4 rounded-full shadow-lg transition-all hover:scale-110"
+              className="group pointer-events-auto absolute top-[20%] left-1/2 -translate-x-1/2 bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm hover:from-blue-500/80 hover:to-blue-600/80 p-3 rounded-full border-2 border-white/40 hover:border-white shadow-lg transition-all duration-300 hover:scale-125"
               title={`Go to ${locations[current.directions.forward].name}`}
             >
-              <ArrowUp size={32} className="text-gray-800" />
+              <ArrowUp size={28} className="text-white drop-shadow-lg" />
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                {locations[current.directions.forward].name}
+              </div>
             </button>
           )}
 
@@ -209,10 +222,13 @@ function VirtualTour() {
           {current.directions.back && (
             <button
               onClick={() => navigateTo('back')}
-              className="pointer-events-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-32 bg-white/90 hover:bg-white p-4 rounded-full shadow-lg transition-all hover:scale-110"
+              className="group pointer-events-auto absolute bottom-[20%] left-1/2 -translate-x-1/2 bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm hover:from-purple-500/80 hover:to-purple-600/80 p-3 rounded-full border-2 border-white/40 hover:border-white shadow-lg transition-all duration-300 hover:scale-125"
               title={`Go to ${locations[current.directions.back].name}`}
             >
-              <ArrowDown size={32} className="text-gray-800" />
+              <ArrowDown size={28} className="text-white drop-shadow-lg" />
+              <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                {locations[current.directions.back].name}
+              </div>
             </button>
           )}
 
@@ -220,10 +236,13 @@ function VirtualTour() {
           {current.directions.left && (
             <button
               onClick={() => navigateTo('left')}
-              className="pointer-events-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -ml-32 bg-white/90 hover:bg-white p-4 rounded-full shadow-lg transition-all hover:scale-110"
+              className="group pointer-events-auto absolute top-1/2 left-[15%] -translate-y-1/2 bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm hover:from-green-500/80 hover:to-green-600/80 p-3 rounded-full border-2 border-white/40 hover:border-white shadow-lg transition-all duration-300 hover:scale-125"
               title={`Go to ${locations[current.directions.left].name}`}
             >
-              <ArrowLeft size={32} className="text-gray-800" />
+              <ArrowLeft size={28} className="text-white drop-shadow-lg" />
+              <div className="absolute top-1/2 -right-2 translate-x-full -translate-y-1/2 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                {locations[current.directions.left].name}
+              </div>
             </button>
           )}
 
@@ -231,10 +250,13 @@ function VirtualTour() {
           {current.directions.right && (
             <button
               onClick={() => navigateTo('right')}
-              className="pointer-events-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ml-32 bg-white/90 hover:bg-white p-4 rounded-full shadow-lg transition-all hover:scale-110"
+              className="group pointer-events-auto absolute top-1/2 right-[15%] -translate-y-1/2 bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm hover:from-orange-500/80 hover:to-orange-600/80 p-3 rounded-full border-2 border-white/40 hover:border-white shadow-lg transition-all duration-300 hover:scale-125"
               title={`Go to ${locations[current.directions.right].name}`}
             >
-              <ArrowRight size={32} className="text-gray-800" />
+              <ArrowRight size={28} className="text-white drop-shadow-lg" />
+              <div className="absolute top-1/2 -left-2 -translate-x-full -translate-y-1/2 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                {locations[current.directions.right].name}
+              </div>
             </button>
           )}
         </div>
