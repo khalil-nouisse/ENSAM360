@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import VirtualTour from './components/VirtualTour'
 import { useState } from 'react'
 import Navbar from './components/Navbar'
-import CampusMap from './components/CampusMap'
+import CampusMapLeaflet from './components/CampusMapLeaflet'
 import InteractionPanel from './components/InteractionPanel'
 
 // Mock buildings data
@@ -72,7 +72,7 @@ function App() {
         <div className="hidden lg:flex gap-6 h-[calc(100vh-12rem)]">
           {/* Left Side: Campus Map (70% width) */}
           <div className="w-[70%]">
-            <CampusMap />
+            <CampusMapLeaflet />
           </div>
           
           {/* Right Side: Interaction Panel (30% width) */}
@@ -101,7 +101,7 @@ function App() {
             setIs3DMode={setIs3DMode}
           />
           <div className="h-80">
-            <CampusMap />
+            <CampusMapLeaflet />
           </div>
         </div>
       </main>
