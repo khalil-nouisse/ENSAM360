@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import VirtualTour from './components/VirtualTour'
+import Auth from './pages/Auth'
 import { useState } from 'react'
 import Navbar from './components/Navbar'
 import CampusMapLeaflet from './components/CampusMapLeaflet'
@@ -108,6 +109,7 @@ function App() {
     </div>
     }/>
     <Route path="/tour" element={<VirtualTour />} />
+    <Route path="/auth" element={<Auth />} />
     </Routes>
     </BrowserRouter>
   )

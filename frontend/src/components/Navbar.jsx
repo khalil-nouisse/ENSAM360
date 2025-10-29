@@ -4,7 +4,11 @@ import { ArrowUpRight, Menu, X } from 'lucide-react';
 export default function NavigationHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const navItems = ['Home', 'Features', 'Discover', 'About'];
+  const navItems = ['Home', 'Features', 'Discover' ,'About'];
+
+    const handleAuthClick = () => {
+      navigate("/auth");
+    };
 
   return (
     <div className="w-full pt-8">
@@ -59,7 +63,8 @@ export default function NavigationHeader() {
               ))}
               <button
                 className="flex items-center justify-center w-full py-3 rounded-full transition-all duration-200"
-                style={{ backgroundColor: '#213985', color: '#F1E8DD' }}
+                onClick={handleAuthClick}
+                style={{ backgroundColor: '#213985', color: '#F1E8D' }}
               >
                 Get Started
                 <ArrowUpRight className="w-5 h-5 ml-2" />
