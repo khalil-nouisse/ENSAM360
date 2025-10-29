@@ -215,7 +215,7 @@ function CampusMapLeaflet() {
   }
 
   return (
-    <div className="relative border border-darkblue/20 rounded-2xl shadow-lg h-full w-full overflow-hidden" style={{ backgroundColor: '#213985' }}>
+    <div className="relative border border-darkblue/20 rounded-2xl shadow-lg h-full w-full overflow-hidden" style={{ backgroundColor: '#0B132B' }}>
       {/* Map Container */}
       <div 
         ref={mapRef} 
@@ -256,6 +256,8 @@ function CampusMapLeaflet() {
 
       {/* Custom CSS for markers */}
       <style jsx>{`
+        /* Leaflet canvas background , map background color */
+        .leaflet-container { background:rgb(33, 57, 133); }
         .custom-building-marker {
           background: transparent !important;
           border: none !important;
