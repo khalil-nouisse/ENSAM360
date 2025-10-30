@@ -16,28 +16,41 @@ const MOCK_BUILDINGS = [
   },
   {
     id: 2,
-    name: "Library Complex",
+    name: "Administration_etud",
     description: "The main library offering extensive collections, study spaces, digital resources, and quiet zones for academic research and learning.",
-    image_url: "https://placehold.co/400x300/213985/F1E8DD?text=Library+Complex"
+    image_url: "src/assets/image/adminetud.jpg"
   },
   {
     id: 3,
-    name: "Student Center",
+    name: "Bibliotheque_et_centre_de_langue",
     description: "The heart of campus life with dining facilities, event spaces, student organizations, and recreational amenities for the campus community.",
-    image_url: "https://placehold.co/400x300/213985/F1E8DD?text=Student+Center"
+    image_url: "src/assets/image/bib.jpg"
   },
   {
     id: 4,
-    name: "Science Hall",
+    name: "AEEE",
     description: "Modern laboratories and classrooms for physics, chemistry, biology, and environmental science programs with cutting-edge equipment.",
-    image_url: "https://placehold.co/400x300/213985/F1E8DD?text=Science+Hall"
+    image_url: "src/assets/image/a3e.jpg"
   },
   {
     id: 5,
-    name: "Arts Building",
+    name: "mathinfo",
     description: "Creative spaces for fine arts, music, theater, and design programs including studios, galleries, and performance venues.",
-    image_url: "https://placehold.co/400x300/213985/F1E8DD?text=Arts+Building"
-  }
+    image_url: "src/assets/image/cc_outside.jpg"
+  },
+  {
+    id: 6,
+    name: "amphie_et_salle_de_conference",
+    description: "Creative spaces for fine arts, music, theater, and design programs including studios, galleries, and performance venues.",
+    image_url: "src/assets/image/image7.jpg"
+  },
+  {
+    id: 7,
+    name: "Amphi3",
+    description: "Creative spaces for fine arts, music, theater, and design programs including studios, galleries, and performance venues.",
+    image_url: "src/assets/image/image11.jpg"
+  },
+  
 ]
 
 function App() {
