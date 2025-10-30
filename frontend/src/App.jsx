@@ -108,7 +108,7 @@ function App() {
       </main>
     </div>
     }/>
-    
+    <Route path="/auth" element={<Auth />} />
     <Route path="/tour" element={<VirtualTour location={selectedBuilding? selectedBuilding:null}/>} />
     </Routes>
     </BrowserRouter>
