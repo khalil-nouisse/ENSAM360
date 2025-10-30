@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { ArrowLeft, ArrowRight, ArrowUp, ArrowDown, Map, Home } from 'lucide-react'
 
-function VirtualTour() {
+function VirtualTour(props) {
   // Define your tour locations with their 360 image paths
   const locations = {
   entree_ecole: {
@@ -245,8 +245,8 @@ function VirtualTour() {
     }
   }
 };
-
-  const [currentLocation, setCurrentLocation] = useState('entree_ecole')
+  
+  const [currentLocation, setCurrentLocation] = useState(props.location ? props.location.name : 'entree_ecole')
   const [showMap, setShowMap] = useState(false)
   const [viewerReady, setViewerReady] = useState(false)
   const viewerRef = useRef(null)
