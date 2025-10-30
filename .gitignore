@@ -1,3 +1,4 @@
-.envfrontend/src/assets/campus_map_2d1.svg
+.env
+frontend/src/assets/campus_map_2d1.svg
 frontend/src/assets/*.svg
 node_modules/

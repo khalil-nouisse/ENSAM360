@@ -10,9 +10,9 @@ import InteractionPanel from './components/InteractionPanel'
 const MOCK_BUILDINGS = [
   {
     id: 1,
-    name: "Engineering Building",
+    name: 'administration',
     description: "A state-of-the-art facility housing computer science, electrical engineering, and mechanical engineering departments. Features advanced laboratories and research centers.",
-    image_url: "https://placehold.co/400x300/213985/F1E8DD?text=Engineering+Building"
+    image_url: "src/assets/image/administration.jpg"
   },
   {
     id: 2,
@@ -108,8 +108,8 @@ function App() {
       </main>
     </div>
     }/>
-    <Route path="/tour" element={<VirtualTour />} />
-    <Route path="/auth" element={<Auth />} />
+    
+    <Route path="/tour" element={<VirtualTour location={selectedBuilding? selectedBuilding:null}/>} />
     </Routes>
     </BrowserRouter>
   )

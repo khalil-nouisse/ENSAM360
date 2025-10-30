@@ -1,92 +1,252 @@
 import { useState, useEffect, useRef } from 'react'
 import { ArrowLeft, ArrowRight, ArrowUp, ArrowDown, Map, Home } from 'lucide-react'
 
-function VirtualTour() {
+function VirtualTour(props) {
   // Define your tour locations with their 360 image paths
   const locations = {
-    entrance: {
-      name: "Campus Entrance",
-      image: "/src/assets/entrance_360.jpg", // Path to your 360° image
-      directions: {
-        forward: 'lobby',
-        right: 'parking',
-        left: null,
-        back: null
-      }
-    },
-    lobby: {
-      name: "Main Lobby",
-      image: "/src/assets/lobby_360.jpg",
-      directions: {
-        forward: 'corridor',
-        right: 'office',
-        left: 'library',
-        back: 'entrance'
-      }
-    },
-    parking: {
-      name: "Parking Area",
-      image: "/src/assets/parking_360.jpg",
-      directions: {
-        forward: null,
-        right: null,
-        left: 'entrance',
-        back: null
-      }
-    },
-    corridor: {
-      name: "Main Corridor",
-      image: "/src/assets/example.jpg",
-      directions: {
-        forward: 'classroom',
-        right: 'lab',
-        left: null,
-        back: 'lobby'
-      }
-    },
-    office: {
-      name: "Administration Office",
-      image: "/src/assets/office_360.jpg",
-      directions: {
-        forward: null,
-        right: null,
-        left: 'lobby',
-        back: null
-      }
-    },
-    library: {
-      name: "Library",
-      image: "/src/assets/library_360.jpg",
-      directions: {
-        forward: null,
-        right: 'lobby',
-        left: null,
-        back: null
-      }
-    },
-    classroom: {
-      name: "Classroom 101",
-      image: "/src/assets/classroom_360.jpg",
-      directions: {
-        forward: null,
-        right: null,
-        left: null,
-        back: 'corridor'
-      }
-    },
-    lab: {
-      name: "Science Laboratory",
-      image: "/src/assets/lab_360.jpg",
-      directions: {
-        forward: null,
-        right: null,
-        left: 'corridor',
-        back: null
-      }
+  entree_ecole: {
+    name: "Entrée de l'École",
+    image: "/src/assets/image/entreensam.jpg",
+    directions: {
+      forward: null,
+      right: null,
+      left: null,
+      back: "administration"
+    }
+  },
+  administration: {
+    name: "Administration",
+    image: "src/assets/image/administration.jpg",
+    directions: {
+      forward: "Admnetud",
+      right: null,
+      left: null,
+      back: "entree_ecole"
+    }
+  },
+  Admnetud: {
+    name: "Route vers l'Administration des Étudiants et la Bibliothèque",
+    image: "src/assets/image/routebib.jpg",
+    directions: {
+      forward: "Administration_etud",
+      right: null,
+      left: null,
+      back: "administration"
+    }
+  },
+  Administration_etud: {
+    name: "Administration des Étudiants",
+    image: "src/assets/image/adminetud.jpg",
+    directions: {
+      forward: "couloirForum",
+      right: null,
+      left: null,
+      back: "Admnetud"
+    }
+  },
+  couloirForum: {
+    name: "Couloir Forum",
+    image: "src/assets/image/couloirforum.jpg",
+    directions: {
+      forward: "couloir1",
+      right: null,
+      left: null,
+      back: "Administration_etud"
+    }
+  },
+  couloir1: {
+    name: "Couloir 1",
+    image: "src/assets/image/image5.jpg",
+    directions: {
+      forward: "couloir2",
+      right: "Bibliotheque_et_centre_de_langue",
+      left: null,
+      back: "couloirForum"
+    }
+  },
+  Bibliotheque_et_centre_de_langue: {
+    name: "Bibliothèque et Centre de Langue",
+    image: "src/assets/image/bib.jpg",
+    directions: {
+      forward: "escalier1",
+      right: null,
+      left: "couloir1",
+      back: null
+    }
+  },
+  escalier1: {
+    name: "Escalier 1",
+    image: "src/assets/image/escalier1.jpg",
+    directions: {
+      forward: "escalier2",
+      right: null,
+      left: null,
+      back: "Bibliotheque_et_centre_de_langue"
+    }
+  },
+  escalier2: {
+    name: "Escalier 2",
+    image: "src/assets/image/image2.jpg",
+    directions: {
+      forward: null,
+      right: null,
+      left: null,
+      back: "escalier1"
+    }
+  },
+  couloir2: {
+    name: "Couloir 2",
+    image: "src/assets/image/image6.jpg",
+    directions: {
+      forward: "amphie_et_salle_de_conference",
+      right: "couloircctd1",
+      left: null,
+      back: "couloir1"
+    }
+  },
+  couloircctd1: {
+    name: "Couloir Centre de Calcul",
+    image: "src/assets/image/couloircctd1.jpg",
+    directions: {
+      forward: "CouloirAEEE",
+      right: "mathinfo",
+      left: null,
+      back: "couloir2"
+    }
+  },
+  CouloirAEEE: {
+    name: "Couloir de l'Entrée de AEEE",
+    image: "src/assets/image/couloira3e.jpg",
+    directions: {
+      forward: "couloirtd1",
+      right: "EntreeA3e",
+      left: null,
+      back: "couloircctd1"
+    }
+  },
+  couloirtd1: {
+    name: "Couloir TD1",
+    image: "src/assets/image/ctd1v1.jpeg",
+    directions: {
+      forward: "CouloirTD1TD2",
+      right: null,
+      left: null,
+      back: "CouloirAEEE"
+    }
+  },
+  CouloirTD1TD2: {
+    name: "Couloir entre TD1, TD2 et Amphi 250",
+    image: "src/assets/image/Ctd1td2.jpg",
+    directions: {
+      forward: "entree_ecole",
+      right: null,
+      left: null,
+      back: "couloirtd1"
+    }
+  },
+  EntreeA3e: {
+    name: "Entrée de AEEE",
+    image: "src/assets/image/EntreeA3E.jpg",
+    directions: {
+      forward: "AEEE",
+      right: null,
+      left: null,
+      back: "CouloirAEEE"
+    }
+  },
+  AEEE: {
+    name: "Département AEEE",
+    image: "src/assets/image/a3e.jpg",
+    directions: {
+      forward: "a3einside",
+      right: null,
+      left: null,
+      back: "EntreeA3e"
+    }
+  },
+  a3einside: {
+    name: "Département AEEE (Intérieur)",
+    image: "src/assets/image/a3e2.jpg",
+    directions: {
+      forward: null,
+      right: null,
+      left: null,
+      back: "AEEE"
+    }
+  },
+  mathinfo: {
+    name: "Département Mathématiques-Informatique",
+    image: "src/assets/image/cc_outside.jpg",
+    directions: {
+      forward: "mathinfo_inside",
+      right: null,
+      left: null,
+      back: "couloircctd1"
+    }
+  },
+  mathinfo_inside: {
+    name: "Département Mathématiques-Informatique (Intérieur)",
+    image: "src/assets/image/mathinfo.jpg",
+    directions: {
+      forward: null,
+      right: null,
+      left: null,
+      back: "mathinfo"
+    }
+  },
+  amphie_et_salle_de_conference: {
+    name: "Amphithéâtre 3 et Salle de Conférence",
+    image: "src/assets/image/image7.jpg",
+    directions: {
+      forward: "entree_emphi3",
+      right: "entree_salle_conference",
+      left: null,
+      back: "couloir2"
+    }
+  },
+  entree_salle_conference: {
+    name: "Entrée de la Salle de Conférence",
+    image: "src/assets/image/image8.jpg",
+    directions: {
+      forward: "salle_conference",
+      right: null,
+      left: null,
+      back: "amphie_et_salle_de_conference"
+    }
+  },
+  salle_conference: {
+    name: "Salle de Conférence",
+    image: "src/assets/image/image9.jpg",
+    directions: {
+      forward: null,
+      right: null,
+      left: null,
+      back: "entree_salle_conference"
+    }
+  },
+  entree_emphi3: {
+    name: "Entrée de l'Amphithéâtre 3",
+    image: "src/assets/image/amphi3.jpg",
+    directions: {
+      forward: "Amphi3",
+      right: null,
+      left: null,
+      back: "amphie_et_salle_de_conference"
+    }
+  },
+  Amphi3: {
+    name: "Amphithéâtre 3",
+    image: "src/assets/image/image11.jpg",
+    directions: {
+      forward: null,
+      right: null,
+      left: null,
+      back: "entree_emphi3"
     }
   }
-
-  const [currentLocation, setCurrentLocation] = useState('entrance')
+};
+  
+  const [currentLocation, setCurrentLocation] = useState(props.location ? props.location.name : 'entree_ecole')
   const [showMap, setShowMap] = useState(false)
   const [viewerReady, setViewerReady] = useState(false)
   const viewerRef = useRef(null)
@@ -141,9 +301,19 @@ function VirtualTour() {
       mouseZoom: true,
       draggable: true,
       compass: true,
-      hfov: 100,
+      // Settings for 180° images
+      haov: 360, // Horizontal angle of view (180° instead of 360°)
+      vaov: 180, // Vertical angle of view
+      hfov: 120, // Initial field of view
+      minHfov: 50, // Maximum zoom in
+      maxHfov: 150, // Maximum zoom out
       pitch: 0,
-      yaw: 0
+      yaw: 0,
+      // Prevent looking beyond the 180° range
+      // minYaw: -90,
+      // maxYaw: 90,
+      minPitch: -90,
+      maxPitch: 90
     })
   }, [currentLocation, viewerReady, current.image])
 
@@ -198,10 +368,13 @@ function VirtualTour() {
           {current.directions.forward && (
             <button
               onClick={() => navigateTo('forward')}
-              className="pointer-events-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -mt-32 bg-white/90 hover:bg-white p-4 rounded-full shadow-lg transition-all hover:scale-110"
+              className="group pointer-events-auto absolute top-[20%] left-1/2 -translate-x-1/2 bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm hover:from-blue-500/80 hover:to-blue-600/80 p-3 rounded-full border-2 border-white/40 hover:border-white shadow-lg transition-all duration-300 hover:scale-125"
               title={`Go to ${locations[current.directions.forward].name}`}
             >
-              <ArrowUp size={32} className="text-gray-800" />
+              <ArrowUp size={28} className="text-white drop-shadow-lg" />
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                {locations[current.directions.forward].name}
+              </div>
             </button>
           )}
 
@@ -209,10 +382,13 @@ function VirtualTour() {
           {current.directions.back && (
             <button
               onClick={() => navigateTo('back')}
-              className="pointer-events-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-32 bg-white/90 hover:bg-white p-4 rounded-full shadow-lg transition-all hover:scale-110"
+              className="group pointer-events-auto absolute bottom-[20%] left-1/2 -translate-x-1/2 bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm hover:from-purple-500/80 hover:to-purple-600/80 p-3 rounded-full border-2 border-white/40 hover:border-white shadow-lg transition-all duration-300 hover:scale-125"
               title={`Go to ${locations[current.directions.back].name}`}
             >
-              <ArrowDown size={32} className="text-gray-800" />
+              <ArrowDown size={28} className="text-white drop-shadow-lg" />
+              <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                {locations[current.directions.back].name}
+              </div>
             </button>
           )}
 
@@ -220,10 +396,13 @@ function VirtualTour() {
           {current.directions.left && (
             <button
               onClick={() => navigateTo('left')}
-              className="pointer-events-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -ml-32 bg-white/90 hover:bg-white p-4 rounded-full shadow-lg transition-all hover:scale-110"
+              className="group pointer-events-auto absolute top-1/2 left-[15%] -translate-y-1/2 bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm hover:from-green-500/80 hover:to-green-600/80 p-3 rounded-full border-2 border-white/40 hover:border-white shadow-lg transition-all duration-300 hover:scale-125"
               title={`Go to ${locations[current.directions.left].name}`}
             >
-              <ArrowLeft size={32} className="text-gray-800" />
+              <ArrowLeft size={28} className="text-white drop-shadow-lg" />
+              <div className="absolute top-1/2 -right-2 translate-x-full -translate-y-1/2 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                {locations[current.directions.left].name}
+              </div>
             </button>
           )}
 
@@ -231,10 +410,13 @@ function VirtualTour() {
           {current.directions.right && (
             <button
               onClick={() => navigateTo('right')}
-              className="pointer-events-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ml-32 bg-white/90 hover:bg-white p-4 rounded-full shadow-lg transition-all hover:scale-110"
+              className="group pointer-events-auto absolute top-1/2 right-[15%] -translate-y-1/2 bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm hover:from-orange-500/80 hover:to-orange-600/80 p-3 rounded-full border-2 border-white/40 hover:border-white shadow-lg transition-all duration-300 hover:scale-125"
               title={`Go to ${locations[current.directions.right].name}`}
             >
-              <ArrowRight size={32} className="text-gray-800" />
+              <ArrowRight size={28} className="text-white drop-shadow-lg" />
+              <div className="absolute top-1/2 -left-2 -translate-x-full -translate-y-1/2 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                {locations[current.directions.right].name}
+              </div>
             </button>
           )}
         </div>
