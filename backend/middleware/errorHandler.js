@@ -1,0 +1,1 @@
+//Catches and formats errors (optional but good).

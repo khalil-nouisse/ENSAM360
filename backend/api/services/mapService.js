@@ -1,0 +1,1 @@
+//ALL Neo4j queries for the map.

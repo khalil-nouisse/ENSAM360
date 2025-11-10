@@ -1,0 +1,1 @@
+//All routes for locations, paths, 360° (e.g., /api/map/...)
