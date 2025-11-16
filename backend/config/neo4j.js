@@ -36,7 +36,7 @@ const testConnection = async () => {
         await driver.verifyConnectivity();
         
         // 6. Utiliser console.log() !
-        console.log("✅ Connexion à Neo4j AuraDB établie avec succès !");
+        console.log("Connexion à Neo4j AuraDB établie avec succès !");
 
     } catch (error) {
         console.error("❌ Impossible de se connecter à AuraDB :", error);
@@ -51,3 +51,5 @@ const testConnection = async () => {
 
 // Lancer le test
 testConnection();
+
+module.exports = driver
