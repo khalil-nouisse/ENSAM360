@@ -18,7 +18,7 @@ function Auth() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-6rem)] flex items-center justify-center px-4" style={{ backgroundColor: '#F1E8DD' }}>
+    <div className="min-h-[calc(100vh)] flex items-center justify-center px-4" style={{ backgroundColor: '#F1E8DD' }}>
       <div className="w-full max-w-md">
         <div className="bg-white/95 backdrop-blur-sm shadow-xl rounded-2xl border border-darkblue/10 overflow-hidden">
           {/* Header */}

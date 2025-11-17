@@ -28,7 +28,7 @@ const getNextLocationsID = async (id)=>{
 const getLocationInfoByID = async (id)=>{
     const session = driver.session();
     cipherQuery = `
-        MATCH (n:Location {id = ${id}})
+    MATCH (n:Location {id = ${id}})
         RETURN n.pano_url AS pano_image ,
                n.name AS name ,
                n.floor AS floor ,
@@ -62,5 +62,5 @@ const getLocationInfoByID = async (id)=>{
 
 module.exports = {
     getNextLocationsID , 
-    getPanoInfoByID
+    getLocationInfoByID
 }

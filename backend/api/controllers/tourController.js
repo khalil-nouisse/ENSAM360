@@ -32,6 +32,7 @@ const getLocationInfoByID = async(req , res)=>{
 
 module.exports = {
     getNextLocationsID , 
+    getLocationInfoByID
 }
 
 
