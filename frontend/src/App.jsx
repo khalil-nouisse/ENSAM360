@@ -1,13 +1,14 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import VirtualTour from './components/VirtualTour'
 import Auth from './pages/Auth'
-import { useState } from 'react'
+import { useState ,useEffect} from 'react'
 import Navbar from './components/Navbar'
 import CampusMapLeaflet from './components/CampusMapLeaflet'
 import InteractionPanel from './components/InteractionPanel'
-
+import axios from 'axios'
+// approach without database
 // Mock buildings data
-const MOCK_BUILDINGS = [
+/* const MOCK_BUILDINGS = [
   {
     id: 1,
     name: 'administration',
@@ -51,24 +52,56 @@ const MOCK_BUILDINGS = [
     image_url: "src/assets/image/image11.jpg"
   },
   
-]
+]*/
+
 
 function App() {
+
+  async function LoadBuildings() {
+  try {
+    const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/buildings");
+    console.log(res.data)
+    return res.data;
+    
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
+  const [Buildings,setBuildings] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedBuilding, setSelectedBuilding] = useState(null)
   const [is3DMode, setIs3DMode] = useState(false)
-
+  const [filteredBuildings,setFilteredBuildings] = useState(null)
   // Filter buildings based on search term
-  const filteredBuildings = MOCK_BUILDINGS.filter(building =>
-    building.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  
+  
 
   const handleBuildingSelect = (building) => {
     setSelectedBuilding(building)
     setSearchTerm('')
     setIs3DMode(false)
   }
+  document.addEventListener
+  useEffect(() => {
+      async function init(){
+        const locations = await LoadBuildings();
+        console.log(locations)
+        setBuildings(locations);
+      }
+      init();
+      
+    }, [])
 
+    useEffect(() => {
+  if (!Buildings) return;
+
+  const filtered = Buildings.filter(building =>
+    building.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  setFilteredBuildings(filtered);
+}, [Buildings, searchTerm]);
   return (
     <BrowserRouter>
     <Routes>

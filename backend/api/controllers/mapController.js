@@ -8,11 +8,11 @@ const mapService = require('../services/mapService');
  * Handles the HTTP request and response for fetching all locations.
  */
 
-const getLocations = async (req , res)=> {
+const getBuildings = async (req , res)=> {
     try{
 
         // 1. Call the service to get the data
-        const locations = await mapService.getAllLocations();
+        const locations = await mapService.getAllBuildings();
         
         // 2. Send a success response with the data
         res.status(200).json(locations);
@@ -28,5 +28,5 @@ const getLocations = async (req , res)=> {
 
 
 module.exports = {
-    getLocations,
+    getBuildings,
 }

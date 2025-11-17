@@ -3,7 +3,7 @@ const driver = require('../../config/neo4j');
 const getNextLocationsID = async (id)=>{
     const session =  driver.session();
     cipherQuery = `
-        MATCH (n:Location{ id='${id}'})-[r:CONNECTS_TO]-(m:Location)
+        MATCH (n:Location{ id:'${id}'})-[r:CONNECTS_TO]-(m:Location)
         RETUTN m.id
     `;
     try{
@@ -28,7 +28,7 @@ const getNextLocationsID = async (id)=>{
 const getLocationInfoByID = async (id)=>{
     const session = driver.session();
     cipherQuery = `
-    MATCH (n:Location {id = ${id}})
+    MATCH (n:Location {id : ${id}})
         RETURN n.pano_url AS pano_image ,
                n.name AS name ,
                n.floor AS floor ,

@@ -1,284 +1,306 @@
 import { useState, useEffect, useRef } from 'react'
 import { ArrowLeft, ArrowRight, ArrowUp, ArrowDown, Map, Home } from 'lucide-react'
-
+import axios from 'axios'
 function VirtualTour(props) {
   // Define your tour locations with their 360 image paths
-  const locations = {
-  entree_ecole: {
-    name: "Entrée de l'École",
-    image: "/src/assets/image/entreensam.jpg",
-    directions: {
-      forward: null,
-      right: null,
-      left: null,
-      back: "administration"
-    }
-  },
-  administration: {
-    name: "Administration",
-    image: "src/assets/image/administration.jpg",
-    directions: {
-      forward: "Admnetud",
-      right: null,
-      left: null,
-      back: "entree_ecole"
-    }
-  },
-  Admnetud: {
-    name: "Route vers l'Administration des Étudiants et la Bibliothèque",
-    image: "src/assets/image/routebib.jpg",
-    directions: {
-      forward: "Administration_etud",
-      right: null,
-      left: null,
-      back: "administration"
-    }
-  },
-  Administration_etud: {
-    name: "Administration des Étudiants",
-    image: "src/assets/image/adminetud.jpg",
-    directions: {
-      forward: "couloirForum",
-      right: null,
-      left: null,
-      back: "Admnetud"
-    }
-  },
-  couloirForum: {
-    name: "Couloir Forum",
-    image: "src/assets/image/couloirforum.jpg",
-    directions: {
-      forward: "couloir1",
-      right: null,
-      left: null,
-      back: "Administration_etud"
-    }
-  },
-  couloir1: {
-    name: "Couloir 1",
-    image: "src/assets/image/image5.jpg",
-    directions: {
-      forward: "couloir2",
-      right: "Bibliotheque_et_centre_de_langue",
-      left: null,
-      back: "couloirForum"
-    }
-  },
-  Bibliotheque_et_centre_de_langue: {
-    name: "Bibliothèque et Centre de Langue",
-    image: "src/assets/image/bib.jpg",
-    directions: {
-      forward: "escalier1",
-      right: null,
-      left: "couloir1",
-      back: null
-    }
-  },
-  escalier1: {
-    name: "Escalier 1",
-    image: "src/assets/image/escalier1.jpg",
-    directions: {
-      forward: "escalier2",
-      right: null,
-      left: null,
-      back: "Bibliotheque_et_centre_de_langue"
-    }
-  },
-  escalier2: {
-    name: "Escalier 2",
-    image: "src/assets/image/image2.jpg",
-    directions: {
-      forward: null,
-      right: null,
-      left: null,
-      back: "escalier1"
-    }
-  },
-  couloir2: {
-    name: "Couloir 2",
-    image: "src/assets/image/image6.jpg",
-    directions: {
-      forward: "amphie_et_salle_de_conference",
-      right: "couloircctd1",
-      left: null,
-      back: "couloir1"
-    }
-  },
-  couloircctd1: {
-    name: "Couloir Centre de Calcul",
-    image: "src/assets/image/couloircctd1.jpg",
-    directions: {
-      forward: "CouloirAEEE",
-      right: "mathinfo",
-      left: null,
-      back: "couloir2"
-    }
-  },
-  CouloirAEEE: {
-    name: "Couloir de l'Entrée de AEEE",
-    image: "src/assets/image/couloira3e.jpg",
-    directions: {
-      forward: "couloirtd1",
-      right: "EntreeA3e",
-      left: null,
-      back: "couloircctd1"
-    }
-  },
-  couloirtd1: {
-    name: "Couloir TD1",
-    image: "src/assets/image/ctd1v1.jpeg",
-    directions: {
-      forward: "CouloirTD1TD2",
-      right: null,
-      left: null,
-      back: "CouloirAEEE"
-    }
-  },
-  CouloirTD1TD2: {
-    name: "Couloir entre TD1, TD2 et Amphi 250",
-    image: "src/assets/image/Ctd1td2.jpg",
-    directions: {
-      forward: "entree_ecole",
-      right: null,
-      left: null,
-      back: "couloirtd1"
-    }
-  },
-  EntreeA3e: {
-    name: "Entrée de AEEE",
-    image: "src/assets/image/EntreeA3E.jpg",
-    directions: {
-      forward: "AEEE",
-      right: null,
-      left: null,
-      back: "CouloirAEEE"
-    }
-  },
-  AEEE: {
-    name: "Département AEEE",
-    image: "src/assets/image/a3e.jpg",
-    directions: {
-      forward: "a3einside",
-      right: null,
-      left: null,
-      back: "EntreeA3e"
-    }
-  },
-  a3einside: {
-    name: "Département AEEE (Intérieur)",
-    image: "src/assets/image/a3e2.jpg",
-    directions: {
-      forward: null,
-      right: null,
-      left: null,
-      back: "AEEE"
-    }
-  },
-  mathinfo: {
-    name: "Département Mathématiques-Informatique",
-    image: "src/assets/image/cc_outside.jpg",
-    directions: {
-      forward: "mathinfo_inside",
-      right: null,
-      left: null,
-      back: "couloircctd1"
-    }
-  },
-  mathinfo_inside: {
-    name: "Département Mathématiques-Informatique (Intérieur)",
-    image: "src/assets/image/mathinfo.jpg",
-    directions: {
-      forward: null,
-      right: null,
-      left: null,
-      back: "mathinfo"
-    }
-  },
-  amphie_et_salle_de_conference: {
-    name: "Amphithéâtre 3 et Salle de Conférence",
-    image: "src/assets/image/image7.jpg",
-    directions: {
-      forward: "entree_emphi3",
-      right: "entree_salle_conference",
-      left: null,
-      back: "couloir2"
-    }
-  },
-  entree_salle_conference: {
-    name: "Entrée de la Salle de Conférence",
-    image: "src/assets/image/image8.jpg",
-    directions: {
-      forward: "salle_conference",
-      right: null,
-      left: null,
-      back: "amphie_et_salle_de_conference"
-    }
-  },
-  salle_conference: {
-    name: "Salle de Conférence",
-    image: "src/assets/image/image9.jpg",
-    directions: {
-      forward: null,
-      right: null,
-      left: null,
-      back: "entree_salle_conference"
-    }
-  },
-  entree_emphi3: {
-    name: "Entrée de l'Amphithéâtre 3",
-    image: "src/assets/image/amphi3.jpg",
-    directions: {
-      forward: "Amphi3",
-      right: null,
-      left: null,
-      back: "amphie_et_salle_de_conference"
-    }
-  },
-  Amphi3: {
-    name: "Amphithéâtre 3",
-    image: "src/assets/image/image11.jpg",
-    directions: {
-      forward: null,
-      right: null,
-      left: null,
-      back: "entree_emphi3"
-    }
+
+  // approach with database
+  // TODO need to refactor this function into a separate component
+  async function LoadLocations() {
+  try {
+    const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/buildings");
+    return res.data;
+  } catch (err) {
+    console.error(err);
+    return null;
   }
-};
+}
+  // approach without database
+//   const locations = {
+//   entree_ecole: {
+//     name: "Entrée de l'École",
+//     image: "/src/assets/image/entreensam.jpg",
+//     directions: {
+//       forward: null,
+//       right: null,
+//       left: null,
+//       back: "administration"
+//     }
+//   },
+//   administration: {
+//     name: "Administration",
+//     image: "src/assets/image/administration.jpg",
+//     directions: {
+//       forward: "Admnetud",
+//       right: null,
+//       left: null,
+//       back: "entree_ecole"
+//     }
+//   },
+//   Admnetud: {
+//     name: "Route vers l'Administration des Étudiants et la Bibliothèque",
+//     image: "src/assets/image/routebib.jpg",
+//     directions: {
+//       forward: "Administration_etud",
+//       right: null,
+//       left: null,
+//       back: "administration"
+//     }
+//   },
+//   Administration_etud: {
+//     name: "Administration des Étudiants",
+//     image: "src/assets/image/adminetud.jpg",
+//     directions: {
+//       forward: "couloirForum",
+//       right: null,
+//       left: null,
+//       back: "Admnetud"
+//     }
+//   },
+//   couloirForum: {
+//     name: "Couloir Forum",
+//     image: "src/assets/image/couloirforum.jpg",
+//     directions: {
+//       forward: "couloir1",
+//       right: null,
+//       left: null,
+//       back: "Administration_etud"
+//     }
+//   },
+//   couloir1: {
+//     name: "Couloir 1",
+//     image: "src/assets/image/image5.jpg",
+//     directions: {
+//       forward: "couloir2",
+//       right: "Bibliotheque_et_centre_de_langue",
+//       left: null,
+//       back: "couloirForum"
+//     }
+//   },
+//   Bibliotheque_et_centre_de_langue: {
+//     name: "Bibliothèque et Centre de Langue",
+//     image: "src/assets/image/bib.jpg",
+//     directions: {
+//       forward: "escalier1",
+//       right: null,
+//       left: "couloir1",
+//       back: null
+//     }
+//   },
+//   escalier1: {
+//     name: "Escalier 1",
+//     image: "src/assets/image/escalier1.jpg",
+//     directions: {
+//       forward: "escalier2",
+//       right: null,
+//       left: null,
+//       back: "Bibliotheque_et_centre_de_langue"
+//     }
+//   },
+//   escalier2: {
+//     name: "Escalier 2",
+//     image: "src/assets/image/image2.jpg",
+//     directions: {
+//       forward: null,
+//       right: null,
+//       left: null,
+//       back: "escalier1"
+//     }
+//   },
+//   couloir2: {
+//     name: "Couloir 2",
+//     image: "src/assets/image/image6.jpg",
+//     directions: {
+//       forward: "amphie_et_salle_de_conference",
+//       right: "couloircctd1",
+//       left: null,
+//       back: "couloir1"
+//     }
+//   },
+//   couloircctd1: {
+//     name: "Couloir Centre de Calcul",
+//     image: "src/assets/image/couloircctd1.jpg",
+//     directions: {
+//       forward: "CouloirAEEE",
+//       right: "mathinfo",
+//       left: null,
+//       back: "couloir2"
+//     }
+//   },
+//   CouloirAEEE: {
+//     name: "Couloir de l'Entrée de AEEE",
+//     image: "src/assets/image/couloira3e.jpg",
+//     directions: {
+//       forward: "couloirtd1",
+//       right: "EntreeA3e",
+//       left: null,
+//       back: "couloircctd1"
+//     }
+//   },
+//   couloirtd1: {
+//     name: "Couloir TD1",
+//     image: "src/assets/image/ctd1v1.jpeg",
+//     directions: {
+//       forward: "CouloirTD1TD2",
+//       right: null,
+//       left: null,
+//       back: "CouloirAEEE"
+//     }
+//   },
+//   CouloirTD1TD2: {
+//     name: "Couloir entre TD1, TD2 et Amphi 250",
+//     image: "src/assets/image/Ctd1td2.jpg",
+//     directions: {
+//       forward: "entree_ecole",
+//       right: null,
+//       left: null,
+//       back: "couloirtd1"
+//     }
+//   },
+//   EntreeA3e: {
+//     name: "Entrée de AEEE",
+//     image: "src/assets/image/EntreeA3E.jpg",
+//     directions: {
+//       forward: "AEEE",
+//       right: null,
+//       left: null,
+//       back: "CouloirAEEE"
+//     }
+//   },
+//   AEEE: {
+//     name: "Département AEEE",
+//     image: "src/assets/image/a3e.jpg",
+//     directions: {
+//       forward: "a3einside",
+//       right: null,
+//       left: null,
+//       back: "EntreeA3e"
+//     }
+//   },
+//   a3einside: {
+//     name: "Département AEEE (Intérieur)",
+//     image: "src/assets/image/a3e2.jpg",
+//     directions: {
+//       forward: null,
+//       right: null,
+//       left: null,
+//       back: "AEEE"
+//     }
+//   },
+//   mathinfo: {
+//     name: "Département Mathématiques-Informatique",
+//     image: "src/assets/image/cc_outside.jpg",
+//     directions: {
+//       forward: "mathinfo_inside",
+//       right: null,
+//       left: null,
+//       back: "couloircctd1"
+//     }
+//   },
+//   mathinfo_inside: {
+//     name: "Département Mathématiques-Informatique (Intérieur)",
+//     image: "src/assets/image/mathinfo.jpg",
+//     directions: {
+//       forward: null,
+//       right: null,
+//       left: null,
+//       back: "mathinfo"
+//     }
+//   },
+//   amphie_et_salle_de_conference: {
+//     name: "Amphithéâtre 3 et Salle de Conférence",
+//     image: "src/assets/image/image7.jpg",
+//     directions: {
+//       forward: "entree_emphi3",
+//       right: "entree_salle_conference",
+//       left: null,
+//       back: "couloir2"
+//     }
+//   },
+//   entree_salle_conference: {
+//     name: "Entrée de la Salle de Conférence",
+//     image: "src/assets/image/image8.jpg",
+//     directions: {
+//       forward: "salle_conference",
+//       right: null,
+//       left: null,
+//       back: "amphie_et_salle_de_conference"
+//     }
+//   },
+//   salle_conference: {
+//     name: "Salle de Conférence",
+//     image: "src/assets/image/image9.jpg",
+//     directions: {
+//       forward: null,
+//       right: null,
+//       left: null,
+//       back: "entree_salle_conference"
+//     }
+//   },
+//   entree_emphi3: {
+//     name: "Entrée de l'Amphithéâtre 3",
+//     image: "src/assets/image/amphi3.jpg",
+//     directions: {
+//       forward: "Amphi3",
+//       right: null,
+//       left: null,
+//       back: "amphie_et_salle_de_conference"
+//     }
+//   },
+//   Amphi3: {
+//     name: "Amphithéâtre 3",
+//     image: "src/assets/image/image11.jpg",
+//     directions: {
+//       forward: null,
+//       right: null,
+//       left: null,
+//       back: "entree_emphi3"
+//     }
+//   }
+// };
   
   const [currentLocation, setCurrentLocation] = useState(props.location ? props.location.name : 'entree_ecole')
   const [showMap, setShowMap] = useState(false)
   const [viewerReady, setViewerReady] = useState(false)
   const viewerRef = useRef(null)
   const pannellumViewerRef = useRef(null)
-
+  const [locations,setLocations] = useState(null)
+  if (!locations) {
+  return <div className="text-white p-6">Loading locations...</div>;
+  }
   const current = locations[currentLocation]
 
   // Initialize Pannellum viewer
   useEffect(() => {
-    // Load Pannellum script
-    const script = document.createElement('script')
-    script.src = 'https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js'
-    script.async = true
-    document.body.appendChild(script)
+    async function init(){
+      const locations = await LoadLocations();
+      setLocations(locations);
+      // Load Pannellum script
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js'
+      script.async = true
+      document.body.appendChild(script)
 
-    // Load Pannellum CSS
-    const link = document.createElement('link')
-    link.rel = 'stylesheet'
-    link.href = 'https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css'
-    document.head.appendChild(link)
+      // Load Pannellum CSS
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = 'https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css'
+      document.head.appendChild(link)
 
-    script.onload = () => {
-      setViewerReady(true)
-    }
+      script.onload = () => {
+        setViewerReady(true)
+      }
 
-    return () => {
-      document.body.removeChild(script)
-      document.head.removeChild(link)
-      if (pannellumViewerRef.current) {
-        pannellumViewerRef.current.destroy()
+      return () => {
+        document.body.removeChild(script)
+        document.head.removeChild(link)
+        if (pannellumViewerRef.current) {
+          pannellumViewerRef.current.destroy()
+        }
       }
     }
+    init();
+    
   }, [])
 
   // Update panorama when location changes
@@ -462,5 +484,6 @@ function VirtualTour(props) {
     </div>
   )
 }
+
 
 export default VirtualTour
