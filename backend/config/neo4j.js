@@ -2,7 +2,7 @@
 require('dotenv').config();
 
 const neo4j = require('neo4j-driver');
-
+const {seedDatabase} = require('../scripts/seed');
 // 2. Lire les variables depuis process.env
 const { 
     NEO4J_URI, 
@@ -31,12 +31,21 @@ try {
 }
 
 // 5. Fonction pour tester la connexion
+<<<<<<< HEAD
 // const testConnection = async () => {
 //     try {
 //         await driver.verifyConnectivity();
         
 //         // 6. Utiliser console.log() !
 //         console.log("Connexion à Neo4j AuraDB établie avec succès !");
+=======
+const testConnection = async () => {
+    try {
+        await driver.verifyConnectivity();
+        await seedDatabase(driver);
+        // 6. Utiliser console.log() !
+        console.log("Connexion à Neo4j AuraDB établie avec succès !");
+>>>>>>> a9b4c1c478928ba036d531be1483c2fa78bf1b9a
 
 //     } catch (error) {
 //         console.error("❌ Impossible de se connecter à AuraDB :", error);
@@ -52,4 +61,12 @@ try {
 // Lancer le test
 //testConnection();
 
+<<<<<<< HEAD
 module.exports = driver
+=======
+
+
+
+
+
+>>>>>>> auradb
