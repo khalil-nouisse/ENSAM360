@@ -8,7 +8,11 @@ const mapService = require('../services/mapService');
  * Handles the HTTP request and response for fetching all locations.
  */
 
+<<<<<<< HEAD
 const getAllBuildings = async (req , res)=> {
+=======
+const getBuildings = async (req , res)=> {
+>>>>>>> virtual_tour
     try{
 
         // 1. Call the service to get the data
@@ -25,6 +29,7 @@ const getAllBuildings = async (req , res)=> {
     }
 };
 
+<<<<<<< HEAD
 const createLocation = async (req , res) => {
     try{
         await mapService.createLocation(req.body);
@@ -54,6 +59,11 @@ const getLocationByID =async (req,res) =>{
 const getPrincipalLocatations = async (req , res) => {
     try{
         const principaleLocations = await mapService.getPrincipalLocatations();
+=======
+const getPrincipalLocations = async (req , res) => {
+    try{
+        const principaleLocations = await mapService.getPrincipalLocations();
+>>>>>>> virtual_tour
         res.status(200).json(principaleLocations);
     }catch(err){
         res.status(500).json({
@@ -64,8 +74,13 @@ const getPrincipalLocatations = async (req , res) => {
 }
 
 module.exports = {
+<<<<<<< HEAD
     getAllBuildings,
     createLocation,
     getLocationByID , 
     getPrincipalLocatations
+=======
+    getBuildings,
+    getPrincipalLocations
+>>>>>>> virtual_tour
 }

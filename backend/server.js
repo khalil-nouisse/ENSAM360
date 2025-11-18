@@ -8,6 +8,7 @@ const mainApiRouter = require('./api/routes/index')
 
 const whiteList = ['http://localhost:5173/'];
 const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 const corsOptions = {
     origin : (origin, callback) => {
@@ -18,12 +19,13 @@ const corsOptions = {
            callback(new Error('Not Allowed by CORS')) ;
         }
     },
+    
     optionsSuccessStatus: 200, // For legacy browser support, keep this set to 200
 }
 
 
 //middlwares
-app.use(cors(corsOptions));
+app.use(cors({corsOptions,credentials:true}));
 app.use(express.urlencoded({ extended : false})); //built in middlware to handlw urlencoded data (form data)
 app.use(express.json());
 app.use(morgan("dev")); 

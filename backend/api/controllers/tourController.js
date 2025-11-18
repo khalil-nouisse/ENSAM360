@@ -16,8 +16,13 @@ const getNextLocationsID = async (req, res)=>{
 
 const getLocationInfoByID = async(req , res)=>{
     try{
+<<<<<<< HEAD
         const informations = tourService.getLocationInfoByID(req.query.id);
 
+=======
+        const informations = await tourService.getLocationInfoByID(req.query.id);
+        console.log(informations)
+>>>>>>> virtual_tour
         res.status(200).json(informations);
 
     }catch(err){

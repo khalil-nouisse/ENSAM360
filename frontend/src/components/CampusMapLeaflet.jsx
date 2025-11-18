@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import L from 'leaflet'
 import { Building2, ArrowRight, MapPin } from 'lucide-react'
+import axios from 'axios'
 
 // Fix for default markers in Leaflet with Vite
 delete L.Icon.Default.prototype._getIconUrl
@@ -11,46 +12,33 @@ L.Icon.Default.mergeOptions({
 })
 
 function CampusMapLeaflet() {
+  async function LoadBuildings() {
+  try {
+    const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/buildings");
+    console.log(res.data)
+    return res.data;
+    
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
   const mapRef = useRef(null)
   const mapInstanceRef = useRef(null)
   const markersRef = useRef([])
-  const [buildings, setBuildings] = useState([
-    {
-      id: 'TD1',
-      name: 'TD1',
-      lat: 455,
-      lng: 310,
-      hasTour: true,
-      tourType: '360°'
-    },
-    {
-      id: 'TD2',
-      name: 'TD2',
-      lat: 470,
-      lng: 215,
-      hasTour: true,
-      tourType: '360°'
-    },
-    {
-      id: 'library',
-      name: 'Library',
-      lat: 730,
-      lng: 215,
-      hasTour: true,
-      tourType: '360°'
-    },
-    {
-      id: 'lab-building',
-      name: 'Laboratory Building',
-      lat: 200,
-      lng: 600,
-      hasTour: true,
-      tourType: '360°'
-    }
-  ])
+  const [buildings, setBuildings] = useState([])
+  
   const [selectedBuilding, setSelectedBuilding] = useState(null)
   const [isCoordinateMode, setIsCoordinateMode] = useState(false)
-
+  useEffect(() => {
+      async function init(){
+        const locations = await LoadBuildings();
+        console.log(locations)
+        setBuildings(locations);
+      }
+      init();
+      
+    }, [])
   useEffect(() => {
     if (!mapRef.current) return
 
@@ -116,54 +104,46 @@ function CampusMapLeaflet() {
   }, [buildings])
 
   const addBuildingMarkers = (map) => {
-    // Clear existing markers
-    markersRef.current.forEach(marker => map.removeLayer(marker))
-    markersRef.current = []
+  if (!buildings || buildings.length === 0) return;
 
-    buildings.forEach(building => {
-      // Create custom icon for building markers
-      const buildingIcon = L.divIcon({
-        html: `
-          <div class="building-marker">
-            <div class="building-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
-              </svg>
-            </div>
-            <div class="tour-indicator">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-              </svg>
-            </div>
-          </div>
-        `,
-        className: 'custom-building-marker',
-        iconSize: [40, 40],
-        iconAnchor: [20, 20]
-      })
+  // define icon ONCE
+  const buildingIcon = L.divIcon({
+    html: `
+      <div class="building-marker">
+        <div class="building-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
+          </svg>
+        </div>
+        <div class="tour-indicator">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+          </svg>
+        </div>
+      </div>
+    `,
+    className: 'custom-building-marker',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20]
+  });
 
-      const marker = L.marker([building.lat, building.lng], { icon: buildingIcon })
-        .addTo(map)
-        .bindPopup(`
-          <div class="building-popup">
-            <h3>${building.name}</h3>
-            <p>Coordinates: (${building.lat.toFixed(4)}, ${building.lng.toFixed(4)})</p>
-            ${building.hasTour ? `
-              <button onclick="window.navigateToTour('${building.id}')" class="tour-button">
-                Enter 360° Tour
-              </button>
-            ` : ''}
-          </div>
-        `)
+  // remove existing markers
+  markersRef.current.forEach(m => map.removeLayer(m));
+  markersRef.current = [];
 
-      // Add click handler for marker
-      marker.on('click', () => {
-        setSelectedBuilding(building)
-      })
+  // now loop
+  buildings.forEach(building => {
+    const marker = L.marker(
+      [building.y_coords, building.x_coords],
+      { icon: buildingIcon }
+    )
+    .addTo(map)
+    .bindPopup(`<h3>${building.name}</h3>`);
 
-      markersRef.current.push(marker)
-    })
-  }
+    markersRef.current.push(marker);
+  });
+};
+
 
   const handleMapClick = (e) => {
     console.log('Map clicked! Coordinate mode:', isCoordinateMode)

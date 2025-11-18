@@ -3,7 +3,11 @@ const driver = require('../../config/neo4j');
 const getNextLocationsID = async (id)=>{
     const session =  driver.session();
     cipherQuery = `
+<<<<<<< HEAD
         MATCH (n:Location{ id='$id'})-[r:CONNECTS_TO]-(m:Location)
+=======
+        MATCH (n:Location{ id:'${id}'})-[r:CONNECTS_TO]-(m:Location)
+>>>>>>> virtual_tour
         RETUTN m.id
     `;
     try{
@@ -14,8 +18,12 @@ const getNextLocationsID = async (id)=>{
                 id : record.get('id')
             };
         });
+<<<<<<< HEAD
         return nextLocationsID;
 
+=======
+        return nextLocationsID
+>>>>>>> virtual_tour
     }catch(err){
         console.log("error fetching next nodes ID", err);
         throw err ;
@@ -29,28 +37,35 @@ const getNextLocationsID = async (id)=>{
 const getLocationInfoByID = async (id)=>{
     const session = driver.session();
     cipherQuery = `
+<<<<<<< HEAD
         MATCH (n:Location {id = $id})
+=======
+    MATCH (n:Location {id : '${id}'})
+>>>>>>> virtual_tour
         RETURN n.pano_url AS pano_image ,
                n.name AS name ,
                n.floor AS floor ,
-               n.label AS label ,
-               n.objects AS objects ,
                n.id AS id
     `;
 
     try {
+<<<<<<< HEAD
         const result = await session.run(cipherQuery , { id });
+=======
+        const result = await session.run(cipherQuery);
+        console.log(result)
+>>>>>>> virtual_tour
         const locations = result.records.map(record => {
             return {
                 id : record.get('id') ,
                 name : record.get('name'),
                 floor : record.get('floor'),
-                objects : record.get('objects'),
-                label : record.get('label'),
+                // objects : record.get('objects'),
+                // label : record.get('label'),
                 pano_image : record.get('pano_image')
             };
         });
-
+        
         return locations; 
     }catch(error) {
         console.log("error fetching all locations", error);

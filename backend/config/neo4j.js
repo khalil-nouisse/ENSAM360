@@ -60,13 +60,6 @@ const testConnection = async () => {
 
 // Lancer le test
 //testConnection();
+//testConnection();
 
-<<<<<<< HEAD
 module.exports = driver
-=======
-
-
-
-
-
->>>>>>> auradb

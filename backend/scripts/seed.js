@@ -792,7 +792,7 @@ const seedDatabase = async (driver) => {
   } finally {
     // 5. Always close the session and the driver
     await session.close();
-    await driver.close();
+    // await driver.close();
     console.log('Connexion fermée.');
   }
 };
