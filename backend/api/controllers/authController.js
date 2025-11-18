@@ -32,6 +32,8 @@ const login = async (req , res) => {
           maxAge:24*60*60*1000
       });
 
+      res.cookie('')
+
       res.status(200).json({accessToken});
   }catch(error) {
       res.status(401).json({ message: 'Login failed', error: error.message });
