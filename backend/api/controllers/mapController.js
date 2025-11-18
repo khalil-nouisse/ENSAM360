@@ -28,7 +28,7 @@ const getAllBuildings = async (req , res)=> {
 const createLocation = async (req , res) => {
     try{
         await mapService.createLocation(req.body);
-        res.status(200).send({message : "Location Created Succesfully"});
+        res.status(200).json({message : "Location Created Succesfully"});
 
     }catch(err){
         res.status(500).json({
@@ -38,9 +38,34 @@ const createLocation = async (req , res) => {
     }
 };
 
+const getLocationByID =async (req,res) =>{
+    try{
+        const id = req.params.id;
+        const nextLocations = await mapService.getLocationByID(id);
+        res.status(200).json(nextLocations);
+    }catch(err){
+        res.status(500).json({
+            message : "Error fetching next locations",
+            error : err.message
+        });
+    }
+};
 
+const getPrincipalLocatations = async (req , res) => {
+    try{
+        const principaleLocations = await mapService.getPrincipalLocatations();
+        res.status(200).json(principaleLocations);
+    }catch(err){
+        res.status(500).json({
+            message : "Error fetching Principale locations",
+            error : err.message
+        });
+    }
+}
 
 module.exports = {
     getAllBuildings,
-    createLocation
+    createLocation,
+    getLocationByID , 
+    getPrincipalLocatations
 }

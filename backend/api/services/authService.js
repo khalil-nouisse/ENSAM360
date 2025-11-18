@@ -13,7 +13,7 @@ const register = async (firstName , lastName , email , Password , ) =>{
     const session = driver.session();
 
     const cipherQuery = `
-        CREATE (u:USER{
+        CREATE (u:User{
             id : randomUUID() ,
             firstname : $firstName ,
             lastname : $lastName , 
@@ -50,7 +50,7 @@ const register = async (firstName , lastName , email , Password , ) =>{
 const login = async (email , password)=>{
     const session = driver.session();
     const cipherQuery = `
-        MATCH (u:USER {email : $email})
+        MATCH (u:User {email : $email})
         RETURN u
     `;
     try {
@@ -95,7 +95,7 @@ const login = async (email , password)=>{
         userID = node.properties.id;
 
         cipher = `
-            MATCH (u:USER {id:$userID})
+            MATCH (u:User {id:$userID})
             SET u.refreshToken = $refreshToken
         `;
 
@@ -115,7 +115,7 @@ const refreshToken =async (providedRefreshToken)=>{
     try {
         const decoded = jwt.verify(providedRefreshToken, REFRESH_TOKEN_SECRET);
         const cypherQuery = `
-            MATCH (u:USER {id: $userId})
+            MATCH (u:User {id: $userId})
             WHERE u.refreshToken = $providedRefreshToken
             RETURN u
             `;
@@ -162,7 +162,7 @@ const logout = async (userID)=>{
         //const user = getUserbyID(userID);
         
         cipherQuery = `
-            MATCH (u:USER {id:$userID})
+            MATCH (u:User {id:$userID})
             SET u.refreshToken=null
             RETURN u.id As id
         `;
@@ -182,7 +182,7 @@ const getUserbyID = async(userID)=>{
     const session = driver.session();
     try{
         cipherQuery = `
-            MATCH (u:USER {id:$userID})
+            MATCH (u:User {id:$userID})
             return u
         `;
         
@@ -193,7 +193,7 @@ const getUserbyID = async(userID)=>{
         }
 
         return result.records[0].toObject();
-        
+
 
     }catch(err){
         throw new Error('unable to get the user' , err);

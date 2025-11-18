@@ -33,7 +33,7 @@ const login = async (req , res) => {
       });
 
       res.status(200).json({accessToken});
-  }catch(err) {
+  }catch(error) {
       res.status(401).json({ message: 'Login failed', error: error.message });
   }
 };

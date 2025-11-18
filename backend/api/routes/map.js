@@ -6,5 +6,6 @@ const authMiddleware = require('../../middleware/authMiddleware');
 //get 2D map locaitons
 router.get('/locations' ,mapController.getAllBuildings );
 router.post('/locations' , authMiddleware,  mapController.createLocation) ;
+router.get('/principaleLocations' , mapController.getPrincipalLocatations);
 
 module.exports = router;

@@ -101,6 +101,7 @@ const getLocationByLabel = async (label)=>{
         await session.close();
     }
 }
+
 //const getLocationByID
 const getLocationByID = async(id)=>{
     const session = driver.session();
@@ -189,8 +190,51 @@ const createLocation = async(
 
 ;}
 
+//fetch all nodes except waypoints (used in the search panel and navigation panel map)
+const getPrincipalLocations = async ()=>{
+    const session = driver.session();
+    try{
+        cipherQuery=`
+            MATCH (n)
+            WHERE NOT n:Waypoint AND NOT n:User AND NOT n:Classe
+            RETURN  n.id AS id ,
+                    n.name AS name,
+                    n.description AS description ,
+                    n.map_coords[0] AS x_coords ,
+                    n.map_coords[1] AS y_coords ,
+                    n.pano_url AS pano_image ,
+                    n.flat_url AS flat_image ,
+                    labels(n) AS labels ;
+        `;
+
+        const result = await session.run(cipherQuery);
+        
+        const locations = result.records.map(record => {
+            return {
+                id : record.get('id') ,
+                name : record.get('name'),
+                description : record.get('description'),
+                x_coords : record.get('x_coords'),
+                y_coords : record.get('y_coords'),
+                pano_image : record.get('pano_image'),
+                flat_image : record.get('flat_image'),
+                labels: record.get('labels')
+            };
+        });
+        return locations; 
+
+    }catch(error){
+        console.error("Error creating location:", error);
+        throw error;
+    }finally{
+        session.close();
+    }
+}
+
 
 module.exports = {
     getAllBuildings,
-    createLocation
+    createLocation , 
+    getLocationByID ,
+    getPrincipalLocations
 }
