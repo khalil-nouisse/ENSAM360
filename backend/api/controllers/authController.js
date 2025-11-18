@@ -19,27 +19,62 @@ const register = async (req, res) => {
 };
 
 const login = async (req , res) => {
-    const {email , password } = req.body;
+  const {email , password } = req.body;
 
-    if (!email || !password) {
-      return res.status(400).json({ message: 'email and password are required.' });
-    }
-    try{
-        const {refreshToken , accessToken} = await authService.login(email , password);
+  if (!email || !password) {
+    return res.status(400).json({ message: 'email and password are required.' });
+  }
+  try{
+      const {refreshToken , accessToken} = await authService.login(email , password);
 
-        res.cookie('jwt',refreshToken,{
-            httpOnly:true,
-            maxAge:24*60*60*1000
-        });
+      res.cookie('jwt',refreshToken,{
+          httpOnly:true,
+          maxAge:24*60*60*1000
+      });
 
-        res.status(200).json({accessToken});
-    }catch(err) {
-        res.status(401).json({ message: 'Login failed', error: error.message });
-    }
+      res.status(200).json({accessToken});
+  }catch(err) {
+      res.status(401).json({ message: 'Login failed', error: error.message });
+  }
 };
 
+const handleRefreshToken = async (req , res) =>{
+  
+    const {token} = req.body;
+    if(!token){
+      return res.status(400).json({ message: 'Refresh token is required.' });
+    }
+  try{
+    const { accessToken } = authService.refreshToken(token);
+    res.json({accessToken});
+
+  }catch(err){
+    res.status(401).json({ message: 'Refresh token is invalid or expired.', error: err.message });
+  }
+};
+
+const handleLogout = async (req, res)=>{
+
+  const userID = req.params.id;
+
+  if(!userID){
+    return res.status(400).json({message : "User ID is required."});
+  }
+
+  try{
+
+    const loggedOut = await authService.logout(userID);
+    res.status(200).json({message:loggedOut.message});
+
+  }catch(err){
+    res.status(500).json({message: 'Error logging out.' , error: err.message});
+  }
+
+}
 
 module.exports = {
     login , 
-    register
-}
+    register ,
+    handleRefreshToken , 
+    handleLogout
+};

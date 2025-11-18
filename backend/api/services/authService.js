@@ -27,18 +27,13 @@ const register = async (firstName , lastName , email , Password , ) =>{
                u.email AS email 
         `;
     try{
-        const result = await session.run(cipherQuery , {firstName , lastName , email , Password});
+        const result = await session.run(cipherQuery , {firstName , lastName , email , hashedPassword});
 
-        if( result.record.length === 0) {
+        if( result.records.length === 0) {
             throw new Error("Could not create user");
         }
 
-        return {
-                id : result.get('id') ,
-                firstname : result.get('firstname'),
-                lastname : result.get('lastname'),
-                email : result.get('email')
-            };
+        return result.records[0].toObject();
         
     }catch (error) {
         // Handle specific error for unique email constraint
@@ -79,43 +74,137 @@ const login = async (email , password)=>{
             user : {
                 id : node.properties.id ,
                 firstname : node.properties.firstname ,
-                lastname : node.properties.lastname
+                lastname : node.properties.lastname ,
+                email : node.properties.email
             }
         };
 
         const accessToken = jwt.sign(
                 payload.user,
-                process.env.ACCESS_TOKEN_SECRET,
+                ACCESS_TOKEN_SECRET,
                 {expiresIn:'1h'}
-            )
+            );
 
         const refreshToken = jwt.sign(
                 payload.user,
-                process.env.REFRESH_TOKEN_SECRET,
+                REFRESH_TOKEN_SECRET,
                 {expiresIn:'1d'}
-            )
+            );
         
         // inserting the refresh Token in the database ??
         userID = node.properties.id;
+
         cipher = `
-            MATCH (u:USER-{id:$userID})
-            SET u.refreshToken : $refreshToken
-        `
+            MATCH (u:USER {id:$userID})
+            SET u.refreshToken = $refreshToken
+        `;
 
         await session.run(cipher , {userID , refreshToken} );
 
-        //TODO 
-
         return {refreshToken ,accessToken} ;
     }catch(err){
-        console.log("Invalid Login");
+        throw err
     }finally{
         session.close();
     }
 };
 
+const refreshToken =async (providedRefreshToken)=>{
+    const session = driver.session();
+
+    try {
+        const decoded = jwt.verify(providedRefreshToken, REFRESH_TOKEN_SECRET);
+        const cypherQuery = `
+            MATCH (u:USER {id: $userId})
+            WHERE u.refreshToken = $providedRefreshToken
+            RETURN u
+            `;
+        const result = await session.run(cypherQuery, {
+            userId: decoded.id,
+            providedRefreshToken,
+        });
+
+        if (result.records.length === 0) {
+            // This is a security check. If the token is valid but not
+            // in the DB, it might have been stolen or logged out.
+            throw new Error('Refresh token not found or has been invalidated.');
+        }
+        const userNode = result.records[0].get('u').properties;
+
+        // 3. Issue a new ACCESS token (not a new refresh token)
+        const payload = {
+            user : {
+                id : userNode.id ,
+                firstname : userNode.firstname ,
+                lastname : userNode.lastname ,
+                email : userNode.email
+            }
+        };
+
+        const newAccessToken = jwt.sign(
+            payload.user,
+            ACCESS_TOKEN_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        return { accessToken: newAccessToken };
+
+    }catch(error){
+        throw new Error('Invalid refresh token.', error);
+    }finally{
+        await session.close();
+    }
+};
+
+const logout = async (userID)=>{
+    const session = driver.session();
+    try{
+        //const user = getUserbyID(userID);
+        
+        cipherQuery = `
+            MATCH (u:USER {id:$userID})
+            SET u.refreshToken=null
+            RETURN u.id As id
+        `;
+
+        await session.run(cipherQuery, {userID});
+
+        return {message : "Loged out succesfully"};
+
+    }catch(err){
+        throw new Error('Error loging out ',err);
+    }finally{
+        await session.close();
+    }
+};
+
+const getUserbyID = async(userID)=>{
+    const session = driver.session();
+    try{
+        cipherQuery = `
+            MATCH (u:USER {id:$userID})
+            return u
+        `;
+        
+        const result = await session.run(cipherQuery , {userID});
+
+        if( result.records.length === 0) {
+            throw new Error("Could not find user");
+        }
+
+        return result.records[0].toObject();
+        
+
+    }catch(err){
+        throw new Error('unable to get the user' , err);
+    }finally{
+        session.close();
+    }
+};
 
 module.exports = {
     register , 
-    login
-}
+    login ,
+    refreshToken , 
+    logout,
+};

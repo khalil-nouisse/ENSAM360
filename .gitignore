@@ -2,3 +2,4 @@
 frontend/src/assets/campus_map_2d1.svg
 frontend/src/assets/*.svg
 node_modules/
+frontend/public/images/

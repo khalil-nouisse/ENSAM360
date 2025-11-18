@@ -8,6 +8,6 @@ const authRoutes = require('./auth');
 
 router.use('/map' , mapRoutes); // 2D map
 router.use('/tour' , tourRoutes); // 360 tour
-router.use('auth' , authRoutes); //authentification
+router.use('/auth' , authRoutes); //authentification
 
 module.exports = router ;

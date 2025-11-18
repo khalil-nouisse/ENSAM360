@@ -9,9 +9,9 @@ const getNextLocationsID = async (id)=>{
     try{
         const result = await session.run(cipherQuery , {id});
 
-        const nextLocationsID = result.records.map(record => {
+        const nextLocationsID = result.records.map(a => {
             return {
-                id : record.get('id') ,
+                id : record.get('id')
             };
         });
 
@@ -62,5 +62,5 @@ const getLocationInfoByID = async (id)=>{
 
 module.exports = {
     getNextLocationsID , 
-    getPanoInfoByID
+    getLocationInfoByID
 }
