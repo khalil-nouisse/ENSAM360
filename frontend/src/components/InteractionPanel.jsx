@@ -9,7 +9,7 @@ function InteractionPanel({
   onBuildingSelect, 
   selectedBuilding, 
   is3DMode, 
-  setIs3DMode 
+  setIs3DMode,
 }) {
   return (
     <div 

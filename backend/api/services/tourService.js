@@ -14,7 +14,7 @@ const getNextLocationsID = async (id)=>{
                 id : record.get('id') ,
             };
         });
-
+        return nextLocationsID
     }catch(err){
         console.log("error fetching next nodes ID", err);
         throw err ;

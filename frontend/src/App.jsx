@@ -59,7 +59,7 @@ function App() {
 
   async function LoadBuildings() {
   try {
-    const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/buildings");
+    const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/principalLocations");
     console.log(res.data)
     return res.data;
     
@@ -145,6 +145,7 @@ function App() {
             selectedBuilding={selectedBuilding}
             is3DMode={is3DMode}
             setIs3DMode={setIs3DMode}
+            buildings={Buildings}
           />
           <div className="h-80">
             <CampusMapLeaflet />

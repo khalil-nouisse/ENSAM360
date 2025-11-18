@@ -5,6 +5,7 @@ const mapController = require('../controllers/mapController')
 
 //get 2D map locaitons
 router.get('/buildings' ,mapController.getBuildings);
+router.get('/principalLocations' , mapController.getPrincipalLocations);
 
 
 module.exports = router;

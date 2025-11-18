@@ -12,7 +12,18 @@ function VirtualTour(props) {
       return null;
     }
   }
-  
+  async function LoadLocations() {
+  try {
+    const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/PrincipalLocations");
+    console.log(res.data)
+    return res.data;
+    
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
+  const [locations,setLocations] = useState(null)
   const [showMap, setShowMap] = useState(false)
   const [viewerReady, setViewerReady] = useState(false)
   const viewerRef = useRef(null)
@@ -20,7 +31,17 @@ function VirtualTour(props) {
   const [currentLocation,setCurrentLocation] = useState('ensam_entry')
   const [currentLocationDetails,setCurrentLocationDetails] = useState(null)
   
+
   useEffect(()=>{
+    if(locations) return;
+    async function loadLocations(){
+          const loadedLocations = await LoadLocations();
+          setLocations(loadedLocations);
+    }
+    loadLocations();
+  })
+  useEffect(()=>{
+    
     if(!props.location) return
     setCurrentLocation(props.location.id)
   },[props.location])
@@ -119,8 +140,8 @@ useEffect(() => {
     }
   }
   
-  const goToLocation = (locationKey) => {
-    setCurrentLocation(locationKey)
+  const goToLocation = (locationId) => {
+    setCurrentLocation(locationId)
     setShowMap(false)
   }
   
@@ -223,9 +244,30 @@ useEffect(() => {
                 ✕
               </button>
             </div>
-            <div className="space-y-2">
-              <p className="text-gray-500 text-sm">Map locations will be loaded from API</p>
-            </div>
+            {locations
+            &&
+            (<div className="space-y-2">
+              
+              {Object.entries(locations).map(([key, location]) => (
+                <button
+                  key={key}
+                  onClick={() => goToLocation(location.id)}
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                    currentLocation === key
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-800'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    {currentLocation === key && <Home size={16} />}
+                    <span className="font-medium">{location.name}</span>
+                  </div>
+                </button>
+              ))}
+            </div>)}
+           
+            {!locations &&(<div>Loading</div>)}
+             
           </div>
         )}
       </div>

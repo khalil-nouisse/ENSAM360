@@ -3,8 +3,8 @@ const tourService = require('../services/tourService');
 
 const getNextLocationsID = async (req, res)=>{
     try{
-        const id = tourService.getNextLocationsID(req.params.id)
-        res.status(200).json(id);
+        const ids = tourService.getNextLocationsID(req.params.id)
+        res.status(200).json(ids);
 
     }catch(err){
         res.status(500).json({

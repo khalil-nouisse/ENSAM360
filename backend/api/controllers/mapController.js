@@ -25,8 +25,19 @@ const getBuildings = async (req , res)=> {
     }
 };
 
-
+const getPrincipalLocations = async (req , res) => {
+    try{
+        const principaleLocations = await mapService.getPrincipalLocations();
+        res.status(200).json(principaleLocations);
+    }catch(err){
+        res.status(500).json({
+            message : "Error fetching Principale locations",
+            error : err.message
+        });
+    }
+}
 
 module.exports = {
     getBuildings,
+    getPrincipalLocations
 }
