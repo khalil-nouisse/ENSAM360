@@ -2,12 +2,12 @@ const express = require("express")
 const app = express()
 const path = require('path')
 const cors = require('cors');
-
+const morgan = require('morgan')
 //main routes
 const mainApiRouter = require('./api/routes/index')
 
 const whiteList = ['http://localhost:5173/'];
-const PORT = process.env.PORT || 2000;
+const PORT = process.env.PORT || 3000;
 
 const corsOptions = {
     origin : (origin, callback) => {
@@ -26,18 +26,19 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended : false})); //built in middlware to handlw urlencoded data (form data)
 app.use(express.json());
+app.use(morgan("dev")); 
 
 //routes
 app.use("/api" , mainApiRouter);
 
 
 //incase we have a false rooting , 
-app.use((req , res)=> {
-    res.redirect("/");
+app.use((req, res) => {
+  res.status(404).json({ error: "Not Found" });
 });
 
 
 app.listen(PORT, (err) => {
     if(err) console.log(err);
-    console.log(`running on port ${PORT || 2000}`);
+    console.log(`running on port ${PORT || 3000}`);
 })

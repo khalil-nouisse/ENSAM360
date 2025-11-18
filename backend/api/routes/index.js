@@ -3,9 +3,11 @@ const express = require('express');
 const router = express.Router();
 
 const mapRoutes = require('./map');
-const tourRoutes = require('./tour')
+const tourRoutes = require('./tour');
+const authRoutes = require('./auth');
 
 router.use('/map' , mapRoutes); // 2D map
 router.use('/tour' , tourRoutes); // 360 tour
+router.use('/auth' , authRoutes); //authentification
 
 module.exports = router ;
