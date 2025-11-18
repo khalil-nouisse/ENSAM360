@@ -34,7 +34,7 @@ try {
 // const testConnection = async () => {
 //     try {
 //         await driver.verifyConnectivity();
-//         //await seedDatabase(driver);
+//         await seedDatabase(driver);
 //         // 6. Utiliser console.log() !
 //         console.log("Connexion à Neo4j AuraDB établie avec succès !");
 
@@ -45,7 +45,7 @@ try {
 //         }
 //     } finally {
 //         // Toujours fermer le driver quand le script est terminé
-//         await driver.close();
+//         //await driver.close();
 //     }
 // };
 

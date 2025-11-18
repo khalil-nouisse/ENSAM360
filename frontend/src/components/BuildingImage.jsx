@@ -2,12 +2,14 @@ function BuildingImage({ selectedBuilding }) {
   if (!selectedBuilding) {
     return null
   }
-
+  console.log(selectedBuilding.pano_image)
+  const correctImagepath = selectedBuilding.pano_image.replace("src/assets/image","/images")
+  console.log(correctImagepath)
   return (
     <div>
       <div className="mb-4" style={{ backgroundColor: 'white' }}>
         <img
-          src={selectedBuilding.image_url}
+          src={correctImagepath}
           alt={selectedBuilding.name}
           className="w-full h-48 object-cover rounded-lg shadow-sm border border-beige"
         />

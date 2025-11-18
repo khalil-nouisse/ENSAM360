@@ -82,7 +82,6 @@ function App() {
     setSearchTerm('')
     setIs3DMode(false)
   }
-  document.addEventListener
   useEffect(() => {
       async function init(){
         const locations = await LoadBuildings();
