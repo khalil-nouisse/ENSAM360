@@ -185,9 +185,10 @@ function CampusMapLeaflet() {
       setIsCoordinateMode(false)
     }
   }
- 
+  // TODO : figure out why buildingId is computed as a Text , not a String
   const navigateToTour = (buildingId) => {
     console.log(buildingId);
+    console.log(buildingId.toString())
     const building = buildings.find(b => b.id === buildingId)
     if (building) {
       console.log(`Navigating to 360° tour for: ${building.name}`)
