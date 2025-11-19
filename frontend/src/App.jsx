@@ -59,7 +59,7 @@ function App() {
 
   async function LoadBuildings() {
   try {
-    const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/principalLocations");
+    const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/principaleLocations");
     console.log(res.data)
     return res.data;
     

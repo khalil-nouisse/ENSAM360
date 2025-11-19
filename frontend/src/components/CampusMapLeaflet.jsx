@@ -14,7 +14,7 @@ L.Icon.Default.mergeOptions({
 function CampusMapLeaflet() {
   async function LoadBuildings() {
   try {
-    const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/buildings");
+    const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/principaleLocations");
     console.log(res.data)
     return res.data;
     
@@ -88,7 +88,16 @@ function CampusMapLeaflet() {
 
     // Add click handler for coordinate detection
     map.on('click', handleMapClick)
-
+     map.on('popupopen', function(e) {
+    const button = e.popup.getElement().querySelector('.tour-button');
+    if (button) {
+        button.addEventListener('click', function() {
+            const buildingId = this.getAttribute('data-building-id');
+            console.log(buildingId);
+            navigateToTour(buildingId);
+        });
+    }
+});
     return () => {
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove()
@@ -138,16 +147,20 @@ function CampusMapLeaflet() {
       { icon: buildingIcon }
     )
     .addTo(map)
-    .bindPopup(`<h3>${building.name}</h3>`);
+    .bindPopup(`<h3>${building.name}</h3>
+      <br>
+      <button class="tour-button" data-building-id='${building.id}'>navigate to 360</button>`);
+    
+    console.log("x_coords :",building.x_coords)
 
     markersRef.current.push(marker);
-  });
+});
 };
 
 
   const handleMapClick = (e) => {
     console.log('Map clicked! Coordinate mode:', isCoordinateMode)
-    console.log('Click coordinates:', e.latlng)
+    console.log('Click coordinates:', e.x)
     
     if (!isCoordinateMode) return
 
@@ -172,12 +185,15 @@ function CampusMapLeaflet() {
       setIsCoordinateMode(false)
     }
   }
-
+ 
   const navigateToTour = (buildingId) => {
+    console.log(buildingId);
     const building = buildings.find(b => b.id === buildingId)
     if (building) {
       console.log(`Navigating to 360° tour for: ${building.name}`)
       alert(`Entering 360° tour for ${building.name}!\n\nThis will navigate to the virtual tour inside the building.`)
+    }else{
+      console.log("is not here")
     }
   }
 
@@ -203,6 +219,7 @@ function CampusMapLeaflet() {
       />
       
       {/* Coordinate Detection Controls - Positioned to avoid Leaflet zoom controls */}
+      {/*
       <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
         <button
           onClick={toggleCoordinateMode}
@@ -222,7 +239,7 @@ function CampusMapLeaflet() {
           </div>
         )}
       </div>
-
+      */}
       {/* Building Counter - Simple and clean */}
       {buildings.length > 0 && (
         <div className="absolute bottom-4 left-4 z-10">

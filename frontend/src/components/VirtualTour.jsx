@@ -14,7 +14,7 @@ function VirtualTour(props) {
   }
   async function LoadLocations() {
   try {
-    const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/PrincipalLocations");
+    const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/principaleLocations");
     console.log(res.data)
     return res.data;
     

@@ -8,7 +8,7 @@ const mainApiRouter = require('./api/routes/index')
 
 const whiteList = ['http://localhost:5173/'];
 const PORT = process.env.PORT || 3000;
-const PORT = process.env.PORT || 3000;
+//const PORT = process.env.PORT || 3000;
 
 const corsOptions = {
     origin : (origin, callback) => {
