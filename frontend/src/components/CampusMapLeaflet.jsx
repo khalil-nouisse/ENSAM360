@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import L from 'leaflet'
 import { Building2, ArrowRight, MapPin } from 'lucide-react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 // Fix for default markers in Leaflet with Vite
 delete L.Icon.Default.prototype._getIconUrl
@@ -12,6 +13,7 @@ L.Icon.Default.mergeOptions({
 })
 
 function CampusMapLeaflet() {
+  const navigate = useNavigate()
   async function LoadBuildings() {
   try {
     const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/principaleLocations");
@@ -27,7 +29,8 @@ function CampusMapLeaflet() {
   const mapInstanceRef = useRef(null)
   const markersRef = useRef([])
   const [buildings, setBuildings] = useState([])
-  
+  const buildingsRef = useRef([]) // ADD THIS: Keep a ref to always have current buildings
+  // this ref is the thing that fixed our problem of buildings array length set to 0
   const [selectedBuilding, setSelectedBuilding] = useState(null)
   const [isCoordinateMode, setIsCoordinateMode] = useState(false)
   useEffect(() => {
@@ -39,6 +42,12 @@ function CampusMapLeaflet() {
       init();
       
     }, [])
+  
+  // ADD THIS: Update the ref whenever buildings changes
+  useEffect(() => {
+    buildingsRef.current = buildings;
+  }, [buildings]);
+  
   useEffect(() => {
     if (!mapRef.current) return
 
@@ -93,7 +102,7 @@ function CampusMapLeaflet() {
     if (button) {
         button.addEventListener('click', function() {
             const buildingId = this.getAttribute('data-building-id');
-            console.log(buildingId);
+            console.log(typeof(buildingId));
             navigateToTour(buildingId);
         });
     }
@@ -185,13 +194,17 @@ function CampusMapLeaflet() {
       setIsCoordinateMode(false)
     }
   }
-  // TODO : figure out why buildingId is computed as a Text , not a String
+  
+  // MODIFIED: Use buildingsRef.current instead of buildings
   const navigateToTour = (buildingId) => {
     console.log(buildingId);
     console.log(buildingId.toString())
-    const building = buildings.find(b => b.id === buildingId)
+    console.log(buildingsRef.current) // CHANGED: Use ref instead of state
+    if(!buildingsRef.current || buildingsRef.current.length === 0) return; // CHANGED: Use ref
+    const building = buildingsRef.current.find(b => b.id == buildingId) // CHANGED: Use ref and == for loose comparison
     if (building) {
       console.log(`Navigating to 360° tour for: ${building.name}`)
+      navigate('/tour')
       alert(`Entering 360° tour for ${building.name}!\n\nThis will navigate to the virtual tour inside the building.`)
     }else{
       console.log("is not here")
