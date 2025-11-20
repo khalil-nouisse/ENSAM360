@@ -157,9 +157,7 @@ function CampusMap() {
   // Navigate to 360° tour for a building
   const navigateToTour = (building) => {
     console.log(`Navigating to 360° tour for: ${building.name}`)
-    // TODO: Implement navigation to 360° tour
-    // This could be a callback prop or state change to switch to tour mode
-    alert(`Entering 360° tour for ${building.name}!\n\nThis will navigate to the virtual tour inside the building.`)
+
   }
 
   return (

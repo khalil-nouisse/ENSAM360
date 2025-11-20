@@ -206,7 +206,6 @@ function CampusMapLeaflet({onBuildingSelect}) {
     if (building) {
       console.log(`Navigating to 360° tour for: ${building.name}`)
       navigate('/tour')
-      alert(`Entering 360° tour for ${building.name}!\n\nThis will navigate to the virtual tour inside the building.`)
     }else{
       console.log("is not here")
     }
