@@ -12,7 +12,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 })
 
-function CampusMapLeaflet() {
+function CampusMapLeaflet({onBuildingSelect}) {
   const navigate = useNavigate()
   async function LoadBuildings() {
   try {
@@ -42,7 +42,7 @@ function CampusMapLeaflet() {
       init();
       
     }, [])
-  
+
   // ADD THIS: Update the ref whenever buildings changes
   useEffect(() => {
     buildingsRef.current = buildings;
@@ -202,6 +202,7 @@ function CampusMapLeaflet() {
     console.log(buildingsRef.current) // CHANGED: Use ref instead of state
     if(!buildingsRef.current || buildingsRef.current.length === 0) return; // CHANGED: Use ref
     const building = buildingsRef.current.find(b => b.id == buildingId) // CHANGED: Use ref and == for loose comparison
+    onBuildingSelect(building)
     if (building) {
       console.log(`Navigating to 360° tour for: ${building.name}`)
       navigate('/tour')

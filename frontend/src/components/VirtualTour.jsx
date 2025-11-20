@@ -28,7 +28,7 @@ function VirtualTour(props) {
   const [viewerReady, setViewerReady] = useState(false)
   const viewerRef = useRef(null)
   const pannellumViewerRef = useRef(null)
-  const [currentLocation,setCurrentLocation] = useState('ensam_entry')
+  const [currentLocation, setCurrentLocation] = useState(null)
   const [currentLocationDetails,setCurrentLocationDetails] = useState(null)
   
 
@@ -40,11 +40,13 @@ function VirtualTour(props) {
     }
     loadLocations();
   })
-  useEffect(()=>{
-    
-    if(!props.location) return
-    setCurrentLocation(props.location.id)
-  },[props.location])
+  useEffect(() => {
+    if (props.location) {
+        setCurrentLocation(props.location.id)
+    } else {
+        setCurrentLocation('ensam_entry')
+    }
+}, [props.location])
   
   // Initialize Pannellum viewer
   // Load pannellum script only once on mount

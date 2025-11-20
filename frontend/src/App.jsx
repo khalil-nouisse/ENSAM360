@@ -118,7 +118,7 @@ function App() {
         <div className="hidden lg:flex gap-6 h-[calc(100vh-12rem)]">
           {/* Left Side: Campus Map (70% width) */}
           <div className="w-[70%]">
-            <CampusMapLeaflet />
+            <CampusMapLeaflet onBuildingSelect={handleBuildingSelect}/>
           </div>
           
           {/* Right Side: Interaction Panel (30% width) */}
@@ -148,7 +148,7 @@ function App() {
             buildings={Buildings}
           />
           <div className="h-80">
-            <CampusMapLeaflet />
+            <CampusMapLeaflet onBuildingSelect={handleBuildingSelect}/>
           </div>
         </div>
       </main>
