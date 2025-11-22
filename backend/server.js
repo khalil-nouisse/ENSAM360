@@ -6,26 +6,28 @@ const morgan = require('morgan')
 //main routes
 const mainApiRouter = require('./api/routes/index')
 
-const whiteList = ['http://localhost:5173/'];
-const PORT = process.env.PORT || 3000;
+const whiteList = ['http://localhost:5173'];
+const PORT = process.env.PORT || 5000;
 //const PORT = process.env.PORT || 3000;
 
 const corsOptions = {
-    origin : (origin, callback) => {
-        if(whiteList.indexOf(origin) !== -1 || !origin){
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        if (whiteList.indexOf(origin) !== -1) {
             callback(null, true);
-        }
-        else{
-           callback(new Error('Not Allowed by CORS')) ;
+        } else {
+            callback(new Error('Not Allowed by CORS'));
         }
     },
-    
-    optionsSuccessStatus: 200, // For legacy browser support, keep this set to 200
-}
+    credentials: true,
+    optionsSuccessStatus: 200
+};
 
 
 //middlwares
-app.use(cors({corsOptions,credentials:true}));
+app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended : false})); //built in middlware to handlw urlencoded data (form data)
 app.use(express.json());
 app.use(morgan("dev")); 
@@ -42,5 +44,5 @@ app.use((req, res) => {
 
 app.listen(PORT, (err) => {
     if(err) console.log(err);
-    console.log(`running on port ${PORT || 3000}`);
+    console.log(`running on port ${PORT || 5000}`);
 })

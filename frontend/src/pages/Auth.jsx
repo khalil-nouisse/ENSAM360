@@ -1,20 +1,60 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import AuthContext from '../context/AuthProvider'
 
 function Auth() {
+  // 1. Get the functions from your AuthContext
+  const { login, register } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const [mode, setMode] = useState('signin')
-  const [form, setForm] = useState({ name: '', email: '', password: '' })
+  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '' })
   const [showPassword, setShowPassword] = useState(false)
+  
+  // New state for handling API errors
+  const [error, setError] = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target
     setForm(prev => ({ ...prev, [name]: value }))
+    // Clear error when user starts typing again
+    if (error) setError('');
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Placeholder submit - integrate with backend later
-    // eslint-disable-next-line no-console
-    console.log(`${mode === 'signin' ? 'Sign in' : 'Sign up'} request`, form)
+    setError(''); // Clear previous errors
+
+    try {
+      if (mode === 'signin') {
+        // --- LOGIN LOGIC ---
+        // 2. Call the login function from context
+        await login(form.email, form.password);
+        
+        // 3. Redirect to your map/dashboard
+        navigate('/'); 
+      } else {
+        // --- REGISTER LOGIC ---
+        // 2. Call the register function from context
+        await register(form.firstName, form.lastName, form.email, form.password);
+        
+        // 3. On success, switch to login mode so they can sign in
+        alert("Account created successfully! Please sign in.");
+        setMode('signin');
+      }
+    } catch (err) {
+      // 4. Handle Errors
+      console.error("Auth Error:", err);
+      if (!err?.response) {
+        setError('No Server Response. Is the backend running?');
+      } else if (err.response?.status === 400) {
+        setError('Missing Username or Password');
+      } else if (err.response?.status === 401) {
+        setError('Invalid Email or Password'); // Common for login failure
+      } else {
+        setError(err.response?.data?.message || 'Authentication Failed');
+      }
+    }
   }
 
   return (
@@ -37,7 +77,7 @@ function Auth() {
             <div className="grid grid-cols-2 bg-gray-100 rounded-lg p-1">
               <button
                 type="button"
-                onClick={() => setMode('signin')}
+                onClick={() => { setMode('signin'); setError(''); }}
                 className={`py-2 text-sm font-medium rounded-md transition-colors ${
                   mode === 'signin' ? 'bg-white shadow text-gray-900' : 'text-gray-600 hover:text-gray-900'
                 }`}
@@ -46,7 +86,7 @@ function Auth() {
               </button>
               <button
                 type="button"
-                onClick={() => setMode('signup')}
+                onClick={() => { setMode('signup'); setError(''); }}
                 className={`py-2 text-sm font-medium rounded-md transition-colors ${
                   mode === 'signup' ? 'bg-white shadow text-gray-900' : 'text-gray-600 hover:text-gray-900'
                 }`}
@@ -56,23 +96,51 @@ function Auth() {
             </div>
           </div>
 
+          {/* Error Message Display */}
+          {error && (
+            <div className="mx-8 mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded relative text-sm text-center">
+              {error}
+            </div>
+          )}
+
           {/* Form */}
           <form onSubmit={handleSubmit} className="px-8 pt-6 pb-8">
             {mode === 'signup' && (
-              <div className="mb-4">
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full name</label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  autoComplete="name"
-                  required
-                  value={form.name}
-                  onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-3 py-2 outline-none bg-white"
-                  placeholder="John Doe"
-                />
-              </div>
+              <>
+                <div className="mb-4">
+                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+                    First name
+                  </label>
+                  <input
+                    id="firstName"
+                    name="firstName" // Fixed typo here (was firstNaame)
+                    type="text"
+                    autoComplete="given-name"
+                    required
+                    value={form.firstName}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-3 py-2 outline-none bg-white"
+                    placeholder="John"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+                    Last name
+                  </label>
+                  <input
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    autoComplete="family-name"
+                    required
+                    value={form.lastName}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 px-3 py-2 outline-none bg-white"
+                    placeholder="Doe"
+                  />
+                </div>
+              </>
             )}
 
             <div className="mb-4">
@@ -154,9 +222,9 @@ function Auth() {
 
             <p className="mt-6 text-center text-sm text-gray-600">
               {mode === 'signin' ? (
-                <>Don’t have an account? <button type="button" onClick={() => setMode('signup')} className="font-medium text-blue-600 hover:text-blue-700">Sign up</button></>
+                <>Don’t have an account? <button type="button" onClick={() => { setMode('signup'); setError(''); }} className="font-medium text-blue-600 hover:text-blue-700">Sign up</button></>
               ) : (
-                <>Already have an account? <button type="button" onClick={() => setMode('signin')} className="font-medium text-blue-600 hover:text-blue-700">Sign in</button></>
+                <>Already have an account? <button type="button" onClick={() => { setMode('signin'); setError(''); }} className="font-medium text-blue-600 hover:text-blue-700">Sign in</button></>
               )}
             </p>
           </form>
@@ -167,5 +235,3 @@ function Auth() {
 }
 
 export default Auth
-
-

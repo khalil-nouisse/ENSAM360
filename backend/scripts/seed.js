@@ -565,9 +565,9 @@ const seedDatabase = async (driver) => {
   const session = driver.session();
 
   try {
-    console.log('🌱 Nettoyage de la base de données...');
     // 1. Delete all existing nodes and relationships
-    await session.run('MATCH (n) DETACH DELETE n');
+    //console.log('🌱 Nettoyage de la base de données...');
+    //await session.run('MATCH (n) DETACH DELETE n');
 
     console.log('Création des lieux (Nœuds)...');
     // 2. Create all locations using MERGE
@@ -650,7 +650,7 @@ const seedDatabase = async (driver) => {
     await session.run(`
             MATCH (a:Location {id: 'couloirForum'})
             MATCH (b:Location {id: 'couloir1'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 10}]->(b)
+            MERGE (a)-->(b)
             MERGE (b)-[r2:CONNECTS_TO {distance: 10}]->(a)
         `);
 
