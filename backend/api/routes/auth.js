@@ -8,5 +8,5 @@ router.post('/login' ,authController.login );
 router.post('/register' ,authController.register);
 router.post('/refresh' , authController.handleRefreshToken);
 router.post('/logout' , authMiddleware , authController.handleLogout )
-
+router.post('/verify', authController.verifyUser);
 module.exports = router;

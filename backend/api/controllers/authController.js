@@ -37,7 +37,6 @@ const login = async (req , res) => {
   }catch(error) {
     console.error("Login Service Error:", error);
     res.status(401).json({ message: 'Login failed', error: error.message });
-
   }
 };
 
@@ -75,9 +74,25 @@ const handleLogout = async (req, res)=>{
 
 }
 
+const verifyUser = async (req , res) => {
+  const { email , otp } = req.body;
+  if(!email || ! otp){
+    return res.status(400).json({message : "email and otp required!"});
+  }
+  try{
+    const verified = await authService.verifyOTP(email , otp);
+    console.log(verified);
+    res.status(200).json({message:verified.message});
+
+  }catch(err){
+    res.status(500).json({ message : "Error Verifying User email"});
+  }
+}
+
 module.exports = {
     login , 
     register ,
     handleRefreshToken , 
-    handleLogout
+    handleLogout , 
+    verifyUser
 };

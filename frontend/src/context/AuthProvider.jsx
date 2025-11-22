@@ -53,10 +53,28 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const verifyOtp = async (email , otp) => {
+        try{
+            await axios.post('api/auth/verify' , 
+                {
+                    email , otp
+                },
+                {
+                    headers: { 'Content-Type': 'application/json' }
+                }
+            );
+            return true;
+
+        }catch(err){
+            console.error("Verification Failed", err);
+            throw err;
+        }
+    }
+
     const logout = async () => {
         try {
             // We need to send the header because route uses 'authMiddleware'
-            await axios.post('/auth/logout', {}, {
+            await axios.post('api/auth/logout', {}, {
                 headers: { Authorization: `Bearer ${auth.accessToken}` }
             });
         } catch (err) {
@@ -77,7 +95,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ auth, setAuth, login, register, logout }}>
+        <AuthContext.Provider value={{ auth, setAuth, login, register, logout , verifyOtp }}>
             {children}
         </AuthContext.Provider>
     );

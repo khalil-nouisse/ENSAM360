@@ -2,39 +2,69 @@ const driver = require('../../config/neo4j');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const sendEmail = require('../../utils/sendEmail');
+require('dotenv').config()
 
 const { ACCESS_TOKEN_SECRET , REFRESH_TOKEN_SECRET } = process.env
 
 const register = async (firstName , lastName , email , Password , ) =>{
-    // A salt is a random string added to the password before hashing.
-    const salt = await bcrypt.genSalt(10); 
-	const hashedPassword = await bcrypt.hash(Password ,salt);
-
     const session = driver.session();
-
-    const cipherQuery = `
-        CREATE (u:User{
-            id : randomUUID() ,
-            firstname : $firstName ,
-            lastname : $lastName , 
-            email : $email , 
-            password : $hashedPassword ,
-            createdAt: timestamp()
-        })
-        RETURN u.id As id ,
-               u.firstname AS firstname ,
-               u.lastname AS lastname ,
-               u.email AS email 
-        `;
     try{
-        const result = await session.run(cipherQuery , {firstName , lastName , email , hashedPassword});
+        //check if the user already exists 
+        const checkQuery = `MATCH (u:User{email: $email}) RETURN u`;
+        const checkResult = await session.run(checkQuery , {email});
+
+        if (checkResult.records.length > 0){
+            const existingUser = checkResult.records[0].get('u').properties;
+
+            if (existingUser.isVerified){
+                throw new Error('User with this email already exists.');
+            }
+            else {
+                // User exists but hasn't verified yet.
+                throw new Error('User exists but is not verified. Please check your email for the code.');
+            }
+        }
+        //Hash password
+        // A salt is a random string added to the password before hashing.
+        const salt = await bcrypt.genSalt(10); 
+        const hashedPassword = await bcrypt.hash(Password ,salt);
+
+        //Generate OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+        
+        const cipherQuery = `
+            CREATE (u:User{
+                id : randomUUID() ,
+                firstname : $firstName ,
+                lastname : $lastName , 
+                email : $email , 
+                password : $hashedPassword ,
+                createdAt: timestamp() ,
+                isVerified: false,
+                otp: $otp,
+                otpExpires: $otpExpires
+            })
+            RETURN u.id As id ,
+                u.firstname AS firstname ,
+                u.lastname AS lastname ,
+                u.email AS email 
+        `;
+        
+        const result = await session.run(cipherQuery , {
+            firstName , lastName , email , hashedPassword , otp , otpExpires
+        });
 
         if( result.records.length === 0) {
             throw new Error("Could not create user");
         }
 
+        //send email
+        await sendEmail(email , otp);
+
         return result.records[0].toObject();
-        
+            
     }catch (error) {
         // Handle specific error for unique email constraint
         if (error.code === 'Neo.ClientError.Schema.ConstraintValidationFailed') {
@@ -61,6 +91,12 @@ const login = async (email , password)=>{
         }
 
         const node = result.records[0].get('u');
+
+        //Block unverified users ---
+         if (node.properties.isVerified === false) {
+            throw new Error("Please verify your email address before logging in.");
+        }
+
         const userPassword = node.properties.password;
 
         const matchPassword = await bcrypt.compare(password , userPassword);
@@ -202,9 +238,53 @@ const getUserbyID = async(userID)=>{
     }
 };
 
+const verifyOTP = async (email, otp) => {
+    const session = driver.session();
+    try {
+        // Find user and return their OTP details
+        const query = `
+            MATCH (u:User {email: $email})
+            RETURN u
+        `;
+        const result = await session.run(query, { email });
+
+        if (result.records.length === 0) throw new Error("User not found");
+
+        const userNode = result.records[0].get('u');
+        const user = userNode.properties;
+
+        // 1. Check if code matches
+        if (user.otp !== otp) {
+            throw new Error("Invalid Verification Code");
+        }
+
+        // 2. Check if expired
+        if (user.otpExpires < Date.now()) {
+            throw new Error("Verification Code has expired");
+        }
+
+        // 3. Activate User
+        const updateQuery = `
+            MATCH (u:User {email: $email})
+            SET u.isVerified = true, 
+                u.otp = null, 
+                u.otpExpires = null
+            RETURN u.email
+        `;
+        
+        await session.run(updateQuery, { email });
+        
+        return { message: "Account Verified Successfully" };
+
+    } finally {
+        session.close();
+    }
+};
+
 module.exports = {
     register , 
     login ,
     refreshToken , 
     logout,
+    verifyOTP
 };
