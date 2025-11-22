@@ -1,15 +1,16 @@
 import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AuthContext from '../context/AuthProvider'
+import { Button } from '@/components/ui/button'
 
 function Auth() {
   const { login, register, verifyOtp } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // Modes: 'signin', 'signup', 'otp'
-  const [mode, setMode] = useState('signin') 
+  const [mode, setMode] = useState('signin')
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '' })
-  const [otp, setOtp] = useState('') 
+  const [otp, setOtp] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
 
@@ -27,12 +28,12 @@ function Auth() {
       if (mode === 'signin') {
         // 1. LOGIN
         await login(form.email, form.password);
-        navigate('/'); 
+        navigate('/');
       } else if (mode === 'signup') {
         // 2. REGISTER -> Switch to OTP
         await register(form.firstName, form.lastName, form.email, form.password);
         alert("Account created successfully! Please check your email for the verification code.");
-        setMode('otp'); 
+        setMode('otp');
       } else if (mode === 'otp') {
         // 3. VERIFY -> Switch to Signin
         await verifyOtp(form.email, otp);
@@ -51,42 +52,40 @@ function Auth() {
   }
 
   return (
-    <div className="min-h-[calc(100vh)] flex items-center justify-center px-4" style={{ backgroundColor: '#F1E8DD' }}>
-      <div className="w-full max-w-md">
-        <div className="bg-white/95 backdrop-blur-sm shadow-xl rounded-2xl border border-darkblue/10 overflow-hidden">
-          
+    <div className="min-h-screen flex items-center justify-center px-4 bg-background">
+      <div className="w-full max-w-md animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="bg-card/80 backdrop-blur-md shadow-xl rounded-2xl border border-border overflow-hidden">
+
           {/* Header */}
           <div className="px-8 pt-8 pb-4 text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl" style={{ backgroundColor: '#213985' }}>
-              <span className="text-white font-bold">E</span>
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+              <span className="font-bold text-xl">E</span>
             </div>
-            <h1 className="mt-3 text-2xl font-semibold text-gray-900">ENSAM360</h1>
-            <p className="mt-1 text-sm text-gray-500">
-              {mode === 'signin' ? 'Welcome back. Please sign in.' : 
-               mode === 'otp' ? `Enter the code sent to ${form.email}` :
-               'Create your account to get started.'}
+            <h1 className="mt-4 text-2xl font-bold tracking-tight text-foreground">ENSAM360</h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {mode === 'signin' ? 'Welcome back. Please sign in.' :
+                mode === 'otp' ? `Enter the code sent to ${form.email}` :
+                  'Create your account to get started.'}
             </p>
           </div>
 
           {/* Tabs (Hidden during OTP Verification) */}
           {mode !== 'otp' && (
-            <div className="px-8">
-              <div className="grid grid-cols-2 bg-gray-100 rounded-lg p-1">
+            <div className="px-8 mt-2">
+              <div className="grid grid-cols-2 bg-muted rounded-lg p-1">
                 <button
                   type="button"
                   onClick={() => { setMode('signin'); setError(''); }}
-                  className={`py-2 text-sm font-medium rounded-md transition-colors ${
-                    mode === 'signin' ? 'bg-white shadow text-gray-900' : 'text-gray-600 hover:text-gray-900'
-                  }`}
+                  className={`py-2 text-sm font-medium rounded-md transition-all duration-200 ${mode === 'signin' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
+                    }`}
                 >
                   Sign in
                 </button>
                 <button
                   type="button"
                   onClick={() => { setMode('signup'); setError(''); }}
-                  className={`py-2 text-sm font-medium rounded-md transition-colors ${
-                    mode === 'signup' ? 'bg-white shadow text-gray-900' : 'text-gray-600 hover:text-gray-900'
-                  }`}
+                  className={`py-2 text-sm font-medium rounded-md transition-all duration-200 ${mode === 'signup' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
+                    }`}
                 >
                   Sign up
                 </button>
@@ -96,127 +95,128 @@ function Auth() {
 
           {/* Error Alert */}
           {error && (
-            <div className="mx-8 mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded relative text-sm text-center">
+            <div className="mx-8 mt-4 p-3 bg-destructive/10 border border-destructive/20 text-destructive rounded-lg relative text-sm text-center font-medium animate-in fade-in zoom-in-95">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="px-8 pt-6 pb-8">
-            
+          <form onSubmit={handleSubmit} className="px-8 pt-6 pb-8 space-y-4">
+
             {/* --- OTP MODE --- */}
             {mode === 'otp' ? (
-               <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2 text-center">Verification Code</label>
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2 text-center">Verification Code</label>
                   <input
                     type="text"
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 p-3 text-center text-2xl tracking-[0.5em] font-mono focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full rounded-lg border border-input bg-background p-3 text-center text-2xl tracking-[0.5em] font-mono focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all"
                     placeholder="123456"
                     maxLength={6}
                     autoFocus
                     required
                   />
-                  <div className="mt-4 flex justify-center">
-                    <button 
-                        type="button" 
-                        onClick={() => setMode('signin')}
-                        className="text-sm text-gray-500 hover:text-gray-800 underline"
+                </div>
+                <div className="flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setMode('signin')}
+                    className="text-sm text-muted-foreground hover:text-foreground underline transition-colors"
+                  >
+                    Cancel Verification
+                  </button>
+                </div>
+              </div>
+            ) : (
+              /* --- STANDARD MODES (Signin / Signup) --- */
+              <>
+                {mode === 'signup' && (
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-1.5">First name</label>
+                      <input
+                        name="firstName"
+                        type="text"
+                        required
+                        value={form.firstName}
+                        onChange={handleChange}
+                        className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all"
+                        placeholder="John"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-1.5">Last name</label>
+                      <input
+                        name="lastName"
+                        type="text"
+                        required
+                        value={form.lastName}
+                        onChange={handleChange}
+                        className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all"
+                        placeholder="Doe"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Email</label>
+                  <input
+                    name="email"
+                    type="email"
+                    required
+                    value={form.email}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all"
+                    placeholder="you@example.com"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Password</label>
+                  <div className="relative">
+                    <input
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      required
+                      minLength={6}
+                      value={form.password}
+                      onChange={handleChange}
+                      className="w-full rounded-lg border border-input bg-background px-3 py-2 pr-10 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all"
+                      placeholder="••••••••"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(v => !v)}
+                      className="absolute inset-y-0 right-0 px-3 text-muted-foreground hover:text-foreground transition-colors text-xs font-medium"
                     >
-                        Cancel Verification
+                      {showPassword ? 'Hide' : 'Show'}
                     </button>
                   </div>
-               </div>
-            ) : (
-                /* --- STANDARD MODES (Signin / Signup) --- */
-                <>
-                    {mode === 'signup' && (
-                    <>
-                        <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">First name</label>
-                        <input
-                            name="firstName"
-                            type="text"
-                            required
-                            value={form.firstName}
-                            onChange={handleChange}
-                            className="w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 px-3 py-2 outline-none"
-                            placeholder="John"
-                        />
-                        </div>
-
-                        <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Last name</label>
-                        <input
-                            name="lastName"
-                            type="text"
-                            required
-                            value={form.lastName}
-                            onChange={handleChange}
-                            className="w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 px-3 py-2 outline-none"
-                            placeholder="Doe"
-                        />
-                        </div>
-                    </>
-                    )}
-
-                    <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    <input
-                        name="email"
-                        type="email"
-                        required
-                        value={form.email}
-                        onChange={handleChange}
-                        className="w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 px-3 py-2 outline-none"
-                        placeholder="you@example.com"
-                    />
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                        <div className="relative">
-                            <input
-                            name="password"
-                            type={showPassword ? 'text' : 'password'}
-                            required
-                            minLength={6}
-                            value={form.password}
-                            onChange={handleChange}
-                            className="w-full rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 px-3 py-2 pr-10 outline-none"
-                            placeholder="••••••••"
-                            />
-                            <button
-                            type="button"
-                            onClick={() => setShowPassword(v => !v)}
-                            className="absolute inset-y-0 right-0 px-3 text-gray-500 hover:text-gray-700"
-                            >
-                            {showPassword ? 'Hide' : 'Show'}
-                            </button>
-                        </div>
-                    </div>
-                </>
+                </div>
+              </>
             )}
 
             {/* Submit Button */}
-            <button
+            <Button
               type="submit"
-              className="w-full py-2.5 rounded-lg font-semibold text-white shadow-md hover:shadow-lg transition-all"
-              style={{ backgroundColor: '#213985' }}
+              className="w-full mt-2 shadow-lg shadow-primary/20"
+              size="lg"
             >
               {mode === 'signin' ? 'Sign in' : mode === 'signup' ? 'Create account' : 'Verify Account'}
-            </button>
+            </Button>
 
             {/* Footer Links */}
             {mode === 'signin' && (
-                <p className="mt-6 text-center text-sm text-gray-600">
-                  Don’t have an account? <button type="button" onClick={() => { setMode('signup'); setError(''); }} className="font-medium text-blue-600 hover:text-blue-700">Sign up</button>
-                </p>
+              <p className="mt-6 text-center text-sm text-muted-foreground">
+                Don’t have an account? <button type="button" onClick={() => { setMode('signup'); setError(''); }} className="font-medium text-primary hover:underline transition-all">Sign up</button>
+              </p>
             )}
-             {mode === 'signup' && (
-                <p className="mt-6 text-center text-sm text-gray-600">
-                  Already have an account? <button type="button" onClick={() => { setMode('signin'); setError(''); }} className="font-medium text-blue-600 hover:text-blue-700">Sign in</button>
-                </p>
+            {mode === 'signup' && (
+              <p className="mt-6 text-center text-sm text-muted-foreground">
+                Already have an account? <button type="button" onClick={() => { setMode('signin'); setError(''); }} className="font-medium text-primary hover:underline transition-all">Sign in</button>
+              </p>
             )}
           </form>
         </div>
