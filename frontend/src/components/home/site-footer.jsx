@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 
 export function SiteFooter() {
   return (
-    <footer className="bg-background border-t">
+    <footer id="about" className="bg-background border-t">
       <div className="container mx-auto px-4 md:px-6 py-12 md:py-16">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">

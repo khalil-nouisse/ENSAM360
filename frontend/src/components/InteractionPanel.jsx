@@ -2,19 +2,18 @@ import SearchPanel from './SearchPanel'
 import BuildingImage from './BuildingImage'
 import ExploreButton from './ExploreButton'
 
-function InteractionPanel({ 
-  searchTerm, 
-  setSearchTerm, 
-  filteredBuildings, 
-  onBuildingSelect, 
-  selectedBuilding, 
-  is3DMode, 
+function InteractionPanel({
+  searchTerm,
+  setSearchTerm,
+  filteredBuildings,
+  onBuildingSelect,
+  selectedBuilding,
+  is3DMode,
   setIs3DMode,
 }) {
   return (
-    <div 
-      className="rounded-2xl shadow-lg p-6 border border-darkblue/10 flex flex-col h-full"
-      style={{ backgroundColor: '#213985' }}
+    <div
+      className="rounded-2xl p-6 border border-primary/20 flex flex-col h-full bg-transparent"
     >
       {/* Search Section */}
       <SearchPanel

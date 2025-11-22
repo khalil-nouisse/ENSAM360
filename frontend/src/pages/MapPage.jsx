@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios' // Or use '../api/axios' if you want your configured instance
-import Navbar from '../components/Navbar'
+import { SiteHeader } from "@/components/home/site-header"
 import CampusMapLeaflet from '../components/CampusMapLeaflet'
 import InteractionPanel from '../components/InteractionPanel'
 
@@ -29,16 +29,16 @@ function MapPage() {
     setSelectedBuilding(building)
     setSearchTerm('')
     setIs3DMode(false)
-    
+
     // SAVE TO LOCAL STORAGE: This ensures the Tour page knows which building 
     // was selected even if we change routes.
-    if(building) {
-        localStorage.setItem('selectedBuilding', JSON.stringify(building));
+    if (building) {
+      localStorage.setItem('selectedBuilding', JSON.stringify(building));
     }
   }
 
   useEffect(() => {
-    async function init(){
+    async function init() {
       const locations = await LoadBuildings();
       setBuildings(locations);
     }
@@ -54,16 +54,16 @@ function MapPage() {
   }, [Buildings, searchTerm]);
 
   return (
-    <div className="min-h-screen font-sans" style={{ backgroundColor: '#F1E8DD' }}>
-      <Navbar />
+    <div className="min-h-screen font-sans bg-background">
+      <SiteHeader />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 flex flex-col">
         {/* Desktop Layout */}
-        <div className="hidden lg:flex gap-6 h-[calc(100vh-12rem)]">
-          <div className="w-[70%]">
-            <CampusMapLeaflet onBuildingSelect={handleBuildingSelect}/>
+        <div className="hidden lg:flex gap-8 h-[calc(100vh-10rem)] items-start justify-center max-w-6xl mx-auto w-full">
+          <div className="w-[70%] h-full rounded-2xl overflow-hidden border border-primary/20 shadow-sm">
+            <CampusMapLeaflet onBuildingSelect={handleBuildingSelect} />
           </div>
-          <div className="w-[30%]">
+          <div className="w-[30%] h-full">
             <InteractionPanel
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
@@ -89,7 +89,7 @@ function MapPage() {
             buildings={Buildings}
           />
           <div className="h-80">
-            <CampusMapLeaflet onBuildingSelect={handleBuildingSelect}/>
+            <CampusMapLeaflet onBuildingSelect={handleBuildingSelect} />
           </div>
         </div>
       </main>

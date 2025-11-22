@@ -7,32 +7,32 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         <Link
-          href="/"
+          to="/home"
           className="flex items-center gap-2 font-bold text-xl text-primary hover:opacity-90 transition-opacity"
         >
           <GraduationCap className="h-6 w-6" />
           <span>ENSAM360°</span>
         </Link>
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
-          <Link href="#features" className="hover:text-foreground transition-colors">
+          <Link to="/home#features" className="hover:text-foreground transition-colors">
             Features
           </Link>
-          <Link href="#how-it-works" className="hover:text-foreground transition-colors">
+          <Link to="/home#how-it-works" className="hover:text-foreground transition-colors">
             How It Works
           </Link>
-          <Link href="#map" className="hover:text-foreground transition-colors">
+          <Link to="/map" className="hover:text-foreground transition-colors">
             Map
           </Link>
-          <Link href="#about" className="hover:text-foreground transition-colors">
+          <Link to="/home#about" className="hover:text-foreground transition-colors">
             About
           </Link>
         </nav>
         <div className="flex items-center gap-4">
           <Button variant="ghost" className="hidden sm:flex" asChild>
-            <Link href="/login">Log in</Link>
+            <Link to="/auth">Log in</Link>
           </Button>
           <Button asChild>
-            <Link href="/tour">Start Tour</Link>
+            <Link to="/tour">Start Tour</Link>
           </Button>
         </div>
       </div>
