@@ -11,7 +11,7 @@ export function Hero() {
             <div className="inline-flex items-center rounded-full border text-xs font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary hover:bg-primary/20 py-0.5 px-2.5 animate-in fade-in slide-in-from-bottom-4 duration-700">
               New: AI Campus Assistant
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl text-balance text-slate-900 dark:text-slate-50 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-150">
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl text-foreground">
               Explore ENSAM Meknès <span className="text-primary">Like Never Before</span>
             </h1>
             <p className="max-w-[42rem] text-lg text-muted-foreground sm:text-xl text-balance leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">

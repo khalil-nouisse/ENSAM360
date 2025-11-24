@@ -35,7 +35,7 @@ export function HowItWorks() {
 
           {steps.map((step, index) => (
             <div key={index} className="relative flex flex-col items-center text-center space-y-4 group">
-              <div className="relative z-10 w-24 h-24 rounded-full bg-transparent border-2 border-primary/20 flex items-center justify-center mb-2 transition-all duration-300 group-hover:scale-110 group-hover:border-primary">
+              <div className="relative z-10 w-24 h-24 rounded-full bg-background border-2 border-primary/20 flex items-center justify-center mb-2 transition-all duration-300 group-hover:scale-110 group-hover:border-primary">
                 <step.icon className="w-10 h-10 text-primary transition-all duration-300 group-hover:scale-110" />
                 <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-background text-primary flex items-center justify-center font-bold text-sm border-2 border-primary transition-transform duration-300 group-hover:scale-110">
                   {index + 1}
