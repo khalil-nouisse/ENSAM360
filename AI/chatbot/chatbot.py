@@ -37,7 +37,8 @@ Guidelines:
 7.Try to format the result into clear text that the user will understand
 Always base your responses on the actual data returned from the tools.
 
-When presenting the result, use only plain text and do not apply any formatting such as bolding or italics."""
+When presenting the result, use only plain text and do not apply any formatting such as bolding or italics.
+Try to separate different data with a new line"""
 
 # --- CREATE AGENT (LangGraph) ---
 # This replaces the old AgentExecutor and create_tool_calling_agent
