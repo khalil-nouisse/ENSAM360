@@ -227,7 +227,7 @@
   },
   {
     id: "td1",
-    label: ["Location", "building", "Td"],
+    label: ["Location", "Building", "Td"],
     name: "TD1",
     description: "le Td TD1",
     map_coords: [46, 86],
@@ -291,8 +291,8 @@
     floor: 0,
     objects: []
   }
-];
-*/
+];*/
+
 // 1ere liste de locations
 /*const locations = [
   {
@@ -567,39 +567,41 @@ const seedDatabase = async (driver) => {
   const session = driver.session();
 
   try {
-    console.log('🌱 Nettoyage de la base de données...');
-    // 1. Delete all existing nodes and relationships
-    await session.run('MATCH (n) DETACH DELETE n');
+    // console.log('🌱 Nettoyage de la base de données...');
+    // // 1. Delete all existing nodes and relationships
+    // // await session.run('MATCH (n) DETACH DELETE n');
 
-    console.log('Création des lieux (Nœuds)...');
-    // 2. Create all locations using MERGE
-    for (const loc of locations) {
-      // We add the 'Location' label to all nodes for easy searching
-      let labelsString = "";
-      for (label of loc.label) {
+    // console.log('Création des lieux (Nœuds)...');
+    // // 2. Create all locations using MERGE
+    // for (const loc of locations) {
+    //   // We add the 'Location' label to all nodes for easy searching
+    //   let labelsString = "";
+    //   for (label of loc.label) {
 
-        loc.label.indexOf(label) == loc.label.length - 1 ? labelsString += label : labelsString += label + ":";
-      }
-      await session.run(
-        `MERGE (n:${labelsString} {id: $id})
-                 SET n.name = $name,
-                     n.description = $description,
-                     n.map_coords = $map_coords,
-                     n.pano_url = $pano_url,
-                     n.flat_url = $flat_url,
-                     n.floor = $floor
-                `,
-        {
-          id: loc.id,
-          name: loc.name,
-          description: loc.description,
-          map_coords: loc.map_coords,
-          pano_url: loc.pano_url,
-          flat_url: loc.flat_url,
-          floor: loc.floor
-        }
-      );
-    }
+    //     loc.label.indexOf(label) == loc.label.length - 1 ? labelsString += label : labelsString += label + ":";
+    //   }
+    //   await session.run(
+    //     `MERGE (n:${labelsString} {id: $id})
+    //              SET n.name = $name,
+    //                  n.description = $description,
+    //                  n.map_coords = $map_coords,
+    //                  n.pano_url = $pano_url,
+    //                  n.flat_url = $flat_url,
+    //                  n.floor = $floor,
+    //                  n.objects = $objects
+    //             `,
+    //     {
+    //       id: loc.id,
+    //       name: loc.name,
+    //       description: loc.description,
+    //       map_coords: loc.map_coords,
+    //       pano_url: loc.pano_url,
+    //       flat_url: loc.flat_url,
+    //       floor: loc.floor,
+    //       objects:loc.objects
+    //     }
+    //   );
+    // }
 
     console.log('Création des chemins (Relations)...');
 
@@ -621,170 +623,383 @@ const seedDatabase = async (driver) => {
 
     // 4. Create navigation relationships (paths with distances)
     // Entrance to corridor connections
-    /*await session.run(`
-            MATCH (a:Location {id: 'entree_ecole'})
-            MATCH (b:Location {id: 'administration'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 15}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 15}]->(a)
-        `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'administration'})
-            MATCH (b:Location {id: 'Admnetud'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 10}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 10}]->(a)
-        `);
+    // ********************* 1st set of locations: ************************************
 
-    await session.run(`
-            MATCH (a:Location {id: 'Admnetud'})
-            MATCH (b:Location {id: 'Administration_etud'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 12}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 12}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'ensam_entry'})
+    //         MATCH (b:Location {id: 'administration'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 15}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 15}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'Administration_etud'})
-            MATCH (b:Location {id: 'couloirForum'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 8}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 8}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'administration'})
+    //         MATCH (b:Location {id: 'Admnetud'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 10}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 10}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'couloirForum'})
-            MATCH (b:Location {id: 'couloir1'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 10}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 10}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'Admnetud'})
+    //         MATCH (b:Location {id: 'Administration_etud'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 12}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 12}]->(a)
+    //     `);
 
-    // Library connections
-    await session.run(`
-            MATCH (a:Location {id: 'couloir1'})
-            MATCH (b:Location {id: 'Bibliotheque_et_centre_de_langue'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 20}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 20}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'Administration_etud'})
+    //         MATCH (b:Location {id: 'couloirForum'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 8}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 8}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'Bibliotheque_et_centre_de_langue'})
-            MATCH (b:Location {id: 'escalier1'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 5}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 5}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'couloirForum'})
+    //         MATCH (b:Location {id: 'couloir1'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 10}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 10}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'escalier1'})
-            MATCH (b:Location {id: 'escalier2'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 8}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 8}]->(a)
-        `);
+    // // Library connections
+    // await session.run(`
+    //         MATCH (a:Location {id: 'couloir1'})
+    //         MATCH (b:Location {id: 'Bibliotheque_et_centre_de_langue'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 20}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 20}]->(a)
+    //     `);
 
-    // Second floor corridor connections
-    await session.run(`
-            MATCH (a:Location {id: 'couloir1'})
-            MATCH (b:Location {id: 'couloir2'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 15}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 15}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'Bibliotheque_et_centre_de_langue'})
+    //         MATCH (b:Location {id: 'escalier1'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 5}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 5}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'couloir2'})
-            MATCH (b:Location {id: 'couloircctd1'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 12}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 12}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'escalier1'})
+    //         MATCH (b:Location {id: 'escalier2'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 8}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 8}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'couloircctd1'})
-            MATCH (b:Location {id: 'mathinfo'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 10}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 10}]->(a)
-        `);
+    // // Second floor corridor connections
+    // await session.run(`
+    //         MATCH (a:Location {id: 'couloir1'})
+    //         MATCH (b:Location {id: 'couloir2'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 15}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 15}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'mathinfo'})
-            MATCH (b:Location {id: 'mathinfo_inside'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'couloir2'})
+    //         MATCH (b:Location {id: 'couloircctd1'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 12}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 12}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'couloircctd1'})
-            MATCH (b:Location {id: 'CouloirAEEE'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 15}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 15}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'couloircctd1'})
+    //         MATCH (b:Location {id: 'mathinfo'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 10}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 10}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'CouloirAEEE'})
-            MATCH (b:Location {id: 'EntreeA3e'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 8}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 8}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'mathinfo'})
+    //         MATCH (b:Location {id: 'mathinfo_inside'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'EntreeA3e'})
-            MATCH (b:Location {id: 'AEEE'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 5}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 5}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'couloircctd1'})
+    //         MATCH (b:Location {id: 'CouloirAEEE'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 15}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 15}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'AEEE'})
-            MATCH (b:Location {id: 'a3einside'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'CouloirAEEE'})
+    //         MATCH (b:Location {id: 'EntreeA3e'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 8}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 8}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'CouloirAEEE'})
-            MATCH (b:Location {id: 'couloirtd1'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 18}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 18}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'EntreeA3e'})
+    //         MATCH (b:Location {id: 'AEEE'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 5}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 5}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'couloirtd1'})
-            MATCH (b:Location {id: 'CouloirTD1TD2'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 10}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 10}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'AEEE'})
+    //         MATCH (b:Location {id: 'a3einside'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
 
-    // Amphitheater and conference room connections
-    await session.run(`
-            MATCH (a:Location {id: 'couloir2'})
-            MATCH (b:Location {id: 'amphie_et_salle_de_conference'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 20}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 20}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'CouloirAEEE'})
+    //         MATCH (b:Location {id: 'couloirtd1'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 18}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 18}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'amphie_et_salle_de_conference'})
-            MATCH (b:Location {id: 'entree_salle_conference'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 5}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 5}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'couloirtd1'})
+    //         MATCH (b:Location {id: 'CouloirTD1TD2'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 10}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 10}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'entree_salle_conference'})
-            MATCH (b:Location {id: 'salle_conference'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
-        `);
+    // // Amphitheater and conference room connections
+    // await session.run(`
+    //         MATCH (a:Location {id: 'couloir2'})
+    //         MATCH (b:Location {id: 'amphie_et_salle_de_conference'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 20}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 20}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'amphie_et_salle_de_conference'})
-            MATCH (b:Location {id: 'entree_emphi3'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 5}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 5}]->(a)
-        `);
+    // await session.run(`
+    //         MATCH (a:Location {id: 'amphie_et_salle_de_conference'})
+    //         MATCH (b:Location {id: 'entree_salle_conference'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 5}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 5}]->(a)
+    //     `);
 
-    await session.run(`
-            MATCH (a:Location {id: 'entree_emphi3'})
-            MATCH (b:Location {id: 'Amphi3'})
-            MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
-            MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
-        `);
-    */
+    // await session.run(`
+    //         MATCH (a:Location {id: 'entree_salle_conference'})
+    //         MATCH (b:Location {id: 'salle_conference'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'amphie_et_salle_de_conference'})
+    //         MATCH (b:Location {id: 'entree_emphi3'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 5}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 5}]->(a)
+    //     `);
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'entree_emphi3'})
+    //         MATCH (b:Location {id: 'Amphi3'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    // ********************* 2nd set of locations: ************************************
+    
+    // await session.run(`
+    //         MATCH (a:Location {id: 'ensam_entry'})
+    //         MATCH (b:Location {id: 'pointeuse_entry'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'pointeuse_entry'})
+    //         MATCH (b:Location {id: 'td2_entry'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+    
+    // 2 possible locations starting from td2_entry :
+    // await session.run(`
+    //         MATCH (a:Location {id: 'td2_entry'})
+    //         MATCH (b:Location {id: 'td2'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'td2_entry'})
+    //         MATCH (b:Location {id: 'AUF'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'AUF'})
+    //         MATCH (b:Location {id: 'couloir_intersection'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+    
+    // 2 possible locations starting from couloir_intersection :
+    
+    // await session.run(`
+    //         MATCH (a:Location {id: 'couloir_intersection'})
+    //         MATCH (b:Location {id: 'amphi_parking'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'couloir_intersection'})
+    //         MATCH (b:Location {id: 'td1_entry'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    // 2 locations starting from td1_entry :
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'td1_entry'})
+    //         MATCH (b:Location {id: 'td1_door'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'td1_entry'})
+    //         MATCH (b:Location {id: 'td1'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'td1'})
+    //         MATCH (b:Location {id: 'stairs_right_td1'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'stairs_right_td1'})
+    //         MATCH (b:Location {id: 'couloir_right_td1'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'couloir_right_td1'})
+    //         MATCH (b:Location {id: 'salle_info_7'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    // 3 locations starting from amphiparking :
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'amphi_parking'})
+    //         MATCH (b:Location {id: 'amphis_door'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+     
+    // await session.run(`
+    //         MATCH (a:Location {id: 'amphi_parking'})
+    //         MATCH (b:Location {id: 'parking'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+    
+    
+    // await session.run(`
+    //         MATCH (a:Location {id: 'amphi_parking'})
+    //         MATCH (b:Location {id: 'centre_de_recherche_entry'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+    
+    // 2 locations starting from centre_de_recherche_entry :
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'centre_de_recherche_entry'})
+    //         MATCH (b:Location {id: 'centre_de_recherche_door'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'centre_de_recherche_entry'})
+    //         MATCH (b:Location {id: 'fabrication_mecanique_entry'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'centre_de_recherche_door'})
+    //         MATCH (b:Location {id: 'centre_de_recherche'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'fabrication_mecanique_entry'})
+    //         MATCH (b:Location {id: 'civil_gms_entry'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+    
+
+    // 2 locations starting from civil_gms_entry :
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'civil_gms_entry'})
+    //         MATCH (b:Location {id: 'civil_entry'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'civil_gms_entry'})
+    //         MATCH (b:Location {id: 'buvette'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+    
+
+    
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'civil_entry'})
+    //         MATCH (b:Location {id: 'civil'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'buvette'})
+    //         MATCH (b:Location {id: 'energitique_entry'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+    
+
+    // 2 locations starting from energitique_entry :
+
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'energitique_entry'})
+    //         MATCH (b:Location {id: 'energitique_door'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'energitique_entry'})
+    //         MATCH (b:Location {id: 'terrain_fonderie'})
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
+    //     `);
+
+    
+    
+
+    
+    
+    
+
+
+    
     console.log('✅ Base de données initialisée avec succès !');
 
   } catch (error) {
