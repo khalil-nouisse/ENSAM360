@@ -24,5 +24,6 @@ dist-ssr
 *.sw?
 
 # images
+src/assets/*
 src/assets/image/*
 public/images/*
