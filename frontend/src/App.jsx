@@ -6,6 +6,8 @@ import Navbar from './components/Navbar'
 import CampusMapLeaflet from './components/CampusMapLeaflet'
 import InteractionPanel from './components/InteractionPanel'
 import axios from 'axios'
+import { BestPathFinder } from './components/BestPathFinder'
+import BestPathResults from './components/BestPathResults'
 // approach without database
 // Mock buildings data
 /* const MOCK_BUILDINGS = [
@@ -67,12 +69,46 @@ function App() {
     console.error(err);
     return null;
   }
+
+  
+}
+
+async function LoadLocations() {
+  try {
+    const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/allLocations");
+    console.log(res.data)
+    return res.data;
+    
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+
+  
 }
   const [Buildings,setBuildings] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedBuilding, setSelectedBuilding] = useState(null)
   const [is3DMode, setIs3DMode] = useState(false)
   const [filteredBuildings,setFilteredBuildings] = useState(null)
+  // for BestPathFinder Component
+  const [locations,setLocations] = useState(null)
+  const [filteredStartingLocations,setFilteredStartingLocations]= useState (null)
+  const [filteredDestinationLocations,setFilteredDestinationLocations]= useState (null)
+  const [selectedStartLocation,setSelectedStartLocation]= useState (null)
+  const [startLocationTerm, setStartLocationTerm] = useState('')
+  const [selectedDestinationLocation,setSelectedDestinationLocation]= useState (null)
+  const [destinationLocationTerm, setDestinationLocationTerm] = useState('')
+  const [bestPath, setBestPath] = useState(null)
+  const [selectedPathNode, setSelectedPathNode] = useState(null)
+
+  const handleBestPath = (path) => {
+    setBestPath(path)
+    setSelectedPathNode(null)
+  }
+  const handlePathNodeClick = (nodeId) => {
+    setSelectedPathNode(nodeId)
+  }
   // Filter buildings based on search term
   
   
@@ -82,11 +118,29 @@ function App() {
     setSearchTerm('')
     setIs3DMode(false)
   }
+
+  const handleStartLocationSelect = (location) => {
+    setSelectedStartLocation(location)
+    setFilteredStartingLocations([])
+    setStartLocationTerm(location.name)
+    setIs3DMode(false)
+  }
+
+  const handleDestinationLocationSelect = (location) => {
+    setSelectedDestinationLocation(location)
+    setFilteredDestinationLocations([])
+    setDestinationLocationTerm(location.name)
+    setIs3DMode(false)
+  }
+
   useEffect(() => {
       async function init(){
-        const locations = await LoadBuildings();
+        const buildings = await LoadBuildings();
+        const locations = await LoadLocations();
         console.log(locations)
-        setBuildings(locations);
+        setLocations(locations);
+        console.log(buildings)
+        setBuildings(buildings);
       }
       init();
       
@@ -101,6 +155,21 @@ function App() {
 
   setFilteredBuildings(filtered);
 }, [Buildings, searchTerm]);
+
+useEffect(() => {
+  if (!locations) return;
+  
+  const filteredStart = locations.filter(location =>
+    location.name.toLowerCase().includes(startLocationTerm.toLowerCase())
+  );
+
+  setFilteredStartingLocations(filteredStart);
+  const filteredDestination = locations.filter(location =>
+    location.name.toLowerCase().includes(destinationLocationTerm.toLowerCase())
+  );
+
+  setFilteredDestinationLocations(filteredDestination);
+}, [locations , startLocationTerm, destinationLocationTerm]);
   return (
     <BrowserRouter>
     <Routes>
@@ -118,7 +187,12 @@ function App() {
         <div className="hidden lg:flex gap-6 h-[calc(100vh-12rem)]">
           {/* Left Side: Campus Map (70% width) */}
           <div className="w-[70%]">
-            <CampusMapLeaflet onBuildingSelect={handleBuildingSelect}/>
+            <CampusMapLeaflet onBuildingSelect={handleBuildingSelect} path={bestPath} selectedPathNode={selectedPathNode} />
+          </div>
+
+          <div className="flex-1 flex flex-col gap-4">
+            <BestPathFinder selectedStartLocation={selectedStartLocation} selectedDestinationLocation={selectedDestinationLocation} filteredStartingLocations={filteredStartingLocations} filteredDestinationLocations={filteredDestinationLocations}  onStartLocationSelect={handleStartLocationSelect} onDestinationLocationSelect={handleDestinationLocationSelect} startLocationTerm={startLocationTerm} setStartLocationTerm={setStartLocationTerm} destinationLocationTerm={destinationLocationTerm} setDestinationLocationTerm={setDestinationLocationTerm} onBestPath={handleBestPath} />
+            {bestPath && <BestPathResults bestPath={bestPath} onNodeClick={handlePathNodeClick} />}
           </div>
           
           {/* Right Side: Interaction Panel (30% width) */}
@@ -147,8 +221,12 @@ function App() {
             setIs3DMode={setIs3DMode}
             buildings={Buildings}
           />
+            <div className="space-y-4">
+            <BestPathFinder filteredStartingLocations={filteredStartingLocations} filteredDestinationLocations={filteredDestinationLocations} selectedStartLocation={selectedStartLocation} selectedDestinationLocation={selectedDestinationLocation} onStartLocationSelect={handleStartLocationSelect} onDestinationLocationSelect={handleDestinationLocationSelect} startLocationTerm={startLocationTerm} setStartLocationTerm={setStartLocationTerm} destinationLocationTerm={destinationLocationTerm} setDestinationLocationTerm={setDestinationLocationTerm} onBestPath={handleBestPath} />
+            {bestPath && <BestPathResults bestPath={bestPath} onNodeClick={handlePathNodeClick} />}
+          </div>
           <div className="h-80">
-            <CampusMapLeaflet onBuildingSelect={handleBuildingSelect}/>
+            <CampusMapLeaflet onBuildingSelect={handleBuildingSelect} path={bestPath} selectedPathNode={selectedPathNode} />
           </div>
         </div>
       </main>

@@ -8,6 +8,17 @@ const mapService = require('../services/mapService');
  * Handles the HTTP request and response for fetching all locations.
  */
 
+const getShortestPath = async (req , res) => {
+    try{
+        const path = await mapService.getShortestPath(req.body.startID , req.body.endID);
+        res.status(200).json(path);
+    }catch(err){
+        res.status(500).json({
+            message : "Error fetching shortest path",
+            error : err.message
+        });
+    }
+};
 
 const getAllBuildings = async (req , res)=> {
 
@@ -17,6 +28,26 @@ const getAllBuildings = async (req , res)=> {
 
         // 1. Call the service to get the data
         const locations = await mapService.getAllBuildings();
+        
+        // 2. Send a success response with the data
+        res.status(200).json(locations);
+
+    }catch(err){
+        res.status(500).json({
+            message : "Error fetching locations",
+            error : err.message
+        });
+    }
+};
+
+const getAllLocations = async (req , res)=> {
+
+
+
+    try{
+
+        // 1. Call the service to get the data
+        const locations = await mapService.getAllLocations();
         
         // 2. Send a success response with the data
         res.status(200).json(locations);
@@ -72,11 +103,12 @@ const getPrincipalLocations = async (req , res) => {
 }
 
 module.exports = {
-
+    getAllLocations,
     getAllBuildings,
     createLocation,
     getLocationByID , 
 
-    getPrincipalLocations
+    getPrincipalLocations,
+    getShortestPath
 
 }
