@@ -2,9 +2,9 @@ const driver = require('../../config/neo4j');
 
 const getNextLocationsID = async (id)=>{
     const session =  driver.session();
-    cipherQuery = `
-        MATCH (n:Location{ id='$id'})-[r:CONNECTS_TO]-(m:Location)
-        RETURN m.id
+    const cipherQuery = `
+        MATCH (n:Location { id: $id })-[r:CONNECTS_TO]-(m:Location)
+        RETURN m.id AS id
     `;
     try{
         const result = await session.run(cipherQuery , {id});

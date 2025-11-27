@@ -3,7 +3,8 @@ const tourService = require('../services/tourService');
 
 const getNextLocationsID = async (req, res)=>{
     try{
-        const ids = tourService.getNextLocationsID(req.params.id)
+        // Ensure the async service call is awaited so we return the resolved array
+        const ids = await tourService.getNextLocationsID(req.params.id)
         res.status(200).json(ids);
 
     }catch(err){
