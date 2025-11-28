@@ -52,11 +52,11 @@ export default function Chatbot() {
     };
 
     return (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end pointer-events-none">
             {/* Chat Panel */}
             <div
                 className={cn(
-                    "transition-all duration-300 ease-in-out origin-bottom-right mb-4",
+                    "transition-all duration-300 ease-in-out origin-bottom-right mb-4 pointer-events-auto",
                     isOpen
                         ? "opacity-100 scale-100 translate-y-0"
                         : "opacity-0 scale-95 translate-y-10 pointer-events-none"
@@ -149,7 +149,7 @@ export default function Chatbot() {
                 onClick={() => setIsOpen(!isOpen)}
                 size="icon"
                 className={cn(
-                    "h-14 w-14 rounded-full shadow-lg transition-all duration-300 hover:scale-105 active:scale-95",
+                    "h-14 w-14 rounded-full shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 pointer-events-auto",
                     isOpen
                         ? "bg-destructive hover:bg-destructive/90 rotate-90"
                         : "bg-primary hover:bg-primary/90 rotate-0"

@@ -34,10 +34,13 @@ export function HowItWorks() {
           <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
           {steps.map((step, index) => (
-            <div key={index} className="relative flex flex-col items-center text-center space-y-4 group">
-              <div className="relative z-10 w-24 h-24 rounded-full bg-background border-2 border-primary/20 flex items-center justify-center mb-2 transition-all duration-300 group-hover:scale-110 group-hover:border-primary">
-                <step.icon className="w-10 h-10 text-primary transition-all duration-300 group-hover:scale-110" />
-                <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-background text-primary flex items-center justify-center font-bold text-sm border-2 border-primary transition-transform duration-300 group-hover:scale-110">
+            <div key={index} className="relative z-10 flex flex-col items-center text-center space-y-4 group cursor-pointer">
+              {/* Transparent overlay to capture hover events */}
+              <div className="absolute inset-0 z-50 bg-transparent rounded-xl" />
+
+              <div className="relative z-20 w-24 h-24 rounded-full bg-background border-2 border-primary/20 flex items-center justify-center mb-2 transition-all duration-300 group-hover:scale-110 group-hover:border-primary group-hover:shadow-lg group-hover:bg-primary/5">
+                <step.icon className="w-10 h-10 text-primary transition-all duration-300 group-hover:scale-110 pointer-events-none" />
+                <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-background text-primary flex items-center justify-center font-bold text-sm border-2 border-primary transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground pointer-events-none">
                   {index + 1}
                 </div>
               </div>
