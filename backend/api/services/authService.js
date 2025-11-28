@@ -5,19 +5,19 @@ require('dotenv').config();
 const sendEmail = require('../../utils/sendEmail');
 require('dotenv').config()
 
-const { ACCESS_TOKEN_SECRET , REFRESH_TOKEN_SECRET } = process.env
+const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env
 
-const register = async (firstName , lastName , email , Password , ) =>{
+const register = async (firstName, lastName, email, Password,) => {
     const session = driver.session();
-    try{
+    try {
         //check if the user already exists 
         const checkQuery = `MATCH (u:User{email: $email}) RETURN u`;
-        const checkResult = await session.run(checkQuery , {email});
+        const checkResult = await session.run(checkQuery, { email });
 
-        if (checkResult.records.length > 0){
+        if (checkResult.records.length > 0) {
             const existingUser = checkResult.records[0].get('u').properties;
 
-            if (existingUser.isVerified){
+            if (existingUser.isVerified) {
                 throw new Error('User with this email already exists.');
             }
             else {
@@ -27,13 +27,13 @@ const register = async (firstName , lastName , email , Password , ) =>{
         }
         //Hash password
         // A salt is a random string added to the password before hashing.
-        const salt = await bcrypt.genSalt(10); 
-        const hashedPassword = await bcrypt.hash(Password ,salt);
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(Password, salt);
 
         //Generate OTP
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
         const otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
-        
+
         const cipherQuery = `
             CREATE (u:User{
                 id : randomUUID() ,
@@ -51,82 +51,84 @@ const register = async (firstName , lastName , email , Password , ) =>{
                 u.lastname AS lastname ,
                 u.email AS email 
         `;
-        
-        const result = await session.run(cipherQuery , {
-            firstName , lastName , email , hashedPassword , otp , otpExpires
+
+        const result = await session.run(cipherQuery, {
+            firstName, lastName, email, hashedPassword, otp, otpExpires
         });
 
-        if( result.records.length === 0) {
+        if (result.records.length === 0) {
             throw new Error("Could not create user");
         }
+        console.log("User created in DB, sending email...");
 
         //send email
-        await sendEmail(email , otp);
+        await sendEmail(email, otp);
+        console.log("Email process finished");
 
         return result.records[0].toObject();
-            
-    }catch (error) {
+
+    } catch (error) {
         // Handle specific error for unique email constraint
         if (error.code === 'Neo.ClientError.Schema.ConstraintValidationFailed') {
-        throw new Error('Email already exists.');
+            throw new Error('Email already exists.');
         }
         throw error;
-    }finally {
+    } finally {
         await session.close();
     }
 };
 
 
-const login = async (email , password)=>{
+const login = async (email, password) => {
     const session = driver.session();
     const cipherQuery = `
         MATCH (u:User {email : $email})
         RETURN u
     `;
     try {
-        const result = await session.run(cipherQuery , {email} );
+        const result = await session.run(cipherQuery, { email });
 
-        if( result.records.length === 0 ){
+        if (result.records.length === 0) {
             throw new Error("User Not Found!");
         }
 
         const node = result.records[0].get('u');
 
         //Block unverified users ---
-         if (node.properties.isVerified === false) {
+        if (node.properties.isVerified === false) {
             throw new Error("Please verify your email address before logging in.");
         }
 
         const userPassword = node.properties.password;
 
-        const matchPassword = await bcrypt.compare(password , userPassword);
+        const matchPassword = await bcrypt.compare(password, userPassword);
 
-        if(!matchPassword){
+        if (!matchPassword) {
             throw new Error('Invalid credentials');
         }
 
         // create JWT
         const payload = {
-            user : {
-                id : node.properties.id ,
-                firstname : node.properties.firstname ,
-                lastname : node.properties.lastname ,
-                email : node.properties.email
+            user: {
+                id: node.properties.id,
+                firstname: node.properties.firstname,
+                lastname: node.properties.lastname,
+                email: node.properties.email
             }
         };
 
         const accessToken = jwt.sign(
-                payload.user,
-                ACCESS_TOKEN_SECRET,
-                {expiresIn:'1h'}
-            );
+            payload.user,
+            ACCESS_TOKEN_SECRET,
+            { expiresIn: '1h' }
+        );
 
         const refreshToken = jwt.sign(
-                payload.user,
-                REFRESH_TOKEN_SECRET,
-                {expiresIn:'1d'}
-            );
-        
+            payload.user,
+            REFRESH_TOKEN_SECRET,
+            { expiresIn: '1d' }
+        );
+
         // inserting the refresh Token in the database ??
         userID = node.properties.id;
 
@@ -135,17 +137,17 @@ const login = async (email , password)=>{
             SET u.refreshToken = $refreshToken
         `;
 
-        await session.run(cipher , {userID , refreshToken} );
+        await session.run(cipher, { userID, refreshToken });
 
-        return {refreshToken ,accessToken} ;
-    }catch(err){
+        return { refreshToken, accessToken };
+    } catch (err) {
         throw err
-    }finally{
+    } finally {
         session.close();
     }
 };
 
-const refreshToken =async (providedRefreshToken)=>{
+const refreshToken = async (providedRefreshToken) => {
     const session = driver.session();
 
     try {
@@ -169,11 +171,11 @@ const refreshToken =async (providedRefreshToken)=>{
 
         // 3. Issue a new ACCESS token (not a new refresh token)
         const payload = {
-            user : {
-                id : userNode.id ,
-                firstname : userNode.firstname ,
-                lastname : userNode.lastname ,
-                email : userNode.email
+            user: {
+                id: userNode.id,
+                firstname: userNode.firstname,
+                lastname: userNode.lastname,
+                email: userNode.email
             }
         };
 
@@ -185,55 +187,55 @@ const refreshToken =async (providedRefreshToken)=>{
 
         return { accessToken: newAccessToken };
 
-    }catch(error){
+    } catch (error) {
         throw new Error('Invalid refresh token.', error);
-    }finally{
+    } finally {
         await session.close();
     }
 };
 
-const logout = async (userID)=>{
+const logout = async (userID) => {
     const session = driver.session();
-    try{
+    try {
         //const user = getUserbyID(userID);
-        
+
         cipherQuery = `
             MATCH (u:User {id:$userID})
             SET u.refreshToken=null
             RETURN u.id As id
         `;
 
-        await session.run(cipherQuery, {userID});
+        await session.run(cipherQuery, { userID });
 
-        return {message : "Loged out succesfully"};
+        return { message: "Loged out succesfully" };
 
-    }catch(err){
-        throw new Error('Error loging out ',err);
-    }finally{
+    } catch (err) {
+        throw new Error('Error loging out ', err);
+    } finally {
         await session.close();
     }
 };
 
-const getUserbyID = async(userID)=>{
+const getUserbyID = async (userID) => {
     const session = driver.session();
-    try{
+    try {
         cipherQuery = `
             MATCH (u:User {id:$userID})
             return u
         `;
-        
-        const result = await session.run(cipherQuery , {userID});
 
-        if( result.records.length === 0) {
+        const result = await session.run(cipherQuery, { userID });
+
+        if (result.records.length === 0) {
             throw new Error("Could not find user");
         }
 
         return result.records[0].toObject();
 
 
-    }catch(err){
-        throw new Error('unable to get the user' , err);
-    }finally{
+    } catch (err) {
+        throw new Error('unable to get the user', err);
+    } finally {
         session.close();
     }
 };
@@ -271,9 +273,9 @@ const verifyOTP = async (email, otp) => {
                 u.otpExpires = null
             RETURN u.email
         `;
-        
+
         await session.run(updateQuery, { email });
-        
+
         return { message: "Account Verified Successfully" };
 
     } finally {
@@ -282,9 +284,9 @@ const verifyOTP = async (email, otp) => {
 };
 
 module.exports = {
-    register , 
-    login ,
-    refreshToken , 
+    register,
+    login,
+    refreshToken,
     logout,
     verifyOTP
 };

@@ -12,11 +12,13 @@ const VirtualTourWrapper = () => {
   return <VirtualTour location={location} />;
 };
 
+import { Toaster } from 'sonner'
 import ScrollToHashElement from './components/ScrollToHashElement'
 
 function App() {
   return (
     <BrowserRouter>
+      <Toaster />
       <ScrollToHashElement />
       <div className="app-container" style={{ height: '100vh', width: '100vw' }}>
         <Routes>

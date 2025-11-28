@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from "sonner"
 import AuthContext from '../context/AuthProvider'
 import { Button } from '@/components/ui/button'
 
@@ -32,12 +33,16 @@ function Auth() {
       } else if (mode === 'signup') {
         // 2. REGISTER -> Switch to OTP
         await register(form.firstName, form.lastName, form.email, form.password);
-        alert("Account created successfully! Please check your email for the verification code.");
+        toast.success("Account created successfully!", {
+          description: "Please check your email for the verification code.",
+        });
         setMode('otp');
       } else if (mode === 'otp') {
         // 3. VERIFY -> Switch to Signin
         await verifyOtp(form.email, otp);
-        alert("Account Verified Successfully! Please sign in.");
+        toast.success("Account Verified Successfully!", {
+          description: "Please sign in.",
+        });
         setMode('signin');
         setForm(prev => ({ ...prev, password: '' })); // Clear password for security
       }
@@ -111,7 +116,7 @@ function Auth() {
                     type="text"
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
-                    className="w-full rounded-lg border border-input bg-background p-3 text-center text-2xl tracking-[0.5em] font-mono focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all"
+                    className="w-full rounded-lg border border-input bg-background p-3 text-center text-2xl tracking-[0.5em] font-mono focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all placeholder:text-muted-foreground/50"
                     placeholder="123456"
                     maxLength={6}
                     autoFocus
@@ -141,7 +146,7 @@ function Auth() {
                         required
                         value={form.firstName}
                         onChange={handleChange}
-                        className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all"
+                        className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all placeholder:text-muted-foreground/50"
                         placeholder="John"
                       />
                     </div>
@@ -153,7 +158,7 @@ function Auth() {
                         required
                         value={form.lastName}
                         onChange={handleChange}
-                        className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all"
+                        className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all placeholder:text-muted-foreground/50"
                         placeholder="Doe"
                       />
                     </div>
@@ -168,7 +173,7 @@ function Auth() {
                     required
                     value={form.email}
                     onChange={handleChange}
-                    className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all"
+                    className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all placeholder:text-muted-foreground/50"
                     placeholder="you@example.com"
                   />
                 </div>
@@ -183,7 +188,7 @@ function Auth() {
                       minLength={6}
                       value={form.password}
                       onChange={handleChange}
-                      className="w-full rounded-lg border border-input bg-background px-3 py-2 pr-10 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all"
+                      className="w-full rounded-lg border border-input bg-background px-3 py-2 pr-10 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all placeholder:text-muted-foreground/50"
                       placeholder="••••••••"
                     />
                     <button
