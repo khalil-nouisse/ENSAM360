@@ -62,16 +62,16 @@ export default function Chatbot() {
                         : "opacity-0 scale-95 translate-y-10 pointer-events-none"
                 )}
             >
-                <Card className="w-[350px] sm:w-[400px] h-[500px] shadow-2xl border-border/50 backdrop-blur-sm bg-background/95 flex flex-col overflow-hidden">
+                <Card className="w-[350px] sm:w-[400px] h-[500px] shadow-2xl border-white/40 backdrop-blur-xl bg-white/60 flex flex-col overflow-hidden">
                     {/* Header */}
-                    <div className="p-4 border-b border-border flex items-center justify-between bg-primary/5">
+                    <div className="p-4 border-b border-white/20 flex items-center justify-between bg-white/30 backdrop-blur-md">
                         <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shadow-sm">
                                 <Bot size={18} />
                             </div>
                             <div>
-                                <h3 className="font-semibold text-sm">AI Assistant</h3>
-                                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                <h3 className="font-semibold text-sm text-gray-800">AI Assistant</h3>
+                                <p className="text-xs text-gray-500 flex items-center gap-1">
                                     <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                                     Online
                                 </p>
@@ -80,7 +80,7 @@ export default function Chatbot() {
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 rounded-full hover:bg-destructive/10 hover:text-destructive transition-colors"
+                            className="h-8 w-8 rounded-full hover:bg-black/5 hover:text-destructive transition-colors"
                             onClick={() => setIsOpen(false)}
                         >
                             <X size={16} />
@@ -88,7 +88,7 @@ export default function Chatbot() {
                     </div>
 
                     {/* Messages Area */}
-                    <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-black/10 scrollbar-track-transparent">
                         {messages.map((msg) => (
                             <div
                                 key={msg.id}
@@ -99,10 +99,10 @@ export default function Chatbot() {
                             >
                                 <div
                                     className={cn(
-                                        "max-w-[80%] rounded-2xl px-4 py-2.5 text-sm shadow-sm",
+                                        "max-w-[80%] rounded-2xl px-4 py-2.5 text-sm shadow-sm backdrop-blur-sm",
                                         msg.sender === 'user'
-                                            ? "bg-primary text-primary-foreground rounded-br-none"
-                                            : "bg-muted/50 border border-border rounded-bl-none"
+                                            ? "bg-primary/90 text-primary-foreground rounded-br-none"
+                                            : "bg-white/70 border border-white/40 text-gray-800 rounded-bl-none"
                                     )}
                                 >
                                     {msg.text}
@@ -113,10 +113,10 @@ export default function Chatbot() {
                     </div>
 
                     {/* Input Area */}
-                    <div className="p-4 border-t border-border bg-background/50">
+                    <div className="p-4 border-t border-white/20 bg-white/30 backdrop-blur-md">
                         <form
                             onSubmit={handleSendMessage}
-                            className="flex items-center gap-2 bg-muted/50 p-1.5 rounded-full border border-input focus-within:ring-2 focus-within:ring-ring/20 transition-all"
+                            className="flex items-center gap-2 bg-white/50 p-1.5 rounded-full border border-white/40 focus-within:ring-2 focus-within:ring-primary/20 transition-all shadow-sm"
                         >
                             <input
                                 ref={inputRef}
@@ -124,7 +124,7 @@ export default function Chatbot() {
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
                                 placeholder="Type a message..."
-                                className="flex-1 bg-transparent px-4 py-2 text-sm outline-none placeholder:text-muted-foreground/50 min-w-0"
+                                className="flex-1 bg-transparent px-4 py-2 text-sm outline-none placeholder:text-gray-500/70 text-gray-800 min-w-0"
                             />
                             <Button
                                 type="submit"
@@ -134,7 +134,7 @@ export default function Chatbot() {
                                     "h-8 w-8 rounded-full shrink-0 transition-all duration-200",
                                     inputValue.trim()
                                         ? "bg-primary text-primary-foreground shadow-md hover:bg-primary/90"
-                                        : "bg-muted text-muted-foreground hover:bg-muted"
+                                        : "bg-black/5 text-gray-400 hover:bg-black/10"
                                 )}
                             >
                                 <Send size={14} className={cn(inputValue.trim() && "ml-0.5")} />

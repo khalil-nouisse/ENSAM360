@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
-import { ArrowLeft, ArrowRight, ArrowUp, ArrowDown, Map, Home } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ArrowUp, ArrowDown, Map, Home, Loader2, Compass } from 'lucide-react'
 import axios from 'axios'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 function VirtualTour(props) {
-  async function getLocationDetails(id){
+  async function getLocationDetails(id) {
     try {
       const res = await axios.get(process.env.BACKEND_SERVER + `/api/tour/location/?id=${id}`);
       return res.data;
@@ -13,44 +15,44 @@ function VirtualTour(props) {
     }
   }
   async function LoadLocations() {
-  try {
-    const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/principaleLocations");
-    console.log(res.data)
-    return res.data;
-    
-  } catch (err) {
-    console.error(err);
-    return null;
+    try {
+      const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/principaleLocations");
+      console.log(res.data)
+      return res.data;
+
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
   }
-}
-  const [locations,setLocations] = useState(null)
+  const [locations, setLocations] = useState(null)
   const [showMap, setShowMap] = useState(false)
   const [viewerReady, setViewerReady] = useState(false)
   const viewerRef = useRef(null)
   const pannellumViewerRef = useRef(null)
   const [currentLocation, setCurrentLocation] = useState(null)
-  const [currentLocationDetails,setCurrentLocationDetails] = useState(null)
-  
+  const [currentLocationDetails, setCurrentLocationDetails] = useState(null)
 
-  useEffect(()=>{
-    if(locations) return;
-    async function loadLocations(){
-          const loadedLocations = await LoadLocations();
-          setLocations(loadedLocations);
+
+  useEffect(() => {
+    if (locations) return;
+    async function loadLocations() {
+      const loadedLocations = await LoadLocations();
+      setLocations(loadedLocations);
     }
     loadLocations();
   })
   useEffect(() => {
     if (props.location) {
-        setCurrentLocation(props.location.id)
+      setCurrentLocation(props.location.id)
     } else {
-        setCurrentLocation('ensam_entry')
+      setCurrentLocation('ensam_entry')
     }
-}, [props.location])
-  
+  }, [props.location])
+
   // Initialize Pannellum viewer
   // Load pannellum script only once on mount
-useEffect(() => {
+  useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js';
     script.async = true;
@@ -65,24 +67,24 @@ useEffect(() => {
     script.onload = () => setViewerReady(true);
 
     return () => {
-        document.body.removeChild(script);
-        document.head.removeChild(link);
+      document.body.removeChild(script);
+      document.head.removeChild(link);
     };
-}, []);
+  }, []);
 
 
   useEffect(() => {
     if (!currentLocation) return;
 
     async function load() {
-        const details = await getLocationDetails(currentLocation);
-        console.log(details)
-        setCurrentLocationDetails(details[0]);
+      const details = await getLocationDetails(currentLocation);
+      console.log(details)
+      setCurrentLocationDetails(details[0]);
     }
 
     load();
-}, [currentLocation]);
-  
+  }, [currentLocation]);
+
   // Update panorama when location changes
   useEffect(() => {
     console.log("EFFECT RUN --- viewerReady:", viewerReady);
@@ -90,50 +92,50 @@ useEffect(() => {
     console.log("currentLocationDetails:", currentLocationDetails);
 
     if (!viewerReady) {
-        console.log("STOP → viewerReady is false");
-        return;
+      console.log("STOP → viewerReady is false");
+      return;
     }
 
     if (!window.pannellum) {
-        console.log("STOP → pannellum is not loaded yet");
-        return;
+      console.log("STOP → pannellum is not loaded yet");
+      return;
     }
 
     if (!currentLocationDetails) {
-        console.log("STOP → no currentLocationDetails yet");
-        return;
+      console.log("STOP → no currentLocationDetails yet");
+      return;
     }
 
     if (!currentLocationDetails.pano_image) {
-        console.log("STOP → pano_image missing");
-        return;
+      console.log("STOP → pano_image missing");
+      return;
     }
 
     console.log("pano_image:", currentLocationDetails.pano_image);
 
     if (pannellumViewerRef.current) {
-        pannellumViewerRef.current.destroy();
+      pannellumViewerRef.current.destroy();
     }
 
     const imgPath = currentLocationDetails.pano_image.replace(
-        "src/assets/image",
-        "/images"
+      "src/assets/image",
+      "/images"
     );
 
     console.log("imgPath:", imgPath);
 
     pannellumViewerRef.current = window.pannellum.viewer(viewerRef.current, {
-        type: "equirectangular",
-        panorama: imgPath,
-        autoLoad: true,
-        showControls: true,
-        compass: true,
-        haov: 360,
-        vaov: 180,
-        hfov: 120,
+      type: "equirectangular",
+      panorama: imgPath,
+      autoLoad: true,
+      showControls: false, // We use our own controls
+      compass: true,
+      haov: 360,
+      vaov: 180,
+      hfov: 120,
     });
-}, [viewerReady, currentLocationDetails]);
-  
+  }, [viewerReady, currentLocationDetails]);
+
   const navigateTo = (direction) => {
     if (!currentLocationDetails || !currentLocationDetails.directions) return
     const nextLocation = currentLocationDetails.directions[direction]
@@ -141,141 +143,170 @@ useEffect(() => {
       setCurrentLocation(nextLocation)
     }
   }
-  
+
   const goToLocation = (locationId) => {
     setCurrentLocation(locationId)
     setShowMap(false)
   }
-  
+
   return (
-    <div className="h-screen w-full bg-gray-900 flex flex-col">
-      {/* Header */}
-      <div className="bg-gray-800 text-white px-6 py-4 flex items-center justify-between shadow-lg">
-        <div>
-          <h1 className="text-2xl font-bold">Virtual Campus Tour</h1>
-          <p className="text-sm text-gray-300 mt-1">{currentLocationDetails?.name || 'Loading...'}</p>
+    <div className="h-screen w-full bg-black relative overflow-hidden font-sans">
+      {/* 360 Panorama Viewer */}
+      <div
+        ref={viewerRef}
+        className="w-full h-full absolute inset-0 z-0"
+      />
+
+      {/* Loading Overlay */}
+      {!viewerReady && (
+        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/90 backdrop-blur-md text-white">
+          <Loader2 className="w-12 h-12 animate-spin text-primary mb-4" />
+          <p className="text-lg font-medium tracking-wide">Loading Virtual Experience...</p>
         </div>
-        <button
-          onClick={() => setShowMap(!showMap)}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors"
-        >
-          <Map size={20} />
-          {showMap ? 'Hide Map' : 'Show Map'}
-        </button>
-      </div>
-      {/* Main Content */}
-      <div className="flex-1 relative">
-        {/* 360 Panorama Viewer */}
-        <div 
-          ref={viewerRef}
-          className="w-full h-full"
-          style={{ background: '#000' }}
-        />
-        {/* Loading State */}
-        {!viewerReady && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
-            <div className="text-white text-xl">Loading 360° Viewer...</div>
+      )}
+
+      {/* UI Overlay Layer */}
+      <div className="absolute inset-0 z-10 pointer-events-none flex flex-col justify-between p-6">
+
+        {/* Top Bar */}
+        <div className="flex items-start justify-between pointer-events-auto">
+          {/* Location Info Card */}
+          <div className="bg-black/40 backdrop-blur-xl border border-white/10 p-4 rounded-2xl shadow-2xl max-w-md animate-in slide-in-from-top-4 duration-700">
+            <div className="flex items-center gap-3 mb-1">
+              <div className="p-2 bg-primary/20 rounded-lg text-primary">
+                <Compass size={20} />
+              </div>
+              <h1 className="text-xl font-bold text-white tracking-tight">
+                {currentLocationDetails?.name || 'Loading Location...'}
+              </h1>
+            </div>
+            <p className="text-white/60 text-sm pl-[52px]">
+              Explore the campus in 360° view. Drag to look around.
+            </p>
           </div>
-        )}
-        {/* Navigation Controls Overlay */}
+
+          {/* Map Toggle */}
+          <Button
+            onClick={() => setShowMap(!showMap)}
+            className={cn(
+              "gap-2 shadow-xl border border-white/10 transition-all duration-300",
+              showMap
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "bg-black/40 backdrop-blur-xl text-white hover:bg-white/10"
+            )}
+            size="lg"
+          >
+            <Map size={18} />
+            {showMap ? 'Hide Map' : 'Campus Map'}
+          </Button>
+        </div>
+
+        {/* Navigation Arrows (Centered) */}
         {currentLocationDetails && (
-          <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
             {/* Forward Arrow */}
             {currentLocationDetails.directions?.forward && (
               <button
                 onClick={() => navigateTo('forward')}
-                className="group pointer-events-auto absolute top-[20%] left-1/2 -translate-x-1/2 bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm hover:from-blue-500/80 hover:to-blue-600/80 p-3 rounded-full border-2 border-white/40 hover:border-white shadow-lg transition-all duration-300 hover:scale-125"
-                title="Go forward"
+                className="group pointer-events-auto absolute top-[15%] bg-black/30 backdrop-blur-md hover:bg-primary/80 p-4 rounded-full border border-white/20 hover:border-primary/50 shadow-2xl transition-all duration-300 hover:scale-110 hover:-translate-y-1"
               >
-                <ArrowUp size={28} className="text-white drop-shadow-lg" />
-                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-                  Forward
-                </div>
+                <ArrowUp size={32} className="text-white drop-shadow-md" />
+                <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs font-bold text-white bg-black/60 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                  Move Forward
+                </span>
               </button>
             )}
             {/* Back Arrow */}
             {currentLocationDetails.directions?.back && (
               <button
                 onClick={() => navigateTo('back')}
-                className="group pointer-events-auto absolute bottom-[20%] left-1/2 -translate-x-1/2 bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm hover:from-purple-500/80 hover:to-purple-600/80 p-3 rounded-full border-2 border-white/40 hover:border-white shadow-lg transition-all duration-300 hover:scale-125"
-                title="Go back"
+                className="group pointer-events-auto absolute bottom-[15%] bg-black/30 backdrop-blur-md hover:bg-primary/80 p-4 rounded-full border border-white/20 hover:border-primary/50 shadow-2xl transition-all duration-300 hover:scale-110 hover:translate-y-1"
               >
-                <ArrowDown size={28} className="text-white drop-shadow-lg" />
-                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-                  Back
-                </div>
+                <ArrowDown size={32} className="text-white drop-shadow-md" />
+                <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-xs font-bold text-white bg-black/60 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                  Move Back
+                </span>
               </button>
             )}
             {/* Left Arrow */}
             {currentLocationDetails.directions?.left && (
               <button
                 onClick={() => navigateTo('left')}
-                className="group pointer-events-auto absolute top-1/2 left-[15%] -translate-y-1/2 bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm hover:from-green-500/80 hover:to-green-600/80 p-3 rounded-full border-2 border-white/40 hover:border-white shadow-lg transition-all duration-300 hover:scale-125"
-                title="Go left"
+                className="group pointer-events-auto absolute left-[10%] bg-black/30 backdrop-blur-md hover:bg-primary/80 p-4 rounded-full border border-white/20 hover:border-primary/50 shadow-2xl transition-all duration-300 hover:scale-110 hover:-translate-x-1"
               >
-                <ArrowLeft size={28} className="text-white drop-shadow-lg" />
-                <div className="absolute top-1/2 -right-2 translate-x-full -translate-y-1/2 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-                  Left
-                </div>
+                <ArrowLeft size={32} className="text-white drop-shadow-md" />
+                <span className="absolute top-1/2 left-full ml-3 -translate-y-1/2 text-xs font-bold text-white bg-black/60 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                  Turn Left
+                </span>
               </button>
             )}
             {/* Right Arrow */}
             {currentLocationDetails.directions?.right && (
               <button
                 onClick={() => navigateTo('right')}
-                className="group pointer-events-auto absolute top-1/2 right-[15%] -translate-y-1/2 bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm hover:from-orange-500/80 hover:to-orange-600/80 p-3 rounded-full border-2 border-white/40 hover:border-white shadow-lg transition-all duration-300 hover:scale-125"
-                title="Go right"
+                className="group pointer-events-auto absolute right-[10%] bg-black/30 backdrop-blur-md hover:bg-primary/80 p-4 rounded-full border border-white/20 hover:border-primary/50 shadow-2xl transition-all duration-300 hover:scale-110 hover:translate-x-1"
               >
-                <ArrowRight size={28} className="text-white drop-shadow-lg" />
-                <div className="absolute top-1/2 -left-2 -translate-x-full -translate-y-1/2 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-                  Right
-                </div>
+                <ArrowRight size={32} className="text-white drop-shadow-md" />
+                <span className="absolute top-1/2 right-full mr-3 -translate-y-1/2 text-xs font-bold text-white bg-black/60 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                  Turn Right
+                </span>
               </button>
             )}
           </div>
         )}
-        {/* Mini Map Overlay */}
-        {showMap && (
-          <div className="absolute top-4 right-4 bg-white rounded-lg shadow-2xl p-4 w-80 max-h-96 overflow-auto z-50">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-lg">Tour Map</h3>
-              <button
-                onClick={() => setShowMap(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                ✕
-              </button>
-            </div>
-            {locations
-            &&
-            (<div className="space-y-2">
-              
-              {Object.entries(locations).map(([key, location]) => (
-                <button
-                  key={key}
-                  onClick={() => goToLocation(location.id)}
-                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
-                    currentLocation === key
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 hover:bg-gray-200 text-gray-800'
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    {currentLocation === key && <Home size={16} />}
-                    <span className="font-medium">{location.name}</span>
-                  </div>
-                </button>
-              ))}
-            </div>)}
-           
-            {!locations &&(<div>Loading</div>)}
-             
+
+        {/* Bottom Bar / Instructions */}
+        <div className="flex justify-center pointer-events-none">
+          <div className="bg-black/40 backdrop-blur-md border border-white/10 px-6 py-2 rounded-full text-white/80 text-sm font-medium shadow-lg animate-in slide-in-from-bottom-4 duration-700 delay-200">
+            <span className="hidden md:inline">Click and drag to look around • </span>
+            <span>Use arrows to navigate</span>
           </div>
-        )}
+        </div>
+
       </div>
-      {/* Footer with Instructions */}
-      <div className="bg-gray-800 text-white px-6 py-3 text-center text-sm">
-        <p>Click and drag to look around • Use arrow buttons to navigate between locations • Scroll to zoom</p>
+
+      {/* Mini Map Drawer */}
+      <div
+        className={cn(
+          "absolute top-20 right-6 w-80 bg-black/60 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden transition-all duration-500 z-40 origin-top-right",
+          showMap ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-4 pointer-events-none"
+        )}
+      >
+        <div className="p-4 border-b border-white/10 flex items-center justify-between bg-white/5">
+          <h3 className="font-bold text-white flex items-center gap-2">
+            <Map size={16} className="text-primary" />
+            Quick Navigation
+          </h3>
+        </div>
+        <div className="max-h-[60vh] overflow-y-auto p-2 space-y-1 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
+          {locations ? (
+            Object.entries(locations).map(([key, location]) => (
+              <button
+                key={key}
+                onClick={() => goToLocation(location.id)}
+                className={cn(
+                  "w-full text-left px-3 py-3 rounded-xl transition-all duration-200 flex items-center gap-3 group",
+                  currentLocation === key
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                    : "text-white/70 hover:bg-white/10 hover:text-white"
+                )}
+              >
+                <div className={cn(
+                  "p-2 rounded-lg transition-colors",
+                  currentLocation === key ? "bg-white/20" : "bg-white/5 group-hover:bg-white/10"
+                )}>
+                  <Home size={16} />
+                </div>
+                <span className="font-medium text-sm">{location.name}</span>
+              </button>
+            ))
+          ) : (
+            <div className="p-8 text-center text-white/40 flex flex-col items-center gap-2">
+              <Loader2 className="animate-spin" />
+              <span className="text-xs">Loading locations...</span>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
