@@ -14,12 +14,14 @@ const VirtualTourWrapper = () => {
 
 import { Toaster } from 'sonner'
 import ScrollToHashElement from './components/ScrollToHashElement'
+import Chatbot from './components/Chatbot'
 
 function App() {
   return (
     <BrowserRouter>
       <Toaster />
       <ScrollToHashElement />
+      <Chatbot />
       <div className="app-container" style={{ height: '100vh', width: '100vw' }}>
         <Routes>
           {/* 1. Home Page (Landing) */}
