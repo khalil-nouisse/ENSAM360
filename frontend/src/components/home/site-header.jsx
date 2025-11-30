@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { GraduationCap } from "lucide-react"
+import { ModeToggle } from "@/components/mode-toggle"
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/60 dark:bg-background/60 dark:border-border">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         <Link
           to="/home"
@@ -28,10 +29,11 @@ export function SiteHeader() {
           </Link>
         </nav>
         <div className="flex items-center gap-4">
-          <Button variant="ghost" className="hidden sm:flex" asChild>
+          <ModeToggle />
+          <Button variant="ghost" className="hidden sm:flex text-foreground" asChild>
             <Link to="/auth">Log in</Link>
           </Button>
-          <Button asChild>
+          <Button asChild className="text-primary-foreground">
             <Link to="/tour">Start Tour</Link>
           </Button>
         </div>

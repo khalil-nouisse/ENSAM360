@@ -156,9 +156,9 @@ export default function Chatbot() {
                 )}
             >
                 {isOpen ? (
-                    <X size={24} className="text-white" />
+                    <X size={24} className="text-destructive-foreground" />
                 ) : (
-                    <MessageCircle size={24} className="text-white" />
+                    <MessageCircle size={24} className="text-primary-foreground" />
                 )}
             </Button>
         </div>

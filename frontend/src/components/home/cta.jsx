@@ -6,10 +6,10 @@ export function Cta() {
   return (
     <section className="py-24 bg-background">
       <div className="container mx-auto px-4 md:px-6 text-center">
-        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-6 max-w-3xl mx-auto text-balance">
+        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-6 max-w-3xl mx-auto text-balance text-foreground dark:text-white">
           Ready to explore ENSAM Meknès?
         </h2>
-        <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
+        <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto dark:text-gray-300">
           Join thousands of students and visitors who have already experienced our smart virtual campus.
         </p>
         <Button

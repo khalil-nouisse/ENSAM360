@@ -3,7 +3,10 @@ import Home from './pages/Home'
 import Auth from './pages/Auth'
 import MapPage from './pages/MapPage'
 import VirtualTour from './components/VirtualTour'
-
+import { Toaster } from 'sonner'
+import ScrollToHashElement from './components/ScrollToHashElement'
+import Chatbot from './components/Chatbot'
+import { ThemeProvider } from "@/components/theme-provider"
 
 // Helper component to load the building from storage for the Tour
 const VirtualTourWrapper = () => {
@@ -12,35 +15,33 @@ const VirtualTourWrapper = () => {
   return <VirtualTour location={location} />;
 };
 
-import { Toaster } from 'sonner'
-import ScrollToHashElement from './components/ScrollToHashElement'
-import Chatbot from './components/Chatbot'
-
 function App() {
   return (
-    <BrowserRouter>
-      <Toaster />
-      <ScrollToHashElement />
-      <Chatbot />
-      <div className="app-container" style={{ height: '100vh', width: '100vw' }}>
-        <Routes>
-          {/* 1. Home Page (Landing) */}
-          <Route path="/home" element={<Home />} />
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <BrowserRouter>
+        <Toaster />
+        <ScrollToHashElement />
+        <Chatbot />
+        <div className="app-container" style={{ height: '100vh', width: '100vw' }}>
+          <Routes>
+            {/* 1. Home Page (Landing) */}
+            <Route path="/home" element={<Home />} />
 
-          {/* 2. Default Redirect to Home */}
-          <Route path="/" element={<Navigate to="/home" replace />} />
+            {/* 2. Default Redirect to Home */}
+            <Route path="/" element={<Navigate to="/home" replace />} />
 
-          {/* 3. Map Application */}
-          <Route path="/map" element={<MapPage />} />
+            {/* 3. Map Application */}
+            <Route path="/map" element={<MapPage />} />
 
-          {/* 4. Authentication */}
-          <Route path="/auth" element={<Auth />} />
+            {/* 4. Authentication */}
+            <Route path="/auth" element={<Auth />} />
 
-          {/* 5. Virtual Tour */}
-          <Route path="/tour" element={<VirtualTourWrapper />} />
-        </Routes>
-      </div>
-    </BrowserRouter>
+            {/* 5. Virtual Tour */}
+            <Route path="/tour" element={<VirtualTourWrapper />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }
 

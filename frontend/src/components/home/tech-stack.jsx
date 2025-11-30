@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { cn } from "@/lib/utils";
 
 const technologies = [
     { name: 'React.js', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' },
@@ -24,15 +25,24 @@ export function TechStack() {
                     {techList.map((tech, index) => (
                         <div key={index} className="flex flex-col items-center justify-center gap-3 group min-w-[100px]">
                             <div className="w-12 h-12 md:w-16 md:h-16 relative flex items-center justify-center transition-transform duration-300 group-hover:scale-110 grayscale group-hover:grayscale-0 opacity-70 group-hover:opacity-100">
+                                {/* Light Mode Logo */}
                                 <img
                                     src={tech.logo}
                                     alt={tech.name}
-                                    className="w-full h-full object-contain"
+                                    className={cn("w-full h-full object-contain", tech.darkLogo ? "dark:hidden" : "")}
                                     onError={(e) => {
-                                        e.target.style.display = 'none'; // Hide broken images
-                                        e.target.nextSibling.style.display = 'block'; // Show fallback text
+                                        e.target.style.display = 'none';
+                                        e.target.nextSibling.style.display = 'block';
                                     }}
                                 />
+                                {/* Dark Mode Logo (if available) */}
+                                {tech.darkLogo && (
+                                    <img
+                                        src={tech.darkLogo}
+                                        alt={tech.name}
+                                        className="w-full h-full object-contain hidden dark:block"
+                                    />
+                                )}
                                 <span className="hidden text-xs font-bold text-primary">{tech.name}</span>
                             </div>
                             <span className="text-xs md:text-sm font-medium text-muted-foreground group-hover:text-primary transition-colors">{tech.name}</span>

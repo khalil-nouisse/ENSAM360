@@ -28,10 +28,10 @@ export function PreviewShowcase() {
           </div>
 
           <div className="order-1 lg:order-2 space-y-8">
-            <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl text-balance">
+            <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl text-balance text-foreground dark:text-white">
               Experience the campus from <span className="text-primary">any device</span>
             </h2>
-            <div className="space-y-4 text-lg text-muted-foreground">
+            <div className="space-y-4 text-lg text-muted-foreground dark:text-gray-300">
               <p>
                 Whether you're on a desktop, tablet, or smartphone, our responsive platform adapts to give you the best
                 viewing experience.
