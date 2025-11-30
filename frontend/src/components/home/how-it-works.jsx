@@ -23,8 +23,8 @@ export function HowItWorks() {
     <section id="how-it-works" className="py-20 bg-background">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold tracking-tight md:text-4xl mb-4 text-foreground dark:text-white">How It Works</h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto dark:text-gray-300">
+          <h2 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">How It Works</h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Starting your virtual visit is as easy as 1-2-3.
           </p>
         </div>
@@ -44,10 +44,10 @@ export function HowItWorks() {
                   {index + 1}
                 </div>
               </div>
-              <h3 className="text-xl font-bold mt-4 transition-colors duration-300 group-hover:text-primary text-foreground dark:text-white">
+              <h3 className="text-xl font-bold mt-4 transition-colors duration-300 group-hover:text-primary">
                 {step.title}
               </h3>
-              <p className="text-muted-foreground max-w-xs mx-auto leading-relaxed dark:text-gray-300">{step.description}</p>
+              <p className="text-muted-foreground max-w-xs mx-auto leading-relaxed">{step.description}</p>
             </div>
           ))}
         </div>

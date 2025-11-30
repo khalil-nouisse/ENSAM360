@@ -21,7 +21,7 @@ export function Hero() {
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto animate-in fade-in slide-in-from-bottom-10 duration-700 delay-500">
               <Button
                 size="lg"
-                className="text-base h-12 px-8 shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:scale-105 text-primary-foreground dark:text-black"
+                className="text-base h-12 px-8 shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:scale-105 text-primary-foreground"
                 asChild
               >
                 <Link to="/tour">
@@ -32,7 +32,7 @@ export function Hero() {
               <Button
                 size="lg"
                 variant="outline"
-                className="text-base h-12 px-8 bg-background/50 backdrop-blur-sm hover:bg-background/80 transition-all duration-300 hover:scale-105 text-foreground dark:text-white"
+                className="text-base h-12 px-8 bg-background/50 backdrop-blur-sm hover:bg-background/80 transition-all duration-300 hover:scale-105 text-foreground"
                 asChild
               >
                 <Link to="/map">

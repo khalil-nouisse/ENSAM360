@@ -29,8 +29,8 @@ export function FeaturesGrid() {
     <section id="features" className="py-20 bg-background">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16 space-y-4">
-          <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-balance text-foreground dark:text-white">Everything you need to explore</h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto text-balance dark:text-gray-300">
+          <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-balance">Everything you need to explore</h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto text-balance">
             Our platform combines advanced mapping technology with AI to provide a seamless virtual experience.
           </p>
         </div>

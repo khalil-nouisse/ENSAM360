@@ -154,7 +154,7 @@ export function BestPathFinder({ selectedStartLocation, selectedDestinationLocat
 
         <SearchBestPathBtn
           onClick={handleSearchBtnClick}
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground dark:text-black font-medium py-3 rounded-xl shadow-lg shadow-primary/20 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 mt-2"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 rounded-xl shadow-lg shadow-primary/20 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 mt-2"
         >
           <Navigation size={18} />
           Find Shortest Path
