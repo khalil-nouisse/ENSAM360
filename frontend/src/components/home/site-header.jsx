@@ -33,7 +33,7 @@ export function SiteHeader() {
           <Button variant="ghost" className="hidden sm:flex text-foreground" asChild>
             <Link to="/auth">Log in</Link>
           </Button>
-          <Button asChild className="text-primary-foreground">
+          <Button asChild>
             <Link to="/tour">Start Tour</Link>
           </Button>
         </div>
