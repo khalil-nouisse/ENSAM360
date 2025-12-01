@@ -791,7 +791,7 @@ const seedDatabase = async (driver) => {
     //     `);
 
     // ********************* 2nd set of locations: ************************************
-    
+
     // await session.run(`
     //         MATCH (a:Location {id: 'ensam_entry'})
     //         MATCH (b:Location {id: 'pointeuse_entry'})
@@ -805,7 +805,7 @@ const seedDatabase = async (driver) => {
     //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
     //     `);
-    
+
     // 2 possible locations starting from td2_entry :
     // await session.run(`
     //         MATCH (a:Location {id: 'td2_entry'})
@@ -827,9 +827,9 @@ const seedDatabase = async (driver) => {
     //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
     //     `);
-    
+
     // 2 possible locations starting from couloir_intersection :
-    
+
     // await session.run(`
     //         MATCH (a:Location {id: 'couloir_intersection'})
     //         MATCH (b:Location {id: 'amphi_parking'})
@@ -890,22 +890,22 @@ const seedDatabase = async (driver) => {
     //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
     //     `);
 
-     
+
     // await session.run(`
     //         MATCH (a:Location {id: 'amphi_parking'})
     //         MATCH (b:Location {id: 'parking'})
     //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
     //     `);
-    
-    
+
+
     // await session.run(`
     //         MATCH (a:Location {id: 'amphi_parking'})
     //         MATCH (b:Location {id: 'centre_de_recherche_entry'})
     //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
     //     `);
-    
+
     // 2 locations starting from centre_de_recherche_entry :
 
     // await session.run(`
@@ -936,7 +936,7 @@ const seedDatabase = async (driver) => {
     //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
     //     `);
-    
+
 
     // 2 locations starting from civil_gms_entry :
 
@@ -953,9 +953,9 @@ const seedDatabase = async (driver) => {
     //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
     //     `);
-    
 
-    
+
+
 
     // await session.run(`
     //         MATCH (a:Location {id: 'civil_entry'})
@@ -972,7 +972,7 @@ const seedDatabase = async (driver) => {
     //         MERGE (a)-[r1:CONNECTS_TO {distance: 3}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
     //     `);
-    
+
 
     // 2 locations starting from energitique_entry :
 
@@ -991,15 +991,15 @@ const seedDatabase = async (driver) => {
     //         MERGE (b)-[r2:CONNECTS_TO {distance: 3}]->(a)
     //     `);
 
-    
-    
-
-    
-    
-    
 
 
-    
+
+
+
+
+
+
+
     console.log('✅ Base de données initialisée avec succès !');
 
   } catch (error) {

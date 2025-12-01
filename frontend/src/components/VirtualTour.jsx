@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { createRoot } from 'react-dom/client'
 import { ArrowLeft, ArrowRight, ArrowUp, ArrowDown, Map, Home, Loader2, Compass, ArrowUpCircle } from 'lucide-react'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
@@ -88,10 +89,20 @@ function VirtualTour(props) {
         const res = await axios.get(process.env.BACKEND_SERVER + `/api/tour/nextLocations/${currentLocation}`)
         // existing backend route returns objects like [{ id: 'xxx' }, ...] OR array of string ids
         const data = res.data || []
-        // normalize to string ids and dedupe so we won't show duplicates when relationships are bidirectional
-        const ids = data.map(it => (typeof it === 'string' ? it : it?.id)).filter(Boolean)
-        const uniqIds = [...new Set(ids)]
-        setNeighborIds(uniqIds)
+
+        // Deduplicate by ID and preserve objects (to keep 'yaw')
+        const uniqueNeighbors = []
+        const seenIds = new Set()
+
+        data.forEach(item => {
+          const id = typeof item === 'string' ? item : item?.id
+          if (id && !seenIds.has(id)) {
+            seenIds.add(id)
+            uniqueNeighbors.push(typeof item === 'string' ? { id } : item)
+          }
+        })
+
+        setNeighborIds(uniqueNeighbors)
       } catch (err) {
         console.error('Failed to fetch neighbor ids', err)
         setNeighborIds([])
@@ -178,7 +189,14 @@ function VirtualTour(props) {
       try {
         const promises = neighborIds.map(it => {
           const id = (typeof it === 'string') ? it : it?.id
-          return getLocationDetails(id).then(data => data && data[0] ? data[0] : { id })
+          return getLocationDetails(id).then(data => {
+            const locationDetail = data && data[0] ? data[0] : { id }
+            // Merge relationship properties (like yaw) into the location detail
+            if (typeof it === 'object') {
+              return { ...locationDetail, ...it }
+            }
+            return locationDetail
+          })
         })
         const detailsRaw = await Promise.all(promises)
         const details = detailsRaw.map(d => {
@@ -203,6 +221,52 @@ function VirtualTour(props) {
     loadNeighbors()
     return () => { cancelled = true }
   }, [neighborIds])
+
+  // Add hotspots when neighbors are loaded
+  useEffect(() => {
+    if (!viewerReady || !pannellumViewerRef.current || !neighborsDetails || neighborsDetails.length === 0) return;
+
+    // Iterate and add hotspots
+    neighborsDetails.forEach((n, idx) => {
+      // Calculate yaw if missing (fallback)
+      const yaw = (typeof n.yaw === 'number' && !isNaN(n.yaw)) ? n.yaw : (idx * (360 / neighborsDetails.length));
+      // Calculate pitch: use relationship pitch if available, otherwise default to -10 (slightly down)
+      const pitch = (typeof n.pitch === 'number' && !isNaN(n.pitch)) ? n.pitch : -10;
+
+      pannellumViewerRef.current.addHotSpot({
+        pitch: pitch,
+        yaw: yaw,
+        type: "info",
+        text: n.name,
+        createTooltipFunc: (hotSpotDiv, args) => {
+          hotSpotDiv.classList.add('custom-hotspot');
+          hotSpotDiv.style.width = 'auto';
+          hotSpotDiv.style.height = 'auto';
+          hotSpotDiv.style.background = 'transparent';
+          hotSpotDiv.style.border = 'none';
+
+          const root = createRoot(hotSpotDiv);
+          root.render(
+            <button
+              onClick={() => goToLocation(n.id)}
+              className="group relative flex items-center justify-center bg-white/60 dark:bg-white/20 backdrop-blur-md hover:bg-primary/90 p-3 rounded-full border-2 border-white/40 hover:border-white shadow-lg transition-all duration-300 hover:scale-125"
+              title={`${n.name ? n.name + ' - ' : ''}${n.description ? n.description : ''}`}
+            >
+              <ArrowUpCircle size={28} className="text-gray-800 dark:text-white group-hover:text-white drop-shadow-lg transition-colors" />
+              <div className="absolute -bottom-14 left-1/2 -translate-x-1/2 bg-white/80 dark:bg-black/70 backdrop-blur-md text-gray-800 dark:text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity max-w-xs shadow-lg border border-white/40 pointer-events-none">
+                <div className="font-semibold">{n.name}</div>
+                <div className="text-xs opacity-80">{n.description}</div>
+              </div>
+            </button>
+          );
+        },
+        clickHandlerFunc: (evt, args) => {
+          goToLocation(n.id);
+        }
+      });
+    });
+
+  }, [viewerReady, neighborsDetails]);
 
   return (
     <div className="h-screen w-full bg-black relative overflow-hidden font-sans">
@@ -307,37 +371,6 @@ function VirtualTour(props) {
                 </span>
               </button>
             )}
-          </div>
-        )}
-
-        {/* Neighbor Arrow Overlay */}
-        {neighborsDetails && neighborsDetails.length > 0 && (
-          <div className="absolute inset-0 pointer-events-none">
-            {neighborsDetails.map((n, idx) => {
-              // If yaw is present use it; otherwise spread them evenly around the circle
-              const angleDeg = (typeof n.yaw === 'number' && !isNaN(n.yaw)) ? n.yaw : (idx * (360 / neighborsDetails.length))
-              const angleRad = (angleDeg - 90) * (Math.PI / 180) // align 0deg to top
-              const radius = 160
-              const x = Math.cos(angleRad) * radius
-              const y = Math.sin(angleRad) * radius
-              const left = `calc(50% + ${x}px)`
-              const top = `calc(50% + ${y}px)`
-              return (
-                <button
-                  key={n.id}
-                  onClick={() => goToLocation(n.id)}
-                  className="group pointer-events-auto absolute -translate-x-1/2 -translate-y-1/2 bg-white/60 dark:bg-white/20 backdrop-blur-md hover:bg-primary/90 p-3 rounded-full border-2 border-white/40 hover:border-white shadow-lg transition-all duration-300 hover:scale-125"
-                  style={{ left, top }}
-                  title={`${n.name ? n.name + ' - ' : ''}${n.description ? n.description : ''}`}
-                >
-                  <ArrowUpCircle size={28} className="text-gray-800 dark:text-white group-hover:text-white drop-shadow-lg transition-colors" style={{ transform: `rotate(${angleDeg}deg)` }} />
-                  <div className="absolute -bottom-14 left-1/2 -translate-x-1/2 bg-white/80 dark:bg-black/70 backdrop-blur-md text-gray-800 dark:text-white px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity max-w-xs shadow-lg border border-white/40">
-                    <div className="font-semibold">{n.name}</div>
-                    <div className="text-xs opacity-80">{n.description}</div>
-                  </div>
-                </button>
-              )
-            })}
           </div>
         )}
 
