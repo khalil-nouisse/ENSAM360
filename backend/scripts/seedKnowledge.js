@@ -1,8 +1,8 @@
 // scripts/seedDb.js
 //const driver = require('../config/neo4j');
-
-import { HuggingFaceInferenceEmbeddings } from "@langchain/community/embeddings/hf";
-import dotenv from "dotenv";
+import { HuggingFaceInferenceEmbeddings } from '@langchain/community/embeddings/hf';
+//const { HuggingFaceInferenceEmbeddings } = require('@langchain/community/embeddings/hf');
+import dotenv from 'dotenv';
 dotenv.config();
 //require('dotenv').config();
 
@@ -31,7 +31,7 @@ const seed = async (driver) => {
     // Wait a moment for index to come online
     await new Promise(r => setTimeout(r, 5000)); 
 
-    // Add some "General Knowledge" Data
+    // TODO : new DATA FORM
     const topics = [
       { 
         name: "Cafeteria", 
