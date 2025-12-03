@@ -630,50 +630,50 @@ const seedDatabase = async (driver) => {
     //         MATCH (a:Location {id: 'ensam_entry'})
     //         MATCH (b:Location {id: 'administration'})
     //         MERGE (a)-[r1:CONNECTS_TO {distance: 15}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {distance: 15}]->(a)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 15,yaw:85}]->(a)
     //     `);
 
     // await session.run(`
     //         MATCH (a:Location {id: 'administration'})
     //         MATCH (b:Location {id: 'Admnetud'})
-    //         MERGE (a)-[r1:CONNECTS_TO {distance: 10}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {distance: 10}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 10,yaw:280,pitch:-7}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 10,yaw:100}]->(a)
     //     `);
 
     // await session.run(`
     //         MATCH (a:Location {id: 'Admnetud'})
     //         MATCH (b:Location {id: 'Administration_etud'})
-    //         MERGE (a)-[r1:CONNECTS_TO {distance: 12}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {distance: 12}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 12,yaw:320}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 12,yaw:80}]->(a)
     //     `);
 
     // await session.run(`
     //         MATCH (a:Location {id: 'Administration_etud'})
     //         MATCH (b:Location {id: 'couloirForum'})
-    //         MERGE (a)-[r1:CONNECTS_TO {distance: 8}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {distance: 8}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 8,yaw:184}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 8,yaw:0}]->(a)
     //     `);
 
     // await session.run(`
     //         MATCH (a:Location {id: 'couloirForum'})
     //         MATCH (b:Location {id: 'couloir1'})
-    //         MERGE (a)-[r1:CONNECTS_TO {distance: 10}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {distance: 10}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 10,yaw:275}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 10,yaw:270}]->(a)
     //     `);
 
     // // Library connections
     // await session.run(`
     //         MATCH (a:Location {id: 'couloir1'})
     //         MATCH (b:Location {id: 'Bibliotheque_et_centre_de_langue'})
-    //         MERGE (a)-[r1:CONNECTS_TO {distance: 20}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {distance: 20}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 20,yaw:0}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 20,yaw:160,pitch:-5}]->(a)
     //     `);
 
     // await session.run(`
     //         MATCH (a:Location {id: 'Bibliotheque_et_centre_de_langue'})
     //         MATCH (b:Location {id: 'escalier1'})
-    //         MERGE (a)-[r1:CONNECTS_TO {distance: 5}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {distance: 5}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 5,yaw:180,pitch:-5}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {distance: 5,yaw:12,pitch:-20}]->(a)
     //     `);
 
     // await session.run(`
@@ -687,14 +687,14 @@ const seedDatabase = async (driver) => {
     // await session.run(`
     //         MATCH (a:Location {id: 'couloir1'})
     //         MATCH (b:Location {id: 'couloir2'})
-    //         MERGE (a)-[r1:CONNECTS_TO {distance: 15}]->(b)
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 15,yaw:90}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {distance: 15}]->(a)
     //     `);
 
     // await session.run(`
     //         MATCH (a:Location {id: 'couloir2'})
     //         MATCH (b:Location {id: 'couloircctd1'})
-    //         MERGE (a)-[r1:CONNECTS_TO {distance: 12}]->(b)
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 12,yaw:270}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {distance: 12}]->(a)
     //     `);
 
@@ -758,7 +758,7 @@ const seedDatabase = async (driver) => {
     // await session.run(`
     //         MATCH (a:Location {id: 'couloir2'})
     //         MATCH (b:Location {id: 'amphie_et_salle_de_conference'})
-    //         MERGE (a)-[r1:CONNECTS_TO {distance: 20}]->(b)
+    //         MERGE (a)-[r1:CONNECTS_TO {distance: 20,yaw:85}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {distance: 20}]->(a)
     //     `);
 
