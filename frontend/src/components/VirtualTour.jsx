@@ -101,6 +101,13 @@ function VirtualTour(props) {
     load();
   }, [currentLocation]);
 
+  // Sync current location to localStorage whenever it changes
+  useEffect(() => {
+    if (currentLocationDetails) {
+      localStorage.setItem('selectedBuilding', JSON.stringify(currentLocationDetails));
+    }
+  }, [currentLocationDetails]);
+
   // Update panorama when location changes
   useEffect(() => {
     console.log("EFFECT RUN --- viewerReady:", viewerReady);
