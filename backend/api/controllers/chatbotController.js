@@ -1,10 +1,10 @@
 //Handles req/res for chatbot routes.
-const { chatWithLLM } = require('../services/chatbotService');  // ✅ Import correctly
+const { chatWithLLM } = require('../services/chatbotService');
 
 const handleChat = async (req, res) => {
     try {
-        const { message, locationID } = req.body;  // ✅ Fixed typo: "message" not "messsage"
-        
+        const { message, locationID, userId } = req.body;
+
         // Optional: validate input
         if (!message) {
             return res.status(400).json({
@@ -12,18 +12,18 @@ const handleChat = async (req, res) => {
             });
         }
 
-        console.log("Received chat request:", { message, locationID });  // ✅ Debug log
+        console.log("Received chat request:", { message, locationID, userId });
 
-        const response = await chatWithLLM(message, locationID);  // ✅ Use correct variable name
+        const response = await chatWithLLM(message, locationID, userId);
 
-        res.status(200).json({  // ✅ Fixed: dot instead of comma
+        res.status(200).json({
             type: response.type,
             message: response.text,
             destinationName: response.destinationName  // Include for navigation actions
         });
 
-    } catch(err) {
-        console.error("Controller error:", err);  // ✅ Better logging
+    } catch (err) {
+        console.error("Controller error:", err);
         res.status(500).json({
             message: "Error handling chat by chatbot",
             error: err.message

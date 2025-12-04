@@ -7,12 +7,23 @@ import axios from 'axios';
 
 export default function Chatbot({ location }) {
 
+    // Helper to get or create a session ID
+    const getSessionId = () => {
+        let sessionId = localStorage.getItem('chat_session_id');
+        if (!sessionId) {
+            sessionId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            localStorage.setItem('chat_session_id', sessionId);
+        }
+        return sessionId;
+    };
+
     const chatbotRes = async (userMessage) => {
         // Always try to get the latest location from localStorage first
         const savedBuilding = localStorage.getItem('selectedBuilding');
         const currentLocation = savedBuilding ? JSON.parse(savedBuilding) : location;
+        const userId = getSessionId();
 
-        console.log("chatbotRes called. Location:", currentLocation);
+        console.log("chatbotRes called. Location:", currentLocation, "User:", userId);
 
         if (!currentLocation) {
             console.log("problem: location is missing")
@@ -22,7 +33,8 @@ export default function Chatbot({ location }) {
         if (currentLocation) {
             const res = await axios.post(import.meta.env.VITE_BACKEND_SERVER + "/api/chatbot", {
                 message: userMessage,
-                locationID: currentLocation.id
+                locationID: currentLocation.id,
+                userId: userId
             });
             console.log(res.data);
             return res.data
