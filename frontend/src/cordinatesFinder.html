@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENSAM Interactive Campus Map</title>
+
+    <!-- 1. Include Leaflet CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        /* Basic styling for the page */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 2rem;
+        }
+        /* The container for your map MUST have a defined height */
+        #map {
+            height: 80vh; /* 80% of the viewport height */
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background-color: #e9e9e9; /* Placeholder color while image loads */
+        }
+        /* Custom styling for the marker popups */
+        .leaflet-popup-content-wrapper {
+            border-radius: 8px;
+        }
+        .leaflet-popup-content {
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 style="text-align: center; color: #333;">ENSAM Meknes - Coordinate Finder</h1>
+    <p style="text-align: center; color: #666;">Click on the map to find building coordinates. Check the browser's developer console (F12).</p>
+
+    <!-- 2. This is where your map will be rendered -->
+    <div id="map"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- A. SETUP THE MAP ---
+
+            // Updated with the dimensions you provided
+            const mapWidth = 2429.02;
+            const mapHeight = 2344.52;
+            
+            // This tells Leaflet the boundaries of your image
+            const mapBounds = [[0, 0], [mapHeight, map]];
+
+            // The path to your SVG map file.
+            // This path assumes your HTML file is in the 'src' folder, and the 'assets' folder is also inside 'src'.
+            // If your HTML is in 'frontend', the path might need to be 'src/assets/campus_map_2d1.svg'.
+            const imageUrl = 'src/assets/campus_map_2d1.svg';
+
+            // Initialize the map
+            const map = L.map('map', {
+                crs: L.CRS.Simple, // Use a simple coordinate system for images
+                minZoom: -3, // Allows zooming out further
+            });
+
+            // Add your SVG image as an overlay on the map
+            const imageOverlay = L.imageOverlay(imageUrl, mapBounds);
+            
+            // NEW: Add an error handler to check if the image loaded
+            imageOverlay.on('error', function() {
+                console.error(`Error: Could not load the map image from path: "${imageUrl}".`);
+                alert(`Error: The map image could not be loaded.\n\nPlease check the following:\n1. The imageUrl path in the script is correct for your file structure.\n2. The filename has no typos.\n3. For best results, run this from a local web server (e.g., VS Code Live Server).`);
+            });
+            
+            imageOverlay.addTo(map);
+            map.fitBounds(mapBounds);
+
+
+            // --- B. DATA FOR YOUR MARKERS ---
+            // You will populate this array using the "Coordinate Finder" tool below.
+            const locations = [
+                // This is placeholder data. You will replace it with the real coordinates you find.
+                { id: 'placeholder', name: 'Placeholder Marker', coords: [1172, 1214] },
+            ];
+
+
+            // --- C. PLACE MARKERS ON THE MAP ---
+            locations.forEach(location => {
+                const marker = L.marker(location.coords).addTo(map);
+                marker.bindPopup(location.name);
+            });
+
+
+            // --- D. THE COORDINATE FINDER TOOL ---
+            // This tool is now active. Click the map and check the console.
+            map.on('click', function(e) {
+                const coords = e.latlng;
+                // The coordinates are logged in [y, x] format, which is what Leaflet uses for {lat, lng}.
+                console.log(`Clicked at: [${Math.round(coords.lat)}, ${Math.round(coords.lng)}]`);
+            });
+
+        });
+    </script>
+
+</body>
+</html>
+
