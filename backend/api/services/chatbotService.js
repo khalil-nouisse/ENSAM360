@@ -15,7 +15,11 @@ const userHistories = {};
 const model = new ChatGroq({
     apiKey: process.env.GROQ_API_KEY,
     model: "llama-3.3-70b-versatile",
-    temperature: 0.3,
+    temperature: 0.2,
+    maxOutputTokens: 800, 
+    top_p: 0.9,                // Balanced creativity
+    frequency_penalty: 0.2,    // Stops repetition
+    presence_penalty: 0.1,     // Slight boost for idea diversity
 });
 
 const embedder = new HuggingFaceInferenceEmbeddings({
@@ -86,7 +90,7 @@ const chatWithLLM = async (userMessage, currentLocationId, userId, k = 3) => {
             You are a guide at ENSAM Meknes. 
             Use the context and history.
             *INSTRUCTIONS FOR RESPONSE STYLE:*
-            1. *Be Concise:* Answer in 1-3 sentences maximum.
+            1. *Be Concise:* Answer directly.
             2. *No Filler:* Do not start with "Hello," "I can help with that," or "Sure." Go straight to the answer.
             3. *Direct:* If the user greets you, greet back briefly. If they ask a question, just answer the question.
             4. *Formatting:* Use bullet points if listing more than two items.
@@ -102,7 +106,7 @@ const chatWithLLM = async (userMessage, currentLocationId, userId, k = 3) => {
 
         // We configure it to keep approx the last 10 messages (assuming ~50 tokens/msg)
         const historyTrimmer = trimMessages({
-            maxTokens: 500,
+            maxTokens: 1200,
             strategy: "last",
             tokenCounter: model,
             includeSystem: false, // We handle system prompt in the template, so just trim the history
