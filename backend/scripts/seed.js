@@ -4,13 +4,13 @@
 // --- Your Campus Data ---
 // Define your data here to keep the Cypher queries clean
 // 2eme liste de locations
-/*const locations = [
+const locations = [
   {
     id: "amphi_parking",
     label: ["Location", "Waypoint"],
     name: "Amphi Parking",
     description: "Intersection entre l'amphi et parking",
-    map_coords: [100, 100],
+    map_coords: [379, 317],
     pano_url: "src/assets/image/amphi_parking.jpg",
     flat_url: "src/assets/image/amphi_parking_flat.jpg",
     floor: 0,
@@ -21,7 +21,7 @@
     label: ["Location", "Waypoint"],
     name: "Porte Amphi",
     description: "La porte d'entree de l'amphi",
-    map_coords: [20, 60],
+    map_coords: [350, 317],
     pano_url: "src/assets/image/amphis_door.jpg",
     flat_url: "src/assets/image/amphis_door_flat.jpg",
     floor: 0,
@@ -65,7 +65,7 @@
     label: ["Location", "Waypoint"],
     name: "La porte de Centre de Recherche",
     description: "La porte du Centre de recherche",
-    map_coords: [40, 80],
+    map_coords: [441, 350],
     pano_url: "src/assets/image/centre_de_recherche_door.jpg",
     flat_url: "src/assets/image/centre_de_recherche_door_flat.jpg",
     floor: 0,
@@ -76,7 +76,7 @@
     label: ["Location", "Waypoint"],
     name: "Entree de Centre de Recherche",
     description: "L'entree de Centre de recherche",
-    map_coords: [50, 40],
+    map_coords: [441, 316],
     pano_url: "src/assets/image/centre_de_recherche_entry.jpg",
     flat_url: "src/assets/image/centre_de_recherche_entry_flat.jpg",
     floor: 0,
@@ -87,7 +87,7 @@
     label: ["Location", "Building", "Dept"],
     name: "Departement civil",
     description: "Le department genie civil",
-    map_coords: [542, 350],
+    map_coords: [542, 400],
     pano_url: "src/assets/image/civil.jpg",
     flat_url: "src/assets/image/civil_flat.jpg",
     floor: 0,
@@ -98,7 +98,7 @@
     label: ["Location", "Waypoint"],
     name: "Entree civil",
     description: "Entree du Departement Genie Civil",
-    map_coords: [54, 44],
+    map_coords: [542, 350],
     pano_url: "src/assets/image/civil_entry.jpg",
     flat_url: "src/assets/image/civil_entry_flat.jpg",
     floor: 0,
@@ -109,7 +109,7 @@
     label: ["Location", "Waypoint"],
     name: "Intersection GMS Civil",
     description: "Intersection entre le Atelier Tp GMS et le Dept Civil",
-    map_coords: [45, 85],
+    map_coords: [542, 316],
     pano_url: "src/assets/image/civil_gms_entry.jpg",
     flat_url: "src/assets/image/civil_gms_entry_flat.jpg",
     floor: 0,
@@ -120,7 +120,7 @@
     label: ["Location", "Waypoint"],
     name: "Couloir Intersection",
     description: "Couloir de l'intersection entre chemin vers Buvette et chemin vers Bibliothèque",
-    map_coords: [50, 90],
+    map_coords: [379, 399],
     pano_url: "src/assets/image/couloir_intersection.jpg",
     flat_url: "src/assets/image/couloir_intersection_flat.jpg",
     floor: 0,
@@ -131,7 +131,7 @@
     label: ["Location", "Waypoint"],
     name: "Couloir droit de TD1",
     description: "Couloir droit du Td1",
-    map_coords: [55, 95],
+    map_coords: [320, 435],
     pano_url: "src/assets/image/couloir_right_td1.jpg",
     flat_url: "src/assets/image/couloir_right_td1_flat.jpg",
     floor: 1,
@@ -142,7 +142,7 @@
     label: ["Location", "Waypoint"],
     name: "Porte Energitique",
     description: "La prote du Departement Energitique",
-    map_coords: [60, 100],
+    map_coords: [670, 405],
     pano_url: "src/assets/image/energitique_door.jpg",
     flat_url: "src/assets/image/energitique_door_flat.jpg",
     floor: 0,
@@ -153,7 +153,7 @@
     label: ["Location", "Waypoint"],
     name: "Entree Energitique",
     description: "Entree du Departement Energitique",
-    map_coords: [65, 105],
+    map_coords: [670, 317],
     pano_url: "src/assets/image/energitique_entry.jpg",
     flat_url: "src/assets/image/energitique_entry_flat.jpg",
     floor: 0,
@@ -161,10 +161,10 @@
   },
   {
     id: "ensam_entry",
-    label: ["Location", "Waypoint"],
+    label: ["Location"],
     name: "Entree Ensam",
     description: "Entree de L'Ecole Nationale Superieure d'Arts et Metiers de Meknes",
-    map_coords: [58, 98],
+    map_coords: [82, 330],
     pano_url: "src/assets/image/ensam_entry.jpg",
     flat_url: "src/assets/image/ensam_entry_flat.jpg",
     floor: 0,
@@ -175,7 +175,7 @@
     label: ["Location", "Waypoint"],
     name: "Entree Tp Fabrication mecanique",
     description: "Entree du TP en fabrication mecanique",
-    map_coords: [60, 100],
+    map_coords: [493, 316],
     pano_url: "src/assets/image/fabrication_mecanique_entry.jpg",
     flat_url: "src/assets/image/fabrication_mecanique_entry_flat.jpg",
     floor: 0,
@@ -197,7 +197,7 @@
     label: ["Location", "Waypoint"],
     name: "Espace de pointeuses",
     description: "Espace de pointeuses a cote du TD2",
-    map_coords: [52, 92],
+    map_coords: [187, 401],
     pano_url: "src/assets/image/pointeuse_entry.jpg",
     flat_url: "src/assets/image/pointeuse_entry_flat.jpg",
     floor: 0,
@@ -208,7 +208,7 @@
     label: ["Location", "Classe"],
     name: "Salle 7 Info",
     description: "Salle 7 de la filiere Genie Informatique,Ingenierie Logicielle et Systemes Intelligents",
-    map_coords: [53, 93],
+    map_coords: [324, 435],
     pano_url: "src/assets/image/salle_info_7.jpg",
     flat_url: "src/assets/image/salle_info_7_flat.jpg",
     floor: 1,
@@ -230,7 +230,7 @@
     label: ["Location", "Building", "Td"],
     name: "TD1",
     description: "le Td TD1",
-    map_coords: [320, 455],
+    map_coords: [320, 452],
     pano_url: "src/assets/image/td1.jpg",
     flat_url: "src/assets/image/td1_flat.jpg",
     floor: 0,
@@ -238,10 +238,10 @@
   },
   {
     id: "td1_door",
-    label: ["Location", "Waypoint"],
+    label: ["Location", "Waypoint"],  
     name: "Porte de TD1",
     description: "La porte du TD1",
-    map_coords: [45, 85],
+    map_coords: [348, 452],
     pano_url: "src/assets/image/td1_door.jpg",
     flat_url: "src/assets/image/td1_door_flat.jpg",
     floor: 0,
@@ -252,7 +252,7 @@
     label: ["Location", "Waypoint"],
     name: "Entrée de TD1",
     description: "Entrée du Td TD1",
-    map_coords: [50, 88],
+    map_coords: [379, 452],
     pano_url: "src/assets/image/td1_entry.jpg",
     flat_url: "src/assets/image/td1_entry_flat.jpg",
     floor: 0,
@@ -274,7 +274,7 @@
     label: ["Location", "Waypoint"],
     name: "Entree TD2",
     description: "Entree du TD2",
-    map_coords: [51, 89],
+    map_coords: [211, 401],
     pano_url: "src/assets/image/td2_entry.jpg",
     flat_url: "src/assets/image/td2_entry_flat.jpg",
     floor: 0,
@@ -285,13 +285,13 @@
     label: ["Location", "Waypoint"],
     name: "Intersection Terrain Fonderie",
     description: "Intersection entre le chemin menant au Terrain de Foot et La buvette des Profs avec le chemin menant au TP (labaux) de Fonderie",
-    map_coords: [51, 89],
+    map_coords: [720, 317],
     pano_url: "src/assets/image/terrain_fonderie.jpg",
     flat_url: "src/assets/image/terrain_fonderie_flat.jpg",
     floor: 0,
     objects: []
   }
-];*/
+];
 
 // 1ere liste de locations
 /*const locations = [
@@ -572,36 +572,36 @@ const seedDatabase = async (driver) => {
     // // await session.run('MATCH (n) DETACH DELETE n');
 
     // console.log('Création des lieux (Nœuds)...');
-    // // 2. Create all locations using MERGE
-    // for (const loc of locations) {
-    //   // We add the 'Location' label to all nodes for easy searching
-    //   let labelsString = "";
-    //   for (label of loc.label) {
+    // 2. Create all locations using MERGE
+    for (const loc of locations) {
+      // We add the 'Location' label to all nodes for easy searching
+      let labelsString = "";
+      for (label of loc.label) {
 
-    //     loc.label.indexOf(label) == loc.label.length - 1 ? labelsString += label : labelsString += label + ":";
-    //   }
-    //   await session.run(
-    //     `MERGE (n:${labelsString} {id: $id})
-    //              SET n.name = $name,
-    //                  n.description = $description,
-    //                  n.map_coords = $map_coords,
-    //                  n.pano_url = $pano_url,
-    //                  n.flat_url = $flat_url,
-    //                  n.floor = $floor,
-    //                  n.objects = $objects
-    //             `,
-    //     {
-    //       id: loc.id,
-    //       name: loc.name,
-    //       description: loc.description,
-    //       map_coords: loc.map_coords,
-    //       pano_url: loc.pano_url,
-    //       flat_url: loc.flat_url,
-    //       floor: loc.floor,
-    //       objects:loc.objects
-    //     }
-    //   );
-    // }
+        loc.label.indexOf(label) == loc.label.length - 1 ? labelsString += label : labelsString += label + ":";
+      }
+      await session.run(
+        `MERGE (n:${labelsString} {id: $id})
+                 SET n.name = $name,
+                     n.description = $description,
+                     n.map_coords = $map_coords,
+                     n.pano_url = $pano_url,
+                     n.flat_url = $flat_url,
+                     n.floor = $floor,
+                     n.objects = $objects
+                `,
+        {
+          id: loc.id,
+          name: loc.name,
+          description: loc.description,
+          map_coords: loc.map_coords,
+          pano_url: loc.pano_url,
+          flat_url: loc.flat_url,
+          floor: loc.floor,
+          objects:loc.objects
+        }
+      );
+    }
 
     console.log('Création des chemins (Relations)...');
 

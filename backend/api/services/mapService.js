@@ -300,7 +300,7 @@ const getPrincipalLocations = async ()=>{
     try{
         const cipherQuery=`
             MATCH (n)
-            WHERE NOT n:Waypoint AND NOT n:User AND NOT n:Classe AND NOT n:Topic
+            WHERE  NOT n:User AND NOT n:Classe AND NOT n:Topic
             RETURN  n.id AS id ,
                     n.name AS name,
                     n.description AS description ,
