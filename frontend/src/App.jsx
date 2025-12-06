@@ -16,12 +16,15 @@ const VirtualTourWrapper = () => {
 };
 
 function App() {
+  const savedBuilding = localStorage.getItem('selectedBuilding');
+  const location = savedBuilding ? JSON.parse(savedBuilding) : null;
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <BrowserRouter>
         <Toaster />
         <ScrollToHashElement />
-        <Chatbot />
+        {console.log("App location:", location)}
+        {location && <Chatbot location={location} />}
         <div className="app-container" style={{ height: '100vh', width: '100vw' }}>
           <Routes>
             {/* 1. Home Page (Landing) */}

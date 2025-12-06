@@ -27,3 +27,4 @@ dist-ssr
 src/assets/*
 src/assets/image/*
 public/images/*
+.vite/

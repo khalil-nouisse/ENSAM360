@@ -59,15 +59,15 @@ export function BestPathFinder({ selectedStartLocation, selectedDestinationLocat
   }, [selectedStartLocation, selectedDestinationLocation]);
 
   return (
-    <div className="bg-white/60 dark:bg-black/40 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-2xl shadow-lg p-6 flex flex-col gap-6 h-full transition-colors duration-300">
-      <div className="flex items-center gap-3 border-b border-gray-200/50 dark:border-white/10 pb-4">
+    <div className="bg-transparent border border-primary/20 rounded-2xl p-4 flex flex-col gap-4 h-full transition-colors duration-300 overflow-y-auto">
+      <div className="flex items-center gap-3 border-b border-primary/10 pb-4">
         <div className="p-2 bg-primary/10 dark:bg-primary/20 rounded-lg text-primary">
           <Navigation size={20} />
         </div>
-        <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Find Path</h2>
+        <h2 className="text-lg font-semibold text-foreground">Find Path</h2>
       </div>
 
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col space-y-3">
         {/* Start Location Input */}
         <div className="relative group">
           <div className="absolute left-3 top-3 text-gray-400 dark:text-gray-500 group-focus-within:text-primary transition-colors">
@@ -76,7 +76,7 @@ export function BestPathFinder({ selectedStartLocation, selectedDestinationLocat
           <input
             type="text"
             placeholder="Start Location"
-            className="w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500 text-gray-800 dark:text-white"
+            className="w-full pl-10 pr-4 py-2.5 bg-transparent border border-primary/20 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-muted-foreground text-foreground"
             onChange={(e) => { setStartLocationTerm(e.target.value); setShowStartSuggestions(true) }}
             value={startLocationTerm}
             onFocus={() => setShowStartSuggestions(true)}
@@ -118,7 +118,7 @@ export function BestPathFinder({ selectedStartLocation, selectedDestinationLocat
           <input
             type="text"
             placeholder="Destination"
-            className="w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500 text-gray-800 dark:text-white"
+            className="w-full pl-10 pr-4 py-2.5 bg-transparent border border-primary/20 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-muted-foreground text-foreground"
             onChange={(e) => { setDestinationLocationTerm(e.target.value); setShowDestinationSuggestions(true) }}
             value={destinationLocationTerm}
             onFocus={() => setShowDestinationSuggestions(true)}
