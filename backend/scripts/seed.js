@@ -247,18 +247,18 @@
     floor: 0,
     objects: []
   },
-  //to be removed and replaced with couloireTD1
-  // {
-  //   id: "td1_entry",
-  //   label: ["Location", "Waypoint"],
-  //   name: "Entrée de TD1",
-  //   description: "Entrée du Td TD1",
-  //   map_coords: [379, 452],
-  //   pano_url: "src/assets/image/td1_entry.jpg",
-  //   flat_url: "src/assets/image/td1_entry_flat.jpg",
-  //   floor: 0,
-  //   objects: []
-  // },
+  
+  {
+    id: "td1_entry",
+    label: ["Location", "Waypoint"],
+    name: "Entrée de TD1",
+    description: "Entrée du Td TD1",
+    map_coords: [379, 452],
+    pano_url: "src/assets/image/td1_entry.jpg",
+    flat_url: "src/assets/image/td1_entry_flat.jpg",
+    floor: 0,
+    objects: []
+  },
   {
     id: "td2",
     label: ["Location", "Building", "Td"],
@@ -620,7 +620,7 @@ const seedDatabase = async (driver) => {
     // await session.run(`
     //         MATCH (a:Location {id: 'ensam_entry'})
     //         MATCH (b:Location {id: 'administration'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:220,pitch:-5}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {yaw:85}]->(a)
     //     `);
 
@@ -786,69 +786,76 @@ const seedDatabase = async (driver) => {
     // await session.run(`
     //         MATCH (a:Location {id: 'ensam_entry'})
     //         MATCH (b:Location {id: 'pointeuse_entry'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:310}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:180}]->(a)
     //     `);
 
     // await session.run(`
     //         MATCH (a:Location {id: 'pointeuse_entry'})
     //         MATCH (b:Location {id: 'td2_entry'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:0}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:220}]->(a)
     //     `);
 
-    // 2 possible locations starting from td2_entry :
+    // // 2 possible locations starting from td2_entry :
     // await session.run(`
     //         MATCH (a:Location {id: 'td2_entry'})
     //         MATCH (b:Location {id: 'td2'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:340}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
     //     `);
 
     // await session.run(`
     //         MATCH (a:Location {id: 'td2_entry'})
     //         MATCH (b:Location {id: 'AUF'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:75}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:180}]->(a)
     //     `);
 
     // await session.run(`
     //         MATCH (a:Location {id: 'AUF'})
     //         MATCH (b:Location {id: 'couloir_intersection'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:0}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:90}]->(a)
     //     `);
 
-    // 2 possible locations starting from couloir_intersection :
+    // // 2 possible locations starting from couloir_intersection :
 
     // await session.run(`
     //         MATCH (a:Location {id: 'couloir_intersection'})
     //         MATCH (b:Location {id: 'amphi_parking'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:0}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
     //     `);
 
     // await session.run(`
     //         MATCH (a:Location {id: 'couloir_intersection'})
     //         MATCH (b:Location {id: 'td1_entry'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:180}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:270}]->(a)
     //     `);
 
-    // 2 locations starting from td1_entry :
+    // // 2 locations starting from td1_entry :
 
     // await session.run(`
     //         MATCH (a:Location {id: 'td1_entry'})
     //         MATCH (b:Location {id: 'td1_door'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:0}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:180}]->(a)
     //     `);
 
     // await session.run(`
-    //         MATCH (a:Location {id: 'td1_entry'})
+    //         MATCH (a:Location {id: 'td1_door'})
     //         MATCH (b:Location {id: 'td1'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:0}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:230}]->(a)
+    //     `);
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'td1_door'})
+    //         MATCH (b:Location {id: 'stairs_right_td1'})
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:90}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:0,pitch:-30}]->(a)
     //     `);
 
     // await session.run(`
@@ -861,7 +868,7 @@ const seedDatabase = async (driver) => {
     // await session.run(`
     //         MATCH (a:Location {id: 'stairs_right_td1'})
     //         MATCH (b:Location {id: 'couloir_right_td1'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:45}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
     //     `);
 
@@ -872,12 +879,12 @@ const seedDatabase = async (driver) => {
     //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
     //     `);
 
-    // 3 locations starting from amphiparking :
+    // // 3 locations starting from amphiparking :
 
     // await session.run(`
     //         MATCH (a:Location {id: 'amphi_parking'})
     //         MATCH (b:Location {id: 'amphis_door'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:0}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
     //     `);
 
@@ -885,64 +892,64 @@ const seedDatabase = async (driver) => {
     // await session.run(`
     //         MATCH (a:Location {id: 'amphi_parking'})
     //         MATCH (b:Location {id: 'parking'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:260}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:150}]->(a)
     //     `);
 
 
     // await session.run(`
     //         MATCH (a:Location {id: 'amphi_parking'})
     //         MATCH (b:Location {id: 'centre_de_recherche_entry'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:180}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:80}]->(a)
     //     `);
 
-    // 2 locations starting from centre_de_recherche_entry :
+    // // 2 locations starting from centre_de_recherche_entry :
 
     // await session.run(`
     //         MATCH (a:Location {id: 'centre_de_recherche_entry'})
     //         MATCH (b:Location {id: 'centre_de_recherche_door'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:180}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
     //     `);
 
     // await session.run(`
     //         MATCH (a:Location {id: 'centre_de_recherche_entry'})
     //         MATCH (b:Location {id: 'fabrication_mecanique_entry'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:280}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:80}]->(a)
     //     `);
 
     // await session.run(`
     //         MATCH (a:Location {id: 'centre_de_recherche_door'})
     //         MATCH (b:Location {id: 'centre_de_recherche'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:0}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:250}]->(a)
     //     `);
 
 
     // await session.run(`
     //         MATCH (a:Location {id: 'fabrication_mecanique_entry'})
     //         MATCH (b:Location {id: 'civil_gms_entry'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:270}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:270}]->(a)
     //     `);
 
 
-    // 2 locations starting from civil_gms_entry :
+    // // 2 locations starting from civil_gms_entry :
 
     // await session.run(`
     //         MATCH (a:Location {id: 'civil_gms_entry'})
     //         MATCH (b:Location {id: 'civil_entry'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:0}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
     //     `);
 
     // await session.run(`
     //         MATCH (a:Location {id: 'civil_gms_entry'})
     //         MATCH (b:Location {id: 'buvette'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:90}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:0}]->(a)
     //     `);
 
 
@@ -960,26 +967,26 @@ const seedDatabase = async (driver) => {
     // await session.run(`
     //         MATCH (a:Location {id: 'buvette'})
     //         MATCH (b:Location {id: 'energitique_entry'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:180}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:270}]->(a)
     //     `);
 
 
-    // 2 locations starting from energitique_entry :
+    // // 2 locations starting from energitique_entry :
 
 
     // await session.run(`
     //         MATCH (a:Location {id: 'energitique_entry'})
     //         MATCH (b:Location {id: 'energitique_door'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:0}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:260}]->(a)
     //     `);
 
     // await session.run(`
     //         MATCH (a:Location {id: 'energitique_entry'})
     //         MATCH (b:Location {id: 'terrain_fonderie'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:90}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:270}]->(a)
     //     `);
 
     // calculate the ditance between 2 locations :
