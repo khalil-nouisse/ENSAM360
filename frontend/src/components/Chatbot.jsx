@@ -64,6 +64,14 @@ export default function Chatbot({ location }) {
         }
     }, [isOpen]);
 
+     const formatMessage = (text) => {
+        if (!text) return "";
+        // Replace "sentence. - item" with "sentence.\n- item"
+        // Also handles cases where it might just be "- item" without punctuation immediately before, but usually it follows a sentence.
+        // We look for a period/colon followed by space and a hyphen.
+        return text.replace(/([.:])\s+-\s+/g, "$1\n- ");
+    };
+
     const handleSendMessage = async (e) => {
         e.preventDefault();
         if (!inputValue.trim()) return;
@@ -93,7 +101,7 @@ export default function Chatbot({ location }) {
             const botResponse = await chatbotRes(newUserMessage.text)
             const newBotMessage = {
                 id: Date.now() + 1,
-                text: botResponse.message,
+                text: formatMessage(botResponse.message),
                 sender: 'bot'
             };
             setMessages(prev => [...prev, newBotMessage]);
