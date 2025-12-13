@@ -201,9 +201,18 @@ function CampusMapLeaflet({ onBuildingSelect, path, selectedPathNode }) {
         fillColor: '#ffffff',
         weight: 2,
         fillOpacity: 1,
-      }).addTo(map).bindPopup(`<h3>${node.name}</h3>
-      <br>
-      <button class=\"tour-button\" data-building-id=\"${node.id}\" onclick=\"window.navigateToTour('${node.id}')\">navigate to 360</button>`);
+      }).addTo(map).bindPopup(`
+        <div class="building-popup ${isDark ? 'dark' : ''}">
+          <div class="popup-header">${node.name}</div>
+          <button class="tour-button" data-building-id="${node.id}" onclick="window.navigateToTour('${node.id}')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <span>View 360°</span>
+          </button>
+        </div>
+      `);
       // Click handler: open a popup (allow user to click navigate) rather than auto-navigate.
       circle.on('click', () => {
         circle.openPopup()
@@ -260,25 +269,26 @@ function CampusMapLeaflet({ onBuildingSelect, path, selectedPathNode }) {
   const addBuildingMarkers = (map) => {
     if (!buildings || buildings.length === 0) return;
 
-    // define icon ONCE
+    // define icon ONCE with theme-aware styling
     const buildingIcon = L.divIcon({
       html: `
-      <div class="building-marker">
+      <div class="building-marker ${isDark ? 'dark' : ''}">
         <div class="building-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2" ry="2"/>
+            <path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01"/>
           </svg>
         </div>
         <div class="tour-indicator">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="10"/>
           </svg>
         </div>
       </div>
     `,
       className: 'custom-building-marker',
-      iconSize: [40, 40],
-      iconAnchor: [20, 20]
+      iconSize: [36, 36],
+      iconAnchor: [18, 18]
     });
 
     // remove existing markers
@@ -292,9 +302,18 @@ function CampusMapLeaflet({ onBuildingSelect, path, selectedPathNode }) {
         { icon: buildingIcon }
       )
         .addTo(map)
-        .bindPopup(`<h3>${building.name}</h3>
-      <br>
-      <button class="tour-button" data-building-id='${building.id}' onclick="window.navigateToTour('${building.id}')">navigate to 360</button>`);
+        .bindPopup(`
+          <div class="building-popup ${isDark ? 'dark' : ''}">
+            <div class="popup-header">${building.name}</div>
+            <button class="tour-button" data-building-id='${building.id}' onclick="window.navigateToTour('${building.id}')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <span>View 360°</span>
+            </button>
+          </div>
+        `);
 
       console.log("x_coords :", building.x_coords)
 
@@ -429,7 +448,7 @@ function CampusMapLeaflet({ onBuildingSelect, path, selectedPathNode }) {
       {/* Custom CSS for markers */}
       <style jsx>{`
         /* Leaflet canvas background , map background color */
-        .leaflet-container { background:rgb(33, 57, 133); }
+        .leaflet-container { background:rgba(21, 26, 23, 1); }
         
         .map-tiles-dark {
           filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
@@ -442,89 +461,203 @@ function CampusMapLeaflet({ onBuildingSelect, path, selectedPathNode }) {
 
         .building-marker {
           position: relative;
-          width: 44px;
-          height: 44px;
+          width: 36px;
+          height: 36px;
         }
 
+        /* Light Mode Building Icon */
         .building-icon {
-          background: linear-gradient(135deg, #3b82f6, #2563eb);
+          background: linear-gradient(135deg, hsl(221 83% 53%), hsl(221 83% 45%));
           border-radius: 50%;
-          width: 44px;
-          height: 44px;
+          width: 36px;
+          height: 36px;
           display: flex;
           align-items: center;
           justify-content: center;
           color: white;
-          box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+          box-shadow: 0 3px 12px hsla(221, 83%, 53%, 0.35), 0 0 0 2px hsl(210 40% 98%);
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          border: 3px solid white;
+          position: relative;
+        }
+
+        /* Dark Mode Building Icon */
+        .building-marker.dark .building-icon {
+          background: linear-gradient(135deg, hsl(221 83% 60%), hsl(221 83% 53%));
+          box-shadow: 0 3px 16px hsla(221, 83%, 53%, 0.45), 0 0 0 2px hsl(217 32% 17%);
         }
         
         .building-icon:hover {
-          background: linear-gradient(135deg, #2563eb, #1d4ed8);
-          transform: scale(1.15);
-          box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+          background: linear-gradient(135deg, hsl(221 83% 45%), hsl(221 83% 38%));
+          transform: scale(1.1);
+          box-shadow: 0 4px 16px hsla(221, 83%, 53%, 0.5), 0 0 0 2px hsl(210 40% 98%);
+        }
+
+        .building-marker.dark .building-icon:hover {
+          background: linear-gradient(135deg, hsl(221 83% 65%), hsl(221 83% 58%));
+          box-shadow: 0 4px 20px hsla(221, 83%, 53%, 0.6), 0 0 0 2px hsl(217 32% 17%);
         }
         
+        /* Tour Indicator Badge */
         .tour-indicator {
           position: absolute;
-          top: -3px;
-          right: -3px;
+          top: -2px;
+          right: -2px;
           background: linear-gradient(135deg, #10b981, #059669);
           border-radius: 50%;
-          width: 18px;
-          height: 18px;
+          width: 14px;
+          height: 14px;
           display: flex;
           align-items: center;
           justify-content: center;
           color: white;
           font-size: 8px;
-          box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
-          border: 2px solid white;
-          animation: pulse 2s infinite;
+          box-shadow: 0 2px 8px rgba(16, 185, 129, 0.5);
+          border: 2px solid hsl(210 40% 98%);
+          animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .building-marker.dark .tour-indicator {
+          border-color: hsl(217 32% 17%);
+          box-shadow: 0 2px 10px rgba(16, 185, 129, 0.6);
         }
         
         @keyframes pulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.1); }
+          0%, 100% { 
+            transform: scale(1);
+            opacity: 1;
+          }
+          50% { 
+            transform: scale(1.15);
+            opacity: 0.9;
+          }
         }
         
+        /* Popup Styling - Light Mode */
         .building-popup {
-          min-width: 220px;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          min-width: 180px;
+          max-width: 200px;
+          padding: 2px;
+          font-family: 'Geist Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
-        .building-popup h3 {
+        .popup-header {
           margin: 0 0 8px 0;
-          font-size: 16px;
+          font-size: 14px;
           font-weight: 600;
-          color: #1f2937;
+          color: hsl(222 47% 11%);
+          letter-spacing: -0.01em;
+          line-height: 1.3;
+        }
+
+        /* Dark Mode Popup */
+        .building-popup.dark .popup-header {
+          color: hsl(210 40% 98%);
         }
         
-        .building-popup p {
-          margin: 0 0 12px 0;
-          font-size: 12px;
-          color: #6b7280;
-        }
-        
+        /* Tour Button - Light Mode */
         .tour-button {
-          background: linear-gradient(135deg, #10b981, #059669);
+          background: linear-gradient(135deg, hsl(221 83% 53%), hsl(221 83% 45%));
           color: white;
           border: none;
-          padding: 10px 16px;
+          padding: 8px 12px;
           border-radius: 8px;
-          font-size: 13px;
+          font-size: 12px;
           font-weight: 600;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
           width: 100%;
-          box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+          box-shadow: 0 2px 8px hsla(221, 83%, 53%, 0.25);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+        }
+
+        /* Dark Mode Tour Button */
+        .building-popup.dark .tour-button {
+          background: linear-gradient(135deg, hsl(221 83% 60%), hsl(221 83% 53%));
+          box-shadow: 0 2px 10px hsla(221, 83%, 53%, 0.35);
         }
         
         .tour-button:hover {
-          background: linear-gradient(135deg, #059669, #047857);
+          background: linear-gradient(135deg, hsl(221 83% 45%), hsl(221 83% 38%));
           transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+          box-shadow: 0 4px 12px hsla(221, 83%, 53%, 0.4);
+        }
+
+        .building-popup.dark .tour-button:hover {
+          background: linear-gradient(135deg, hsl(221 83% 65%), hsl(221 83% 58%));
+          box-shadow: 0 4px 16px hsla(221, 83%, 53%, 0.5);
+        }
+
+        .tour-button:active {
+          transform: translateY(0);
+        }
+
+        .tour-button svg {
+          flex-shrink: 0;
+        }
+
+        .tour-button span {
+          white-space: nowrap;
+        }
+
+        /* Leaflet Popup Customization */
+        .leaflet-popup-content-wrapper {
+          background: hsl(210 40% 98%) !important;
+          border-radius: 10px !important;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+          border: 1px solid hsl(210 40% 96.1%) !important;
+          padding: 10px !important;
+        }
+
+        .building-popup.dark ~ .leaflet-popup-content-wrapper,
+        .leaflet-popup-content-wrapper:has(.building-popup.dark) {
+          background: hsl(217 32% 17%) !important;
+          border-color: hsl(217 32% 22%) !important;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        .leaflet-popup-tip {
+          background: hsl(210 40% 98%) !important;
+          border: 1px solid hsl(210 40% 96.1%) !important;
+        }
+
+        .leaflet-popup-content-wrapper:has(.building-popup.dark) + .leaflet-popup-tip {
+          background: hsl(217 32% 17%) !important;
+          border-color: hsl(217 32% 22%) !important;
+        }
+
+
+        .leaflet-popup-close-button {
+          color: hsl(222 47% 11%) !important;
+          font-size: 18px !important;
+          font-weight: 700 !important;
+          padding: 4px 8px !important;
+          width: 24px !important;
+          height: 24px !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          opacity: 0.5;
+          transition: all 0.2s ease;
+          right: 6px !important;
+          top: 6px !important;
+          border-radius: 4px;
+        }
+
+        .leaflet-popup-close-button:hover {
+          opacity: 1;
+          color: hsl(222 47% 5%) !important;
+        }
+
+        .leaflet-popup-content-wrapper:has(.building-popup.dark) .leaflet-popup-close-button {
+          color: hsl(210 40% 98%) !important;
+        }
+
+        .leaflet-popup-content-wrapper:has(.building-popup.dark) .leaflet-popup-close-button:hover {
+          opacity: 1;
+          color: hsl(0 0% 100%) !important;
         }
       `}</style>
     </div>

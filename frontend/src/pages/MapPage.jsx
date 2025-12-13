@@ -70,6 +70,11 @@ function MapPage() {
     setSelectedPathNode(nodeId)
   }
 
+  const handleCloseBestPath = () => {
+    setBestPath(null)
+    setSelectedPathNode(null)
+  }
+
   const handleStartLocationSelect = (location) => {
     setSelectedStartLocation(location)
     setFilteredStartingLocations([])
@@ -154,7 +159,7 @@ function MapPage() {
             {/* Results */}
             {bestPath && (
               <div className="shrink-0">
-                <BestPathResults bestPath={bestPath} onNodeClick={handlePathNodeClick} />
+                <BestPathResults bestPath={bestPath} onNodeClick={handlePathNodeClick} onClose={handleCloseBestPath} />
               </div>
             )}
 
@@ -199,7 +204,7 @@ function MapPage() {
               setDestinationLocationTerm={setDestinationLocationTerm}
               onBestPath={handleBestPath}
             />
-            {bestPath && <BestPathResults bestPath={bestPath} onNodeClick={handlePathNodeClick} />}
+            {bestPath && <BestPathResults bestPath={bestPath} onNodeClick={handlePathNodeClick} onClose={handleCloseBestPath} />}
           </div>
           <div className="h-80 rounded-2xl overflow-hidden border border-primary/20">
             <CampusMapLeaflet
