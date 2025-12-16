@@ -3,6 +3,20 @@
 
 // --- Your Campus Data ---
 // Define your data here to keep the Cypher queries clean
+// new locations
+// const locations = [
+//   {
+//     id: "labo_indus",
+//     label: ["Location", "Classe"],
+//     name: "Laboratoire Industriel",
+//     description: "Laboratoire Industriel , contient des machines et des outils pour la fabrication industrielle",
+//     map_coords: [720, 317],
+//     pano_url: "src/assets/image/labo_indus.jpg",
+//     flat_url: "src/assets/image/labo_indus_flat.jpg",
+//     floor: 0,
+//     objects: []
+//   }
+// ]
 // 2eme liste de locations
 /*const locations = [
   {
@@ -659,8 +673,8 @@ const seedDatabase = async (driver) => {
     // await session.run(`
     //         MATCH (a:Location {id: 'escalier1'})
     //         MATCH (b:Location {id: 'escalier2'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:-20}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:190}]->(a)
     //     `);
 
     // // Second floor corridor connections
@@ -703,21 +717,21 @@ const seedDatabase = async (driver) => {
     //         MATCH (a:Location {id: 'CouloirAEEE'})
     //         MATCH (b:Location {id: 'EntreeA3e'})
     //         MERGE (a)-[r1:CONNECTS_TO {yaw:90}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:180}]->(a)
     //     `);
 
     // await session.run(`
     //         MATCH (a:Location {id: 'EntreeA3e'})
     //         MATCH (b:Location {id: 'AEEE'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:-35}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:180}]->(a)
     //     `);
 
     // await session.run(`
     //         MATCH (a:Location {id: 'AEEE'})
     //         MATCH (b:Location {id: 'a3einside'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
-    //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:39}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:-105,pitch:-5}]->(a)
     //     `);
 
     // await session.run(`
@@ -976,6 +990,13 @@ const seedDatabase = async (driver) => {
     //         MATCH (b:Location {id: 'terrain_fonderie'})
     //         MERGE (a)-[r1:CONNECTS_TO {yaw:90}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {yaw:270}]->(a)
+    //     `);
+
+    // await session.run(`
+    //         MATCH (a:Location {id: 'mathinfo_inside'})
+    //         MATCH (b:Location {id: 'labo_indus'})
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:127}]->(b)
+    //         MERGE (b)-[r2:CONNECTS_TO {yaw:130}]->(a)
     //     `);
 
     // calculate the ditance between 2 locations :

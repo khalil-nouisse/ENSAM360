@@ -51,19 +51,19 @@ const seed = async (driver) => {
       },
       {
         name: "Parking",
-        content: "The main parking area of ENSAM Meknes, located centrally within the campus for faculty, staff, and visitors."
+        content: "This area is the central parking lot, reserved exclusively for ENSAM Meknès professors and administrative staff."
       },
       {
         name: "Salle Info 7",
-        content: "Computer Lab 7 (Salle Info 7). This room is equipped with computers and is primarily used by the Computer Engineering, Software Engineering, and Intelligent Systems streams for practical programming work."
+        content: "Located within the TD1 building, Room 7 is exclusively reserved for the GI-ILSI program. Inaugurated in 2025, it is equipped with high-speed fiber optic Wi-Fi, a server, and an EPSON projector."
       },
       {
         name: "TD1",
-        content: "TD1 is a dedicated building for Tutorial Classes (Travaux Dirigés). It consists of smaller classrooms designed for problem-solving sessions and small group work."
+        content: "TD1 is a complex comprising multiple rooms. It houses Room 7 (reserved for the GI-ILSI program), classrooms dedicated to the Artificial Intelligence specialization, and other rooms for the Integrated Preparatory Cycle."
       },
       {
         name: "TD2",
-        content: "TD2 is a building for Tutorial Classes (Travaux Dirigés), located adjacent to TD1. It hosts various engineering seminars and exercise sessions."
+        content: "TD2 is a space containing several classrooms, the majority of which are designated for the Integrated Preparatory Cycle."
       },
       {
         name: "Administration",
@@ -75,7 +75,7 @@ const seed = async (driver) => {
       },
       {
         name: "Bibliotheque et Centre de Langue",
-        content: "The Main Library and Language Center. It provides a quiet environment for study, a collection of engineering textbooks and thesis reports, as well as resources for foreign language improvement."
+        content: "This facility houses the language classrooms as well as the main library area. It features additional rooms on the upper level, including a designated reserved room."
       },
       {
         name: "AEEE",
@@ -92,9 +92,14 @@ const seed = async (driver) => {
       {
         name: "Amphi 3",
         content: "Amphitheater 3 is a large lecture hall designed for mass instruction, conferences, and joint courses between different engineering years."
-      }, {
+      },
+      {
         name: "ENSAM Meknes",
         content: "ENSAM Meknès is one of Morocco’s leading engineering schools, known for its strong scientific and technical training. It offers programs in industrial, mechanical, electrical, Software and AI engineering with a focus on innovation, practical learning, and collaboration with industry. Located in Meknès, the school provides a dynamic campus environment that encourages creativity, leadership, and hands-on project experience."
+      },
+      {
+        name: "Espace de pointeuses",
+        content: "Situated next to the entrance of the TD2 building, this area contains devices for students to log their presence."
       }
     ];
 
