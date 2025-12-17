@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from 'axios'
+import axios from '@/api/axios'
 import SearchBestPathBtn from './SearchBestPathBtn'
 import { MapPin, Navigation, X } from 'lucide-react'
 import { cn } from "@/lib/utils"
@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 export function BestPathFinder({ selectedStartLocation, selectedDestinationLocation, filteredStartingLocations, filteredDestinationLocations, onStartLocationSelect, onDestinationLocationSelect, startLocationTerm, setStartLocationTerm, destinationLocationTerm, setDestinationLocationTerm, onBestPath }) {
   async function GenerateShortestPath() {
     try {
-      const res = await axios.post(process.env.BACKEND_SERVER + "/api/map/shortestPath", {
+      const res = await axios.post("/api/map/shortestPath", {
         startID: selectedStartLocationState.id,
         endID: selectedDestinationLocationState.id
       });

@@ -864,7 +864,7 @@ const seedDatabase = async (driver) => {
     // await session.run(`
     //         MATCH (a:Location {id: 'td1'})
     //         MATCH (b:Location {id: 'stairs_right_td1'})
-    //         MERGE (a)-[r1:CONNECTS_TO {}]->(b)
+    //         MERGE (a)-[r1:CONNECTS_TO {yaw:190 , pitch: -5}]->(b)
     //         MERGE (b)-[r2:CONNECTS_TO {}]->(a)
     //     `);
 

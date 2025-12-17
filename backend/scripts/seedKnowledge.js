@@ -100,6 +100,10 @@ const seed = async (driver) => {
       {
         name: "Espace de pointeuses",
         content: "Situated next to the entrance of the TD2 building, this area contains devices for students to log their presence."
+      },
+      {
+        name: "La Laboratoire Industriel",
+        content: "The Industrial Laboratory is a hub for hands-on training in industrial engineering. It features specialized laboratories for mechanical, electrical, and software engineering, as well as a workshop for practical projects. The lab is equipped with computers for industrial simulation and supervision, a conveyor system controlled by an industrial programmable logic controller (PLC), and a storage area containing metallic plates manipulated by a robotic arm. The laboratory also includes multiple robotic arms used for automation and control experiments. "
       }
     ];
 
