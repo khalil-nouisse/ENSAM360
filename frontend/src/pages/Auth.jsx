@@ -116,7 +116,7 @@ function Auth() {
                     type="text"
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
-                    className="w-full rounded-lg border border-input bg-background p-3 text-center text-2xl tracking-[0.5em] font-mono focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all placeholder:text-muted-foreground/50"
+                    className="w-full rounded-lg border border-input bg-background p-3 text-center text-2xl tracking-[0.5em] font-mono focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all placeholder:text-muted-foreground/50 text-foreground"
                     placeholder="123456"
                     maxLength={6}
                     autoFocus
@@ -146,7 +146,7 @@ function Auth() {
                         required
                         value={form.firstName}
                         onChange={handleChange}
-                        className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all placeholder:text-muted-foreground/50"
+                        className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all placeholder:text-muted-foreground/50 text-foreground"
                         placeholder="John"
                       />
                     </div>
@@ -158,7 +158,7 @@ function Auth() {
                         required
                         value={form.lastName}
                         onChange={handleChange}
-                        className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all placeholder:text-muted-foreground/50"
+                        className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all placeholder:text-muted-foreground/50 text-foreground"
                         placeholder="Doe"
                       />
                     </div>
@@ -173,7 +173,7 @@ function Auth() {
                     required
                     value={form.email}
                     onChange={handleChange}
-                    className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all placeholder:text-muted-foreground/50"
+                    className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all placeholder:text-muted-foreground/50 text-foreground"
                     placeholder="you@example.com"
                   />
                 </div>
@@ -188,7 +188,7 @@ function Auth() {
                       minLength={6}
                       value={form.password}
                       onChange={handleChange}
-                      className="w-full rounded-lg border border-input bg-background px-3 py-2 pr-10 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all placeholder:text-muted-foreground/50"
+                      className="w-full rounded-lg border border-input bg-background px-3 py-2 pr-10 text-sm focus:ring-2 focus:ring-ring focus:border-input outline-none transition-all placeholder:text-muted-foreground/50 text-foreground"
                       placeholder="••••••••"
                     />
                     <button

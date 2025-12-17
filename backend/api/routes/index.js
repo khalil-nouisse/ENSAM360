@@ -6,10 +6,11 @@ const mapRoutes = require('./map');
 const tourRoutes = require('./tour');
 const authRoutes = require('./auth');
 const chatbotRoute = require('./chatbot');
+const authMiddlware = require('../../middleware/authMiddleware')
 
-router.use('/map' , mapRoutes); // 2D map
-router.use('/tour' , tourRoutes); // 360 tour
-router.use('/auth' , authRoutes); //authentification
-router.use('/chatbot' , chatbotRoute); //authentification
+router.use('/map', authMiddlware, mapRoutes); // 2D map
+router.use('/tour', tourRoutes); // 360 tour
+router.use('/auth', authRoutes); //authentification
+router.use('/chatbot', chatbotRoute); //authentification
 
-module.exports = router ;
+module.exports = router;

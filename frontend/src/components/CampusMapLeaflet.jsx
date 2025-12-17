@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import L from 'leaflet'
 import { Building2, ArrowRight, MapPin } from 'lucide-react'
-import axios from 'axios'
+import axios from '../api/axios'
 import { useNavigate } from 'react-router-dom'
 import { useTheme } from "@/components/theme-provider" // ADDED: Import useTheme
 
@@ -19,7 +19,7 @@ function CampusMapLeaflet({ onBuildingSelect, path, selectedPathNode }) {
 
   async function LoadBuildings() {
     try {
-      const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/principaleLocations");
+      const res = await axios.get("/api/map/principaleLocations");
       console.log(res.data)
       return res.data;
     } catch (err) {
@@ -30,7 +30,7 @@ function CampusMapLeaflet({ onBuildingSelect, path, selectedPathNode }) {
 
   async function LoadAllLocations() {
     try {
-      const res = await axios.get(process.env.BACKEND_SERVER + "/api/map/allLocations");
+      const res = await axios.get("/api/map/allLocations");
       console.log(res.data)
       return res.data;
 

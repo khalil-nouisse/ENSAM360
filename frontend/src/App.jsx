@@ -15,6 +15,8 @@ const VirtualTourWrapper = () => {
   return <VirtualTour location={location} />;
 };
 
+import ProtectedRoute from './components/ProtectedRoute'
+
 function App() {
   const savedBuilding = localStorage.getItem('selectedBuilding');
   const location = savedBuilding ? JSON.parse(savedBuilding) : null;
@@ -33,14 +35,18 @@ function App() {
             {/* 2. Default Redirect to Home */}
             <Route path="/" element={<Navigate to="/home" replace />} />
 
-            {/* 3. Map Application */}
-            <Route path="/map" element={<MapPage />} />
+            {/* 3. Map Application - Protected */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/map" element={<MapPage />} />
+            </Route>
 
             {/* 4. Authentication */}
             <Route path="/auth" element={<Auth />} />
 
             {/* 5. Virtual Tour */}
-            <Route path="/tour" element={<VirtualTourWrapper />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/tour" element={<VirtualTourWrapper />} />
+            </Route>
           </Routes>
         </div>
       </BrowserRouter>
