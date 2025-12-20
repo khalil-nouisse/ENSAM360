@@ -1,7 +1,7 @@
 # ENSAM360 - Smart Campus Project 🎓🌐
 
-![ENSAM360 Banner](frontend/src/assets/campus_map_2d1.svg) 
-*(Note: Replace with a relevant banner image)*
+
+![ENSAM360 Global Architecture](docs/images/global_arch.jpg)
 
 **ENSAM360** is an immersive "Smart Campus" platform designed for the École Nationale Supérieure d'Arts et Métiers (ENSAM) in Meknès. It bridges the gap between the physical and digital worlds by offering a high-fidelity **Virtual Tour**, an intelligent **AI Guide**, and a mathematically optimal **Navigation System**.
 
@@ -18,6 +18,8 @@
 - **2D Vector Map:** A clickable, interactive SVG map of the entire campus.
 - **Shortest Path Calculation:** Implements **Dijkstra's Algorithm** via Neo4j Graph Data Science library to find the optimal route.
 - **Real-time Visualization:** Visualizes the path instantly on the 2D map.
+
+![ENSAM360 2D MAP](frontend/src/assets/campus_map_2d1.svg) 
 
 ### 🤖 3. The AI Brain (Chatbot)
 - **Context-Aware:** Knows exactly where you are and guides you accordingly ("Turn left" vs "Go to Building B").
