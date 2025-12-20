@@ -3,9 +3,46 @@ import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import axios from 'axios';
 
-export default function Chatbot() {
+export default function Chatbot({ location }) {
+
+    // Helper to get or create a session ID
+    const getSessionId = () => {
+        let sessionId = localStorage.getItem('chat_session_id');
+        if (!sessionId) {
+            sessionId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            localStorage.setItem('chat_session_id', sessionId);
+        }
+        return sessionId;
+    };
+
+    const chatbotRes = async (userMessage) => {
+        // Always try to get the latest location from localStorage first
+        const savedBuilding = localStorage.getItem('selectedBuilding');
+        const currentLocation = savedBuilding ? JSON.parse(savedBuilding) : location;
+        const userId = getSessionId();
+
+        console.log("chatbotRes called. Location:", currentLocation, "User:", userId);
+
+        if (!currentLocation) {
+            console.log("problem: location is missing")
+            return
+        }
+
+        if (currentLocation) {
+            const res = await axios.post(import.meta.env.VITE_BACKEND_SERVER + "/api/chatbot", {
+                message: userMessage,
+                locationID: currentLocation.id,
+                userId: userId
+            });
+            console.log(res.data);
+            return res.data
+        }
+    }
+
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [messages, setMessages] = useState([
         { id: 1, text: "Hi! I'm your AI assistant. How can I help you today?", sender: 'bot' }
     ]);
@@ -27,7 +64,7 @@ export default function Chatbot() {
         }
     }, [isOpen]);
 
-    const handleSendMessage = (e) => {
+    const handleSendMessage = async (e) => {
         e.preventDefault();
         if (!inputValue.trim()) return;
 
@@ -41,14 +78,31 @@ export default function Chatbot() {
         setInputValue("");
 
         // Simulate bot response
-        setTimeout(() => {
-            const botResponse = {
+        // setTimeout(() => {
+        //     const botResponse = {
+        //         id: Date.now() + 1,
+        //         text: "I'm a demo bot. I received your message: " + newUserMessage.text,
+        //         sender: 'bot'
+        //     };
+        //     setMessages(prev => [...prev, botResponse]);
+        // }, 1000);
+
+        // real response
+        setIsLoading(true);
+        try {
+            const botResponse = await chatbotRes(newUserMessage.text)
+            const newBotMessage = {
                 id: Date.now() + 1,
-                text: "I'm a demo bot. I received your message: " + newUserMessage.text,
+                text: botResponse.message,
                 sender: 'bot'
             };
-            setMessages(prev => [...prev, botResponse]);
-        }, 1000);
+            setMessages(prev => [...prev, newBotMessage]);
+        } catch (error) {
+            console.error("Failed to get response", error);
+        } finally {
+            setIsLoading(false);
+        }
+
     };
 
     return (
@@ -109,6 +163,15 @@ export default function Chatbot() {
                                 </div>
                             </div>
                         ))}
+                        {isLoading && (
+                            <div className="flex w-full justify-start">
+                                <div className="bg-white/70 border border-white/40 text-gray-800 rounded-2xl rounded-bl-none px-4 py-3 shadow-sm backdrop-blur-sm flex items-center gap-1">
+                                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
+                                </div>
+                            </div>
+                        )}
                         <div ref={messagesEndRef} />
                     </div>
 
