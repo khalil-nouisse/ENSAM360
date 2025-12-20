@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import axios from '../api/axios'
 import { SiteHeader } from "@/components/home/site-header"
 import CampusMapLeaflet from '../components/CampusMapLeaflet'
 import InteractionPanel from '../components/InteractionPanel'
@@ -29,7 +29,7 @@ function MapPage() {
 
   async function LoadBuildings() {
     try {
-      const res = await axios.get(API_URL + "/api/map/principaleLocations");
+      const res = await axios.get("/api/map/principaleLocations");
       console.log(res.data)
       return res.data;
     } catch (err) {
@@ -40,7 +40,7 @@ function MapPage() {
 
   async function LoadLocations() {
     try {
-      const res = await axios.get(API_URL + "/api/map/allLocations");
+      const res = await axios.get("/api/map/allLocations");
       console.log(res.data)
       return res.data;
     } catch (err) {
@@ -68,6 +68,11 @@ function MapPage() {
 
   const handlePathNodeClick = (nodeId) => {
     setSelectedPathNode(nodeId)
+  }
+
+  const handleCloseBestPath = () => {
+    setBestPath(null)
+    setSelectedPathNode(null)
   }
 
   const handleStartLocationSelect = (location) => {
@@ -154,7 +159,7 @@ function MapPage() {
             {/* Results */}
             {bestPath && (
               <div className="shrink-0">
-                <BestPathResults bestPath={bestPath} onNodeClick={handlePathNodeClick} />
+                <BestPathResults bestPath={bestPath} onNodeClick={handlePathNodeClick} onClose={handleCloseBestPath} />
               </div>
             )}
 
@@ -199,7 +204,7 @@ function MapPage() {
               setDestinationLocationTerm={setDestinationLocationTerm}
               onBestPath={handleBestPath}
             />
-            {bestPath && <BestPathResults bestPath={bestPath} onNodeClick={handlePathNodeClick} />}
+            {bestPath && <BestPathResults bestPath={bestPath} onNodeClick={handlePathNodeClick} onClose={handleCloseBestPath} />}
           </div>
           <div className="h-80 rounded-2xl overflow-hidden border border-primary/20">
             <CampusMapLeaflet

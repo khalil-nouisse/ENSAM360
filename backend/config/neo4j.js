@@ -2,12 +2,13 @@
 require('dotenv').config();
 
 const neo4j = require('neo4j-driver');
-const {seedDatabase} = require('../scripts/seed');
+const { seedDatabase } = require('../scripts/seed');
+const { seed } = require('../scripts/seedKnowledge');
 // 2. Lire les variables depuis process.env
-const { 
-    NEO4J_URI, 
-    NEO4J_USERNAME, 
-    NEO4J_PASSWORD 
+const {
+    NEO4J_URI,
+    NEO4J_USERNAME,
+    NEO4J_PASSWORD
 } = process.env;
 
 // 3. Vérifier que les variables sont bien chargées
@@ -22,7 +23,7 @@ if (!NEO4J_URI || !NEO4J_USERNAME || !NEO4J_PASSWORD) {
 let driver;
 try {
     driver = neo4j.driver(
-        NEO4J_URI, 
+        NEO4J_URI,
         neo4j.auth.basic(NEO4J_USERNAME, NEO4J_PASSWORD)
     );
 } catch (error) {
@@ -34,14 +35,15 @@ try {
 const testConnection = async () => {
     try {
         await driver.verifyConnectivity();
-        await seedDatabase(driver);
+        //await seedDatabase(driver);
+        //await seed(driver);
         // 6. Utiliser console.log() !
         console.log("Connexion à Neo4j AuraDB établie avec succès !");
 
     } catch (error) {
         console.error("❌ Impossible de se connecter à AuraDB :", error);
         if (error.code === 'Neo.ClientError.Security.Unauthorized') {
-             console.error("Vérifiez votre nom d'utilisateur ou mot de passe dans .env.");
+            console.error("Vérifiez votre nom d'utilisateur ou mot de passe dans .env.");
         }
     } finally {
         // Toujours fermer le driver quand le script est terminé
