@@ -1,8 +1,6 @@
 # ENSAM360 - Smart Campus Project 🎓🌐
 
 
-![ENSAM360 Global Architecture](docs/images/global_arch.jpg)
-
 **ENSAM360** is an immersive "Smart Campus" platform designed for the École Nationale Supérieure d'Arts et Métiers (ENSAM) in Meknès. It bridges the gap between the physical and digital worlds by offering a high-fidelity **Virtual Tour**, an intelligent **AI Guide**, and a mathematically optimal **Navigation System**.
 
 ---
