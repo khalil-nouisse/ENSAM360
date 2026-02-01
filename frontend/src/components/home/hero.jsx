@@ -4,71 +4,143 @@ import { ArrowRight, Map } from "lucide-react"
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden py-20 bg-background md:py-15">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-8 items-center">
-          <div className="flex flex-col items-start text-left space-y-8 my-[25px] animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <div className="inline-flex items-center rounded-full border text-xs font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary hover:bg-primary/20 py-0.5 px-2.5 animate-in fade-in slide-in-from-bottom-4 duration-700">
-              New: AI Campus Assistant
-            </div>
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl text-foreground">
-              Explore ENSAM Meknès <span className="text-primary">Like Never Before</span>
-            </h1>
-            <p className="max-w-[42rem] text-lg text-muted-foreground sm:text-xl text-balance leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
-              Smart 360° virtual campus exploration with interactive maps and AI guidance. Navigate classrooms, labs,
-              and facilities from anywhere.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto animate-in fade-in slide-in-from-bottom-10 duration-700 delay-500">
-              <Button
-                size="lg"
-                className="text-base h-12 px-8 shadow-lg shadow-primary/20 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:scale-105"
-                asChild
-              >
-                <Link to="/tour">
-                  Start Virtual Tour
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-base h-12 px-8 bg-background/50 backdrop-blur-sm hover:bg-background/80 transition-all duration-300 hover:scale-105 text-foreground"
-                asChild
-              >
-                <Link to="/map">
-                  <Map className="mr-2 h-4 w-4" />
-                  Explore the Map
-                </Link>
-              </Button>
-            </div>
-          </div>
-          <div className="relative mx-auto w-full max-w-[600px] lg:max-w-none animate-in fade-in slide-in-from-right-8 duration-1000 delay-300">
-            <div className="relative aspect-square lg:aspect-[4/3] overflow-hidden rounded-2xl border bg-muted/50 shadow-2xl">
-              {/* Abstract representation of a 360 viewer or campus map */}
-              <div className="absolute inset-0 bg-linear-to-br from-blue-100 via-indigo-50 to-white dark:from-slate-800 dark:via-slate-900 dark:to-black flex items-center justify-center">
-                <div className="relative w-3/4 h-3/4 rounded-full border-4 border-primary/20 flex items-center justify-center animate-pulse">
-                  <div className="w-1/2 h-1/2 rounded-full bg-primary/10 backdrop-blur-md border border-primary/30 flex items-center justify-center">
-                    <Map className="w-16 h-16 text-primary opacity-50" />
-                  </div>
-                  {/* Orbiting elements */}
-                  <div className="absolute w-full h-full rounded-full border border-dashed border-slate-300 dark:border-slate-700 animate-[spin_20s_linear_infinite]" />
-                </div>
+    <section className="relative w-full overflow-hidden bg-[#F8FAFC] dark:bg-[#0B0E14] transition-colors duration-300">
 
-                {/* Floating badges */}
-                <div className="absolute top-1/4 right-10 bg-white dark:bg-slate-800 p-3 rounded-xl shadow-lg shadow-slate-200/50 dark:shadow-black/50 flex items-center gap-3 animate-[bounce_3s_infinite]">
-                  <div className="h-2 w-2 rounded-full bg-green-500" />
-                  <span className="text-xs font-bold">Amphi A</span>
+      {/* 1. Background Pattern (Circuit/Map) */}
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]"
+        style={{ maskImage: 'radial-gradient(circle at center, black 40%, transparent 80%)' }}>
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+          <defs>
+            <pattern id="circuit" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+              <path d="M100 0 H 0 V 100" fill="none" stroke="currentColor" strokeWidth="0.5" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#circuit)" />
+        </svg>
+      </div>
+
+      <div className="container relative z-10 mx-auto px-4 py-20 flex flex-col items-center justify-center min-h-[85vh]">
+
+        {/* 2. THE ORBIT CONTAINER */}
+        {/* We use a specific Aspect Ratio to force the "Cinematic Wide" look */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] md:w-full max-w-[1300px] aspect-[2/1] pointer-events-none">
+          <svg
+            viewBox="0 0 1400 800"
+            className="w-full h-full visible"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <linearGradient id="orbit-gradient" gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#22c55e" />
+                <stop offset="50%" stopColor="#3b82f6" />
+                <stop offset="100%" stopColor="#ec4899" />
+              </linearGradient>
+
+              <filter id="neon-glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="7" result="coloredBlur" />
+                <feMerge>
+                  <feMergeNode in="coloredBlur" />
+                  <feMergeNode in="coloredBlur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            {/* THE "STRAIGHT STADIUM" PATH */}
+            {/* Removed rotation. Top line is y=120. Bottom line is y=680. Strictly Horizontal. */}
+            <path
+              id="orbitPath"
+              d="M 400 120 
+       L 1000 120
+       C 1350 120, 1350 680, 1000 680
+       L 400 680
+       C 50 680, 50 120, 400 120 Z"
+              stroke="url(#orbit-gradient)"
+              strokeWidth="5"
+              strokeLinecap="round"
+              fill="none"
+              filter="url(#neon-glow)"
+              className="opacity-90 dark:opacity-100"
+            />
+
+            {/* SATELLITE ANIMATION */}
+            <circle r="5" fill="white" filter="url(#neon-glow)">
+              <animateMotion dur="14s" repeatCount="indefinite" rotate="auto">
+                <mpath href="#orbitPath" />
+              </animateMotion>
+            </circle>
+
+            {/* --- NODES (Perfectly aligned to the straight lines) --- */}
+
+            {/* NODE 1: AMPHI A (Top Center) */}
+            {/* y=120 (Exact line height) */}
+            <g className="cursor-pointer pointer-events-auto group">
+              <circle cx="700" cy="120" r="9" fill="#22c55e" stroke="white" strokeWidth="2" className="animate-pulse" />
+              <foreignObject x="580" y="50" width="240" height="60" className="overflow-visible">
+                <div className="flex justify-center transition-transform duration-300 group-hover:scale-110">
+                  <span className="px-5 py-2 bg-[#22c55e] text-white text-xs font-bold uppercase rounded-lg shadow-[0_0_15px_rgba(34,197,94,0.6)] tracking-wider">
+                    Amphi A
+                  </span>
                 </div>
-                <div className="absolute bottom-1/4 left-10 bg-white dark:bg-slate-800 p-3 rounded-xl shadow-lg shadow-slate-200/50 dark:shadow-black/50 flex items-center gap-3 animate-[bounce_4s_infinite]">
-                  <div className="h-2 w-2 rounded-full bg-blue-500" />
-                  <span className="text-xs font-bold">Library</span>
+              </foreignObject>
+            </g>
+
+            {/* NODE 2: LIBRARY (Bottom Left) */}
+            {/* y=680 (Exact line height) */}
+            <g className="cursor-pointer pointer-events-auto group">
+              <circle cx="350" cy="680" r="9" fill="#3b82f6" stroke="white" strokeWidth="2" className="animate-pulse" />
+              <foreignObject x="230" y="700" width="240" height="60" className="overflow-visible">
+                <div className="flex justify-center transition-transform duration-300 group-hover:scale-110">
+                  <span className="px-5 py-2 bg-[#3b82f6] text-white text-xs font-bold uppercase rounded-lg shadow-[0_0_15px_rgba(59,130,246,0.6)] tracking-wider">
+                    Library
+                  </span>
                 </div>
-              </div>
-            </div>
-            {/* Decorative background blob */}
-            <div className="absolute -top-12 -right-12 -z-10 h-[300px] w-[300px] rounded-full bg-primary/20 blur-3xl" />
-            <div className="absolute -bottom-12 -left-12 -z-10 h-[300px] w-[300px] rounded-full bg-blue-400/20 blur-3xl" />
+              </foreignObject>
+            </g>
+
+            {/* NODE 3: AI LAB (Bottom Right) */}
+            {/* y=680 (Exact line height) */}
+            <g className="cursor-pointer pointer-events-auto group">
+              <circle cx="1050" cy="680" r="9" fill="#ec4899" stroke="white" strokeWidth="2" className="animate-pulse" />
+              <foreignObject x="930" y="700" width="240" height="60" className="overflow-visible">
+                <div className="flex justify-center transition-transform duration-300 group-hover:scale-110">
+                  <span className="px-5 py-2 bg-[#ec4899] text-white text-xs font-bold uppercase rounded-lg shadow-[0_0_15px_rgba(236,72,153,0.6)] tracking-wider">
+                    AI Research Lab
+                  </span>
+                </div>
+              </foreignObject>
+            </g>
+          </svg>
+        </div>
+
+        {/* 3. CENTER CONTENT (Grouped tight to fit in the flatter ring) */}
+        <div className="relative z-20 text-center space-y-6 max-w-4xl -mt-8">
+
+          <div className="inline-flex items-center rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-bold text-green-600 dark:text-green-400 backdrop-blur-md">
+            NEW: AI CAMPUS ASSISTANT
           </div>
+
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white drop-shadow-2xl">
+            Explore ENSAM Meknès <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-blue-400 to-pink-400">
+              Like Never Before
+            </span>
+          </h1>
+
+          <p className="text-slate-600 dark:text-slate-300 max-w-xl mx-auto text-lg">
+            Smart 360° virtual campus exploration with interactive maps and AI guidance.
+          </p>
+
+          <div className="flex flex-row justify-center gap-4 pt-2">
+            <Button className="rounded-full bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 px-8 h-12">
+              <Link to="/tour" className="flex items-center">Start Virtual Tour <ArrowRight className="ml-2 w-4 h-4" /></Link>
+            </Button>
+            <Button variant="ghost" className="rounded-full border border-slate-700 hover:bg-slate-800/50 text-slate-700 dark:text-slate-300 h-12 px-6">
+              <Link to="/map" className="flex items-center"><Map className="mr-2 w-4 h-4" /> Explore Map</Link>
+            </Button>
+          </div>
+
         </div>
       </div>
     </section>
