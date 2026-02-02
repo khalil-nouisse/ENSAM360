@@ -3,7 +3,9 @@ function BuildingImage({ selectedBuilding }) {
     return null
   }
   console.log(selectedBuilding.pano_image)
-  const correctImagepath = selectedBuilding.pano_image.replace("src/assets/image","/images")
+  const correctImagepath = selectedBuilding.pano_image.startsWith('http')
+    ? selectedBuilding.pano_image
+    : selectedBuilding.pano_image.replace("src/assets/image", "/images")
   console.log(correctImagepath)
   return (
     <div>

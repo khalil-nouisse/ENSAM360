@@ -18,6 +18,7 @@
 //   }
 // ]
 // 2eme liste de locations
+// 2eme liste de locations
 /*const locations = [
   {
     id: "amphi_parking",
@@ -252,7 +253,7 @@
   },
   {
     id: "td1_door",
-    label: ["Location", "Waypoint"],  
+    label: ["Location", "Waypoint"],
     name: "Porte de TD1",
     description: "La porte du TD1",
     map_coords: [348, 452],
@@ -261,7 +262,7 @@
     floor: 0,
     objects: []
   },
-  
+
   {
     id: "td1_entry",
     label: ["Location", "Waypoint"],
@@ -310,10 +311,10 @@
 
 // 1ere liste de locations
 /*const locations = [
-  
+
   {
     id: "administration",
-    label: ["Location","Building","Admin"],
+    label: ["Location", "Building", "Admin"],
     name: "Administration",
     description: "Bâtiment de l'administration.",
     map_coords: [80, 540],
@@ -324,7 +325,7 @@
   },
   {
     id: "Admnetud",
-    label: ["Location","Waypoint"],
+    label: ["Location", "Waypoint"],
     name: "Route vers l'Administration des Étudiants et la Bibliothèque",
     description: "Jonction vers l'administration des étudiants et la bibliothèque.",
     map_coords: [95, 610],
@@ -335,7 +336,7 @@
   },
   {
     id: "Administration_etud",
-    label: ["Location","Building","Administration"],
+    label: ["Location", "Building", "Administration"],
     name: "Administration des Étudiants",
     description: "Bureau de l'administration des étudiants.",
     map_coords: [180, 623],
@@ -346,7 +347,7 @@
   },
   {
     id: "couloirForum",
-    label: ["Location","Waypoint"],
+    label: ["Location", "Waypoint"],
     name: "Couloir Administration des etudiants",
     description: "Couloir menant au forum.",
     map_coords: [180, 647],
@@ -357,7 +358,7 @@
   },
   {
     id: "couloir1",
-    label: ["Location","Waypoint"],
+    label: ["Location", "Waypoint"],
     name: "Couloir Bibliothèque",
     description: "Premier couloir principal.",
     map_coords: [215, 647],
@@ -368,7 +369,7 @@
   },
   {
     id: "Bibliotheque_et_centre_de_langue",
-    label: ["Location","Building","BIB"],
+    label: ["Location", "Building", "BIB"],
     name: "Bibliothèque et Centre de Langue",
     description: "Bibliothèque principale et centre de langue.",
     map_coords: [220, 730],
@@ -379,7 +380,7 @@
   },
   {
     id: "escalier1",
-    label: ["Location","Waypoint"],
+    label: ["Location", "Waypoint"],
     name: "Escalier Bibliothèque",
     description: "Premier escalier d'accès a la bibliotheque.",
     map_coords: [200, 700],
@@ -390,7 +391,7 @@
   },
   {
     id: "escalier2",
-    label: ["Location","Waypoint"],
+    label: ["Location", "Waypoint"],
     name: "Entrée Bibliothèque",
     description: "Deuxième escalier d'accès.",
     map_coords: [200, 715],
@@ -401,7 +402,7 @@
   },
   {
     id: "couloir2",
-    label: ["Location","Waypoint"],
+    label: ["Location", "Waypoint"],
     name: "Deuxième couloir principal",
     description: "Deuxième couloir principal.",
     map_coords: [377, 647],
@@ -412,7 +413,7 @@
   },
   {
     id: "couloircctd1",
-    label: ["Location","Waypoint"],
+    label: ["Location", "Waypoint"],
     name: "Couloir Centre de Calcul",
     description: "Couloir du centre de calcul.",
     map_coords: [377, 610],
@@ -423,7 +424,7 @@
   },
   {
     id: "CouloirAEEE",
-    label: ["Location","Waypoint"],
+    label: ["Location", "Waypoint"],
     name: "Couloir de l'Entrée de AEEE",
     description: "Couloir d'entrée du département AEEE.",
     map_coords: [379, 476],
@@ -445,7 +446,7 @@
   // },
   {
     id: "EntreeA3e",
-    label: ["Location","Waypoint"],
+    label: ["Location", "Waypoint"],
     name: "Entrée de AEEE",
     description: "Entrée du département AEEE.",
     map_coords: [415, 476],
@@ -456,7 +457,7 @@
   },
   {
     id: "AEEE",
-    label: ["Location","Building","Dept"],
+    label: ["Location", "Building", "Dept"],
     name: "Département AEEE",
     description: "Département d'Automatique, Électronique, Énergie et Environnement.",
     map_coords: [415, 487],
@@ -467,7 +468,7 @@
   },
   {
     id: "a3einside",
-    label: ["Location","Waypoint"],
+    label: ["Location", "Waypoint"],
     name: "Département AEEE (Intérieur)",
     description: "Intérieur du département AEEE.",
     map_coords: [460, 520],
@@ -478,7 +479,7 @@
   },
   {
     id: "mathinfo",
-    label: ["Location","Waypoint"],
+    label: ["Location", "Waypoint"],
     name: "Entrée Département Mathématiques-Informatique",
     description: "Département de Mathématiques et Informatique.",
     map_coords: [420, 610],
@@ -489,7 +490,7 @@
   },
   {
     id: "mathinfo_inside",
-    label: ["Location","Building", "Dept"],
+    label: ["Location", "Building", "Dept"],
     name: "Département Mathématiques-Informatique (Intérieur)",
     description: "Intérieur du département Mathématiques-Informatique.",
     map_coords: [475, 653],
@@ -500,7 +501,7 @@
   },
   {
     id: "amphie_et_salle_de_conference",
-    label: ["Location","Building"],
+    label: ["Location", "Building"],
     name: "Amphithéâtre 3 et Salle de Conférence",
     description: "Jonction entre l'amphithéâtre 3 et la salle de conférence.",
     map_coords: [377, 755],
@@ -511,7 +512,7 @@
   },
   {
     id: "entree_salle_conference",
-    label: ["Location","Waypoint"],
+    label: ["Location", "Waypoint"],
     name: "Entrée de la Salle de Conférence",
     description: "Entrée de la salle de conférence.",
     map_coords: [355, 755],
@@ -522,7 +523,7 @@
   },
   {
     id: "salle_conference",
-    label: ["Location","Amphi"],
+    label: ["Location", "Amphi"],
     name: "Salle de Conférence",
     description: "Salle de conférence principale.",
     map_coords: [355, 800],
@@ -533,7 +534,7 @@
   },
   {
     id: "entree_emphi3",
-    label: ["Location","Waypoint"],
+    label: ["Location", "Waypoint"],
     name: "Entrée de l'Amphithéâtre 3",
     description: "Entrée de l'amphithéâtre 3.",
     map_coords: [410, 755],
@@ -544,7 +545,7 @@
   },
   {
     id: "Amphi3",
-    label: ["Location","Building","Amphi"],
+    label: ["Location", "Building", "Amphi"],
     name: "Amphithéâtre 3",
     description: "Amphithéâtre 3 pour les conférences et cours.",
     map_coords: [300, 300],
@@ -568,6 +569,16 @@ const seedDatabase = async (driver) => {
     // console.log('Création des lieux (Nœuds)...');
     // 2. Create all locations using MERGE
     for (const loc of locations) {
+      // OVERRIDE: Use Cloudinary URLs based on ID
+      // Adjusted to use Root folder based on 'td1_door.jpg' example. 
+      // If you DO use an ENSAM360 folder, add it back here: .../upload/ENSAM360
+      // OVERRIDE: Use Cloudinary URLs based on ID
+      // Adjusted to use Root folder based on 'td1_door.jpg' example. 
+      // If you DO use an ENSAM360 folder, add it back here: .../upload/ENSAM360
+      const CLOUDINARY_BASE = "https://res.cloudinary.com/dj5apwg7g/image/upload";
+      loc.pano_url = `${CLOUDINARY_BASE}/${loc.id}.jpg`;
+      loc.flat_url = `${CLOUDINARY_BASE}/${loc.id}.jpg`;
+
       // We add the 'Location' label to all nodes for easy searching
       let labelsString = "";
       for (label of loc.label) {
@@ -1029,8 +1040,11 @@ const seedDatabase = async (driver) => {
     // await driver.close();
     console.log('Connexion fermée.');
   }
-};
+}
 // --- Run the script ---
-// seedDatabase();
+if (require.main === module) {
+  const driver = require('../config/neo4j');
+  seedDatabase(driver);
+}
 
 module.exports = { seedDatabase }

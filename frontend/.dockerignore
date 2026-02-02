@@ -6,3 +6,5 @@ node_modules
 README.md
 dist
 .git
+public/images
+public/image

@@ -43,6 +43,7 @@ function VirtualTour(props) {
   const [currentLocationDetails, setCurrentLocationDetails] = useState(null)
   const [neighborIds, setNeighborIds] = useState([])
   const [neighborsDetails, setNeighborsDetails] = useState([])
+  const [isSceneLoaded, setIsSceneLoaded] = useState(false);
 
 
   useEffect(() => {
@@ -115,6 +116,12 @@ function VirtualTour(props) {
 
 
     async function load() {
+      // Clear details and reset scene state while loading new location
+      setIsSceneLoaded(false);
+      setCurrentLocationDetails(null);
+      setNeighborIds([]);
+      setNeighborsDetails([]);
+
       const details = await getLocationDetails(currentLocation);
       console.log(details)
       setCurrentLocationDetails(details[0]);
@@ -182,29 +189,74 @@ function VirtualTour(props) {
 
     console.log("pano_image:", currentLocationDetails.pano_image);
 
+    console.log("pano_image:", currentLocationDetails.pano_image);
+
+    // If a viewer already exists, destroy it before creating a new one
+    // This handles the case where the component re-renders but the effect cleanup hasn't run yet
     if (pannellumViewerRef.current) {
-      pannellumViewerRef.current.destroy();
+      try {
+        pannellumViewerRef.current.destroy();
+      } catch (e) {
+        console.warn("Error destroying previous viewer:", e);
+      }
     }
 
-    const imgPath = currentLocationDetails.pano_image.replace(
-      "src/assets/image",
-      "/images"
-    );
+    const imgPath = currentLocationDetails.pano_image.startsWith('http')
+      ? currentLocationDetails.pano_image
+      : currentLocationDetails.pano_image.replace("src/assets/image", "/images");
 
     console.log("imgPath:", imgPath);
 
-    pannellumViewerRef.current = window.pannellum.viewer(viewerRef.current, {
-      type: "equirectangular",
-      panorama: imgPath,
-      autoLoad: true,
-      showControls: false, // We use our own controls
-      compass: false,
-      haov: 360,
-      vaov: 180,
-      hfov: 120,
-      yaw: 0,
-      pitch: 0,
-    });
+    // Use a timeout to ensure the DOM is ready and previous viewer is fully cleaned up
+    const initTimer = setTimeout(() => {
+      if (!viewerRef.current) return;
+
+      try {
+        pannellumViewerRef.current = window.pannellum.viewer(viewerRef.current, {
+          type: "equirectangular",
+          panorama: imgPath,
+          autoLoad: true,
+          showControls: false, // We use our own controls
+          compass: false,
+          haov: 360,
+          vaov: 180,
+          hfov: 120,
+          yaw: 0,
+          pitch: 0,
+          strings: {
+            loadingLabel: "Loading Panorama...",
+            loadButtonLabel: "Load Panorama",
+          }
+        });
+
+
+        pannellumViewerRef.current.on('error', (err) => {
+          console.error("Pannellum Error:", err);
+        });
+
+        pannellumViewerRef.current.on('load', () => {
+          console.log("Pannellum Loaded Automatically - Scene Ready");
+          setIsSceneLoaded(true);
+        });
+
+      } catch (error) {
+        console.error("Error initializing pannellum:", error);
+      }
+    }, 100);
+
+    // CLEANUP FUNCTION: Destroy the viewer when component unmounts or dependencies change
+    return () => {
+      clearTimeout(initTimer);
+      if (pannellumViewerRef.current) {
+        console.log("Cleaning up pannellum viewer");
+        try {
+          pannellumViewerRef.current.destroy();
+          pannellumViewerRef.current = null;
+        } catch (e) {
+          console.warn("Error correctly destroying viewer:", e);
+        }
+      }
+    };
   }, [viewerReady, currentLocationDetails]);
 
   const navigateTo = (direction) => {
@@ -264,9 +316,13 @@ function VirtualTour(props) {
     return () => { cancelled = true }
   }, [neighborIds])
 
-  // Add hotspots when neighbors are loaded
+  // Add hotspots when neighbors are loaded AND scene is ready
   useEffect(() => {
-    if (!viewerReady || !pannellumViewerRef.current || !neighborsDetails || neighborsDetails.length === 0) return;
+    if (!viewerReady || !isSceneLoaded || !pannellumViewerRef.current || !neighborsDetails || neighborsDetails.length === 0) return;
+
+    // Remove existing hotspots first to avoid duplicates (just in case)
+    // Note: Pannellum doesn't have a clearHotSpots method exposed easily, rely on destroy/recreate flow usually.
+    // However, if scene is re-loaded, hotspots might persist if not destroyed. But we destroy viewer on location change.
 
     // Iterate and add hotspots
     neighborsDetails.forEach((n, idx) => {
@@ -319,13 +375,10 @@ function VirtualTour(props) {
             </button>
           );
         },
-        clickHandlerFunc: (evt, args) => {
-          goToLocation(n.id);
-        }
       });
     });
 
-  }, [viewerReady, neighborsDetails, nextStepId]);
+  }, [viewerReady, neighborsDetails, nextStepId, isSceneLoaded]);
 
   return (
     <div className="h-screen w-full bg-black relative overflow-hidden font-sans">
