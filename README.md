@@ -8,6 +8,8 @@
 
 **ENSAM360** is an immersive "Smart Campus" platform designed for the École Nationale Supérieure d'Arts et Métiers (ENSAM) in Meknès. It bridges the gap between the physical and digital worlds by offering a high-fidelity **Virtual Tour**, an intelligent **AI Guide**, and a mathematically optimal **Navigation System**.
 
+![Landing Page](docs/images/landing_page.png)
+
 ---
 
 ## 📑 Table of Contents
@@ -28,13 +30,13 @@
 - **Interactive Hotspots:** Navigate naturally between connected locations.
 - **Powered by:** [Pannellum](https://pannellum.org/).
 
+![360 Panorama](docs/images/360_panorama.png)
+
 ### 🗺️ 2. Interactive Navigation Engine
 - **2D Vector Map:** A clickable, interactive SVG map of the entire campus.
 - **Shortest Path Calculation:** Implements **Dijkstra's Algorithm** via Neo4j Graph Data Science library to find the optimal route.
 - **Real-time Visualization:** Visualizes the path instantly on the 2D map using **Leaflet**.
 - **Interactive Graphs:** Dynamic charts powered by **Recharts**.
-
-![ENSAM360 2D MAP](frontend/src/assets/campus_map_2d1.svg)
 
 ### 🤖 3. The AI Brain (Chatbot)
 - **Context-Aware:** Knows exactly where you are and guides you accordingly ("Turn left" vs "Go to Building B").
@@ -66,6 +68,7 @@
 The project follows a **Micro-Services** inspired architecture within a Monorepo:
 
 ![Global Architecture](docs/images/global_arch.jpg)
+![Sequence Diagram](docs/images/diagramme_sequence%20(1).png)
 
 ---
 
