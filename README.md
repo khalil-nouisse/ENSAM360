@@ -1,4 +1,4 @@
-# ENSAM360 - Smart Campus Project 🎓🌐
+# ENSAM360 - An Immersive 360° Smart Campus Guide with AI-Powered Navigation
 
 ![License](https://img.shields.io/badge/license-Academic-blue.svg)
 ![React](https://img.shields.io/badge/frontend-React_19-61DAFB.svg?logo=react)
