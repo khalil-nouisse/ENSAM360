@@ -561,7 +561,7 @@ const seedDatabase = async (driver) => {
   const session = driver.session();
 
   try {
-    // console.log('🌱 Nettoyage de la base de données...');
+    // console.log(' Nettoyage de la base de données...');
     // // 1. Delete all existing nodes and relationships
     // // await session.run('MATCH (n) DETACH DELETE n');
 
@@ -1022,7 +1022,7 @@ const seedDatabase = async (driver) => {
     console.log('✅ Base de données initialisée avec succès !');
 
   } catch (error) {
-    console.error("❌ Erreur lors de l'initialisation:", error);
+    console.error("Erreur lors de l'initialisation:", error);
   } finally {
     // 5. Always close the session and the driver
     await session.close();

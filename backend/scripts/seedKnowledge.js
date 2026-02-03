@@ -13,7 +13,7 @@ const embedder = new HuggingFaceInferenceEmbeddings({
 
 const seed = async (driver) => {
   const session = driver.session();
-  console.log("🌱 Starting Database Seeding...");
+  console.log(" Starting Database Seeding...");
 
   try {
     // 1. Create the Vector Index (if it doesn't exist)
@@ -63,7 +63,7 @@ const seed = async (driver) => {
       },
       {
         name: "TD2",
-        content: "TD2 is a space containing several classrooms, the majority of which are designated for the Integrated Preparatory Cycle."
+        content: "TD2 is a space containing several classrooms, the majority of which are designated for the Integrated Preparatory Cycle , it doesnt contain presence device ! , the presence logging devices exist outside the building near the entrance. "
       },
       {
         name: "Administration",

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Map } from "lucide-react";
 
 export function Hero() {
-  const animationDuration = "14s";
+  const animationDuration = 14;
 
   // --- TYPEWRITER LOGIC ---
   const [text, setText] = useState("");
@@ -44,6 +44,33 @@ export function Hero() {
     return () => clearTimeout(timer);
   }, [text, isDeleting, loopNum, typingSpeed, messages]);
 
+  // CONFIGURATION FOR THE 3 PULSES
+  // startPoint: Approximate % location on the path (0.11 = Amphi A, 0.5 = AI Lab, 0.72 = Library)
+  // travelDist: How far they travel (0.25 = 25% of the loop)
+  const pulses = [
+    {
+      id: "green-pulse",
+      color: "#22c55e",
+      startPoint: 0.11, // Amphi A
+      endPoint: 0.36,
+      delay: 0
+    },
+    {
+      id: "pink-pulse",
+      color: "#ec4899",
+      startPoint: 0.50, // AI Lab
+      endPoint: 0.75,
+      delay: 2 // Offset timing so they don't all pop at once
+    },
+    {
+      id: "blue-pulse",
+      color: "#3b82f6",
+      startPoint: 0.72, // Library
+      endPoint: 0.97,
+      delay: 4
+    }
+  ];
+
   return (
     <section className="relative w-full h-screen min-h-[850px] overflow-hidden bg-background text-foreground flex flex-col items-center justify-center transition-colors duration-300 font-sans">
 
@@ -70,25 +97,28 @@ export function Hero() {
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>
-            <linearGradient
-              id="comet-gradient"
-              gradientUnits="userSpaceOnUse"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="0%"
-            >
-              <stop offset="0%" stopColor="#22c55e" />
-              <stop offset="50%" stopColor="#3b82f6" />
-              <stop offset="100%" stopColor="#ec4899" />
-            </linearGradient>
+            {/* TAIL GRADIENTS - Specific to each pulse color */}
+            {pulses.map((pulse) => (
+              <linearGradient
+                key={`grad-${pulse.id}`}
+                id={`grad-${pulse.id}`}
+                gradientUnits="userSpaceOnUse"
+                x1="0%" y1="0%" x2="100%" y2="0%"
+              >
+                {/* Tail fades from transparent to the specific color */}
+                <stop offset="0%" stopColor={pulse.color} stopOpacity="0" />
+                <stop offset="100%" stopColor={pulse.color} stopOpacity="1" />
+              </linearGradient>
+            ))}
 
+            {/* FADE MASK GRADIENT (Shared) */}
             <linearGradient id="fade-mask-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="black" />
               <stop offset="40%" stopColor="black" />
               <stop offset="100%" stopColor="white" />
             </linearGradient>
 
+            {/* GLOW FILTER */}
             <filter id="head-glow" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur stdDeviation="4" result="coloredBlur" />
               <feMerge>
@@ -106,29 +136,34 @@ export function Hero() {
                  C 50 680, 50 120, 400 120 Z"
             />
 
-            <mask id="comet-mask">
-              <rect x="-2000" y="-2000" width="4000" height="4000" fill="black" />
-              <g>
-                <rect
-                  x="-450" y="-20"
-                  width="450" height="40"
-                  fill="url(#fade-mask-gradient)"
-                />
-                <animateMotion
-                  dur={animationDuration}
-                  repeatCount="indefinite"
-                  rotate="auto"
-                  calcMode="linear"
-                  keyPoints="0;1"
-                  keyTimes="0;1"
-                >
-                  <mpath href="#stadium-track" />
-                </animateMotion>
-              </g>
-            </mask>
+            {/* MASKS FOR EACH PULSE */}
+            {pulses.map((pulse) => (
+              <mask id={`mask-${pulse.id}`} key={`mask-${pulse.id}`}>
+                <rect x="-2000" y="-2000" width="4000" height="4000" fill="black" />
+                <g>
+                  {/* The visible window moves with the head */}
+                  <rect
+                    x="-450" y="-20"
+                    width="450" height="40"
+                    fill="url(#fade-mask-gradient)"
+                  />
+                  <animateMotion
+                    dur="6s"
+                    begin={`${pulse.delay}s`}
+                    repeatCount="indefinite"
+                    rotate="auto"
+                    keyPoints={`${pulse.startPoint};${pulse.endPoint}`}
+                    keyTimes="0;1"
+                    calcMode="linear"
+                  >
+                    <mpath href="#stadium-track" />
+                  </animateMotion>
+                </g>
+              </mask>
+            ))}
           </defs>
 
-          {/* BASE TRACK */}
+          {/* LAYER A: BASE TRACK */}
           <use
             href="#stadium-track"
             stroke="currentColor"
@@ -136,29 +171,60 @@ export function Hero() {
             className="text-muted-foreground/20"
           />
 
-          {/* COMET TAIL */}
-          <use
-            href="#stadium-track"
-            stroke="url(#comet-gradient)"
-            strokeWidth="4"
-            strokeLinecap="round"
-            mask="url(#comet-mask)"
-            style={{ filter: "drop-shadow(0px 0px 6px rgba(59, 130, 246, 0.5))" }}
-          />
+          {/* LAYER B & C: PULSES (Tail + Head) */}
+          {pulses.map((pulse) => (
+            <g key={pulse.id}>
+              {/* 1. THE TAIL */}
+              <use
+                href="#stadium-track"
+                stroke={`url(#grad-${pulse.id})`}
+                strokeWidth="4"
+                strokeLinecap="round"
+                mask={`url(#mask-${pulse.id})`}
+                style={{ filter: `drop-shadow(0px 0px 8px ${pulse.color})` }}
+                className="opacity-0" // Default hidden, animated below
+              >
+                <animate
+                  attributeName="opacity"
+                  values="0; 1; 1; 0"
+                  keyTimes="0; 0.1; 0.6; 1"
+                  dur="6s"
+                  begin={`${pulse.delay}s`}
+                  repeatCount="indefinite"
+                />
+              </use>
 
-          {/* COMET HEAD */}
-          <circle r="6" filter="url(#head-glow)" className="fill-black dark:fill-white transition-colors duration-300">
-            <animateMotion
-              dur={animationDuration}
-              repeatCount="indefinite"
-              rotate="auto"
-              calcMode="linear"
-              keyPoints="0;1"
-              keyTimes="0;1"
-            >
-              <mpath href="#stadium-track" />
-            </animateMotion>
-          </circle>
+              {/* 2. THE HEAD */}
+              <circle
+                r="6"
+                filter="url(#head-glow)"
+                className="fill-black dark:fill-white opacity-0" // Default hidden
+              >
+                {/* Motion: Moves only along the specific segment */}
+                <animateMotion
+                  dur="6s"
+                  begin={`${pulse.delay}s`}
+                  repeatCount="indefinite"
+                  rotate="auto"
+                  keyPoints={`${pulse.startPoint};${pulse.endPoint}`}
+                  keyTimes="0;1"
+                  calcMode="linear"
+                >
+                  <mpath href="#stadium-track" />
+                </animateMotion>
+
+                {/* Opacity: Pop in -> Travel -> Fade out */}
+                <animate
+                  attributeName="opacity"
+                  values="0; 1; 1; 0"
+                  keyTimes="0; 0.1; 0.6; 1"
+                  dur="6s"
+                  begin={`${pulse.delay}s`}
+                  repeatCount="indefinite"
+                />
+              </circle>
+            </g>
+          ))}
 
           {/* STATIC STATIONS */}
           <g className="opacity-80 hover:opacity-100 transition-opacity duration-300">
@@ -197,7 +263,6 @@ export function Hero() {
       </div>
 
       {/* 3. CENTERED CONTENT */}
-      {/* Increased negative margin slightly to ensure perfect optical center */}
       <div className="relative z-10 flex flex-col items-center justify-center text-center space-y-6 max-w-5xl px-4 -mt-24 md:-mt-32">
 
         {/* Badge */}
@@ -217,7 +282,7 @@ export function Hero() {
             Explore ENSAM360°
           </h1>
 
-          {/* TYPEWRITER CONTAINER - FIXED HEIGHT prevents layout shift */}
+          {/* TYPEWRITER CONTAINER */}
           <div className="h-[40px] md:h-[80px] flex items-center justify-center mt-2 md:mt-4">
             <span className="
               font-plex
@@ -240,7 +305,7 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Description - Added padding to prevent overlapping */}
+        {/* Description */}
         <p className="
           max-w-xl
           font-inter

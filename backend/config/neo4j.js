@@ -41,7 +41,7 @@ const testConnection = async () => {
         console.log("Connexion à Neo4j AuraDB établie avec succès !");
 
     } catch (error) {
-        console.error("❌ Impossible de se connecter à AuraDB :", error);
+        console.error("Impossible de se connecter à AuraDB :", error);
         if (error.code === 'Neo.ClientError.Security.Unauthorized') {
             console.error("Vérifiez votre nom d'utilisateur ou mot de passe dans .env.");
         }

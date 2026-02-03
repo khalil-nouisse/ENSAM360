@@ -3,10 +3,10 @@ import { cn } from "@/lib/utils";
 
 const technologies = [
     { name: 'React.js', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' },
-    { name: 'Express.js', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg', darkLogo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original-wordmark.svg' },
+    { name: 'Node.js', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg' },
     { name: 'Tailwind CSS', logo: '/tailwind-logo.png' },
-    { name: 'Neo4j Aura', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/neo4j/neo4j-original.svg' },
-    { name: 'Cloudinary', logo: '/cloudinary-logo.png' },
+    { name: 'Neo4j Aura', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/neo4j/neo4j-original.svg', invertOnDark: true },
+    { name: 'Cloudinary', logo: '/cloudinary-logo.png', invertOnDark: true },
     { name: 'Docker', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
 ];
 
@@ -29,7 +29,7 @@ export function TechStack() {
                                 <img
                                     src={tech.logo}
                                     alt={tech.name}
-                                    className={cn("w-full h-full object-contain", tech.darkLogo ? "dark:hidden" : "")}
+                                    className={cn("w-full h-full object-contain", tech.darkLogo ? "dark:hidden" : "", tech.invertOnDark ? "invert-on-dark" : "")}
                                     onError={(e) => {
                                         e.target.style.display = 'none';
                                         e.target.nextSibling.style.display = 'block';
@@ -56,6 +56,12 @@ export function TechStack() {
           mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
           -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
         }
+        
+        /* Only invert in dark mode (when html has 'dark' class) */
+        html.dark .invert-on-dark {
+          filter: brightness(0) invert(1);
+        }
+
         @keyframes scroll {
           0% { transform: translateX(0); }
           100% { transform: translateX(-33.33%); }
